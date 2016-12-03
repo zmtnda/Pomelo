@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Technician dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+	<script src="jquery-1.11.3.min.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="css/css_technician_guide.css" rel="stylesheet">
+      <link href="css/css_rating.css" rel="stylesheet">
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+  </head>
+
+  <body>
+		<header class = "navbar-inverse">
+			<div class = "container">
+				<nav class="navbar navbar-inverse navbar-fixed-top">
+				  <div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+					  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					  </button>
+					  <a class="navbar-brand" href="index.html">TeKrew</a>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+					  <ul class="nav navbar-nav">
+						<li class="active"><a href="about_us.html">About Us <span class="sr-only">(current)</span></a></li>
+						<li><a href="signup.html">Sign Up</a></li>
+                        <li class ="dropdown">
+                            <a href="contactus.html" class="dropdown-toggle" data-toggle = "dropdown" data-target="#menu">Contact Us<b class="caret"></b></a>
+                            <ul class="dropdown-menu" id="menu">
+                                <li><a data-target = "#contact" data-toggle = "modal">Contact Information</a></li>
+                                <li><a data-target = "#opinion" data-toggle = "modal">Give Us Your Opinion</a></li>
+                                <li><a href="https://docs.google.com/forms/d/1N1yCBjDKHL5MWz1AoMRSwKthJza7xi7KPRRWh2k6fYo/viewform?embedded=true">Satisfication Survey</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Terms and Conditions</a></li>
+					  </ul>
+					</div>
+				  </div>
+				</nav>
+			</div>
+		</header>	
+
+    <div class="container">
+
+        <div class="col-sm-12 main">
+		
+          <div class="page-header"><h1>Top-rated Technicians</h1></div>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="images/p1.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail"><span class = "label label-danger">HOT!!</span>
+              <h4>#1</h4>
+              <span class="text-muted">E-Mail:leopangchan@gmail.com</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="images/p2.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>#2</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="images/p3.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>#3</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="images/p4.jpg" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>#4</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+          </div>
+
+        <h2 class="sub-header">Technicians Ranking:</h2> 
+          <div class="table-responsive" style = " height:600px; width:100%; overflow:auto;">
+
+            <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Skills</th>
+                  <th>Rates</th>
+                  <th>E-Mail</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10</td>
+                  <td ><a href= "technician_profile.html">CAL POLIER</a></td>
+                  <td>quis</td>
+                  <td>                      
+				  <div class="wrapper-stars">
+                        <span class="stars">
+                            <input type="radio" class="star" id="star1" value="1">
+                            <label for = "star1" class="star"></label>
+
+
+                            <input type="radio" class="star" id="star2" value="2">
+                            <label for = "star2" class="star"></label>
+
+                            <input type="radio" class="star" id="star3" value="3">
+                            <label for = "star3" class="star"></label>
+
+                            <input type="radio" class="star" id="star4" value="4">
+                            <label for = "star4" class="star"></label>
+
+                            <input type="radio" class="star" id="star5" value="5">
+                            <label for = "star5" class="star"></label>
+                        </span>
+                      </div></td>
+                  <td>at</td>
+                </tr>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

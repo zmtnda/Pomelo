@@ -1,0 +1,332 @@
+{
+	"variables": [],
+	"info": {
+		"name": "PomeloTech",
+		"_postman_id": "d1f22942-a0a1-183e-e2c6-ba4930c69f7b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1 Nuke copy",
+			"description": "",
+			"item": [
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/Ssns",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"Admin@11.com\", \"password\": \"password\"}"
+						},
+						"description": "Good Login\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Nuke",
+					"request": {
+						"url": "{{url}}/DB",
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/Ssns/{{cookieAdmin}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Register Technician",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\nvar prsId = postman.getResponseHeader(\"Location\").split('/');\npostman.setEnvironmentVariable(\"TechA\",prsId[prsId.length-1]);"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/User",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"TeacherA@domainA\",\n    \"password\" : \"password\",\n    \"role\"     : 1,\n    \"firstName\": \"Zin\",\n    \"lastName\" : \"technician\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Tech Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Cookie Got\"] = postman.getResponseCookie(\"CHSAuth\") !== null && postman.getResponseCookie(\"CHSAuth\").value !== undefined;\nif (tests[\"Cookie Got\"])\n    postman.setEnvironmentVariable(\"cookieTeacherA\", postman.getResponseCookie(\"CHSAuth\").value)"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/Ssns",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"TeacherA@domainA\",\n    \"password\" : \"password\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Technician post a service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nif (postman.getResponseHeader(\"Location\")) {\n   var attURL = postman.getResponseHeader(\"Location\").split('/');\n   postman.setEnvironmentVariable(\"servId\", attURL[attURL.length-1]);\n}"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/User/2/Serv",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serviceName\": \"service3\",\n    \"amount\" : \"90\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Technician modify a service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/Serv/1",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"serviceName\": \"service3\",\n    \"amount\" : \"90\",\n    \"status\" : 2\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Tech logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/Ssns/{{cookieTeacherA}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Register User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\nvar prsId = postman.getResponseHeader(\"Location\").split('/');\npostman.setEnvironmentVariable(\"UserA\",prsId[prsId.length-1]);"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/User",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"UserA@domainA\",\n    \"password\" : \"password\",\n    \"role\"     : 0,\n    \"firstName\": \"Zin\",\n    \"lastName\" : \"user\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Cookie Got\"] = postman.getResponseCookie(\"CHSAuth\") !== null && postman.getResponseCookie(\"CHSAuth\").value !== undefined;\nif (tests[\"Cookie Got\"])\n    postman.setEnvironmentVariable(\"cookieUserA\", postman.getResponseCookie(\"CHSAuth\").value)"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/Ssns",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"UserA@domainA\",\n    \"password\" : \"password\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User requested the Service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/Serv/2/Order",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "User Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;"
+					}
+				}
+			],
+			"request": {
+				"url": "{{url}}/Ssns/{{cookieTeacherA}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "\n"
+			},
+			"response": []
+		}
+	]
+}

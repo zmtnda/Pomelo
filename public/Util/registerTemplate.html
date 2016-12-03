@@ -1,0 +1,44 @@
+
+<center ng-controller = 'registerController'>
+    <div id="login-form">
+        <form method="post">
+            <table align="center" width="90%" border="0">
+                <tr><
+                    <td>
+                        <a>Please select one</a>
+                        <select type ="userType" name="type" ng-model="user.role">
+                            <option class = "elType" id = "customer" name="Customer" value=0 selected>Customer</option>
+                            <option class = "elType" id = "technician" value=1 name="Technician">Technician</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="email" name="email" value="" style="display: none"/>
+                    <input type="email" name="email" ng-model="user.email" placeholder="Your Email" required /></td>
+                </tr>
+
+                <tr>
+                    <td><input type="password" name="pass" ng-model="user.password" placeholder="Your Password" required /></td>
+                </tr>
+
+                <tr>
+                    <td><input type="text" name="first_name" ng-model="user.firstName" placeholder="First Name" required /></td>
+                </tr>
+
+                <tr>
+                    <td><input type="text" name="last_name" ng-model="user.lastName" placeholder="Last Name" required /></td>
+                </tr>
+
+                <tr>
+                    <td><input type="number" name="phone" ng-model="user.phone" placeholder="Phone#" optional /></td>
+                </tr>
+
+                <tr>
+                    <td><button type="submit" name="btn-signup" ng-if="!submitted" ng-click="postUser()">Sign Me Up</button>
+                        <button type="submit" name="btn-signup" ng-click="$close()">Cancel</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</center>

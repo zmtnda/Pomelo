@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+	<script src="jquery-1.11.3.min.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="css/css_technician_profile.css" rel="stylesheet">
+
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+  </head>
+
+  <body>
+		<header class = "navbar-inverse">
+			<div class = "container">
+				<nav class="navbar navbar-inverse navbar-fixed-top">
+				  <div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+					  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					  </button>
+					  <a class="navbar-brand" href="homepage.html">TeKrew</a>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+					  <ul class="nav navbar-nav">
+						<li class="active"><a href="about_us.html">About Us <span class="sr-only">(current)</span></a></li>
+						<li><a href="#">Sign Up</a></li>
+                        <li class ="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle = "dropdown" data-target="#menu">Contact Us<b class="caret"></b></a>
+                            <ul class="dropdown-menu" id="menu">
+                                <li><a data-target = "#contact" data-toggle = "modal">Contact Information</a></li>
+                                <li><a data-target = "#opinion" data-toggle = "modal">Give Us Your Opinion</a></li>
+                                <li><a href="https://docs.google.com/forms/d/1N1yCBjDKHL5MWz1AoMRSwKthJza7xi7KPRRWh2k6fYo/viewform?embedded=true">Satisfication Survey</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Terms and Conditions</a></li>
+					  </ul>
+					</div>
+				  </div>
+				</nav>
+			</div>
+		</header>	
+
+    <div class="container">
+		<div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading"><h2>Yiupang Chan<h2>
+			  <div class = "row">
+				<div class = "col-sm-4">
+					<a href="#"><img src = "images/p1.jpg" alt = "Profile Picture Is Not Uploaded" class="img-circle"></img></a>
+				</div>
+				<div class = "col-sm-6">
+					<label for = "major"><p>Major:</p></label>
+					<br>
+					<label for = "skill"><p>Skills:</p></label>
+					<br>
+					<label for = "certificate"><p>Certificate:</p></label>
+					<br>
+					<label for = "rating"><p>Rating:</p></label>
+					<br>
+					<label for = "avaliability"><p>Avaliability:</p></label>
+				</div>
+			  </div>
+		  </div>
+
+		  
+		  <div class="panel-body">
+
+		  <!-- Table -->
+			  <ul>
+				<li><button class = "btn" data-toggle = "collapse" data-target = "#description">Description<b class = "caret"></b></button>
+				<p id = "description" class = "collapse in">
+					Anyone who’s studied Physics will be familiar with the term vector. I became reacquainted with it while browsing through my high school textbooks, and decided to adapt it as my personal slogan: Become a vector!
+
+					A  vector is a quantity with both magnitude ( a number or “force”), and specific direction, usually represented by an arrow. Why does this matter? Because in your job search it is key to both have a direction as well as to find ways to keep moving further forward along that path.
+
+					In my job search, I’ve become distracted by all the different career opportunities thrown at me, many moving along paths that seem interesting but aren’t right for me. Its important to think of the purpose any job or professional interaction will serve in the long run. Will they  get you closer to your dream career?
+
+					Having been  in the  job market for a short while and having found it frustrating, it’s easy to see how one can get eager, and  desperately jump at any opportunity. It’s important to be patient and always ask whether this will add substance to my  resume?
+					
+				</p>
+				</li>
+					
+				<li><button class = "btn" data-toggle = "collapse" data-target = "#comments">Comments on this technicians<b class = "caret"></b></li>
+				<p id = "comments" class = "collapse in">
+					A  vector is a quantity with both magnitude ( a number or “force”), and specific direction, usually represented by an arrow. Why does this matter? Because in your job search it is key to both have a direction as well as to find ways to keep moving further forward along that path.
+
+					In my job search, I’ve become distracted by all the different career opportunities thrown at me, many moving along paths that seem interesting but aren’t right for me. Its important to think of the purpose any job or professional interaction will serve in the long run. Will they  get you closer to your dream career?
+
+					Having been  in the  job market for a short while and having found it frustrating, it’s easy to see how one can get eager, and  desperately jump at any opportunity. It’s important to be patient and always ask whether this will add substance to my  resume?</p>
+					
+			  </ul>
+		  </div>
+		</div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

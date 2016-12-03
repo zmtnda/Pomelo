@@ -1,0 +1,34 @@
+<h2 style="font-style: italic">Admin Page</h2>
+<div class="col-xs-6 col-md-6 col-lg-6">
+    <h3>All the Users in the System</h3>
+    <button class="btn btn-warning" type-"button" ng-click="addUser()">ADD A USER</button>
+    <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
+            id: {{user.id}}<br/>
+            email: {{user.email}}<br/>
+            password: {{user.password}}<br/>
+            role: {{user.role}}<br/>
+            firstName: {{user.id}}<br/>
+            lastName: {{user.lastName}}<br/>
+            phone: {{user.phone}}<br/>
+            whenRegistered: {{user.formatDate}}<br/>
+            <br/>
+            <button class="btn btn-warning" type-"button" ng-click="deleteUser(user.id)">Delete User</button>
+            <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyUser()">MODIFY</button> -->
+    </div>
+</div>
+
+<div class="col-xs-6 col-md-6 col-lg-6">
+    <h3>All the services in the System</h3>
+    <!--FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="addService()">ADD A SERVICE</button> -->
+    <div class="thumbnail" ng-repeat="serv in servs">
+            id: {{serv.id}}<br/>
+            serviceName: {{serv.serviceName}}<br/>
+            amount: {{serv.amount}}<br/>
+            status: {{serv.status}}<br/>
+            userId: {{serv.userId}}<br/>
+            technicianId {{serv.technicianId}}<br/>
+            <br/>
+            <button class="btn btn-warning" type-"button" ng-click="deleteService(serv.id)">Delete Service</button>
+            <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyService()">MODIFY</button> -->
+    </div>
+</div>

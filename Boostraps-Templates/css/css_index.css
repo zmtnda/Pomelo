@@ -1,0 +1,265 @@
+body{
+	background-color: black;
+}
+
+/* The top navigation bar*/
+.nav a {
+  color: #5a5a5a;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 14px 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.nav li {
+  display: inline;
+}
+
+.dropdown-menu li a{
+	color: #898989;
+  padding: 6px 20px;
+  font-weight: 300;
+}
+
+.dropdown-menu li{
+	float:right;
+}
+
+.col-md-4{
+	float:right;
+}
+
+.navbar-inverse {
+    background-color: #000;
+    border-color: #080808;
+}
+/* Region for slides */
+.jumbotron {
+  background-color:black;
+  height:500px;
+  background-size: 100% 100%;
+  margin:0;
+  padding:0;
+}
+
+.jumbotron h1 {
+  color: #fff;
+  font-size: 48px;  
+  font-family: 'Shift', sans-serif;
+  font-weight: bold;
+}
+
+.container-fluid{
+	height:100%;
+	width:100%;
+}
+
+.jumbotron p {
+  font-size: 20px;
+  color: #fff;
+}
+
+.slide{
+	display: none;
+	width: 100%;
+	height: 100%;
+} 
+
+.active-slide{
+	display:inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+
+.first-slide{
+	background-image:url('../images/homepage_keyboard.jpg');
+	background-repeat:no-repeat;
+    background-size:100%;
+}
+
+.first-slide p{
+	color:#E0E0E0;
+	font-family:cursive;
+}
+.first-slide h1{
+	color:#808080:
+}
+
+.quote{
+	margin-left:3px;
+}
+
+/* Region for slides(Dots and arrows)*/
+.active-dot{
+	color:green;
+}
+.dot{
+	display:inline-block;
+}
+.slider-dots{
+	padding:0;
+	display:inline-block;
+}
+.arrow-prev{
+	 display: inline-block;
+}
+
+.arrow-next{
+	 display: inline-block;
+}
+
+.sliders{
+	margin-top:5px;
+	text-align:center;
+}
+
+
+/*The middle part of the website*/
+.neighborhood-guides{
+    background-color:#efefef;
+    border-bottom:1px solid #dbdbdb;
+    
+}
+
+.neighborhood-guides h2{
+    color:#393c3d;
+    font-size:24px;
+    }
+.neighborhood-guides p{
+    font-size:15px;
+    margin-bottom:13px;
+
+    }
+	
+.sign-in{
+	margin-top:10px;
+}
+	
+.thumbnail{
+	padding:0;
+	margin:0;
+	background-color:black;
+}
+
+.thumbnail p{
+	color:#E0E0E0;
+}
+
+.thumbnail h3{
+	color:#E0E0E0;
+}
+
+.panel{
+	background-color: #030100;
+}
+.panel-primary {
+    border-color: #000000;
+}
+.panel-primary>.panel-heading {
+    color: #fff;
+    background-color: #000000;
+    border-color: #000000;
+}
+.panel .form-signin-heading{
+	color:white;
+}
+.remember-me{
+	color:white;
+}
+
+.panel-title{
+	font-family:Lucida Console;
+	font-size:40px;
+	font-weight:bold;
+}
+
+.panel-body p{
+	color:white;
+}
+
+/*Bottom navigation part */
+.quicksort li{
+	color:#00b0ff;
+	font-size:9px;
+	float:left;	
+}
+
+.software{
+	display:inline-block;	
+}
+
+.software li{
+	padding:2px;
+	display:block;	
+}
+
+.hardware{
+	display:inline-block;	
+}
+
+.hardware li{
+	padding:2px;
+	display:block;	
+}
+
+/*opinion form*/
+
+input {
+	color:#777;
+	font-family: Verdana, Arial, sans-serif;
+	position:relative;
+}
+
+text{
+	width:100px;
+}
+
+#form{
+	padding:40px;
+}
+
+#message-box{
+	vertical-align:top;
+	padding-bottom:10px;
+}
+
+textarea{
+	color:#777;
+	max-height:150px;
+	max-width:100%;	
+}
+
+
+#header{
+	text-align:center;
+}
+
+#update-option{
+	padding-bottom:20px;
+}
+
+#header h1{	
+    padding-top:5px;
+	color:#1E4D2B;
+	font-family:cursive;
+}
+
+/* Contact US*/
+.modal-header{
+    background-color: #1E4D2B;
+    color:goldenrod;
+    border: 2px solid goldenrod;
+    border-radius: 5px;
+}
+.modal-content{
+    padding:8px;
+}
+
+.modal-footer{
+    margin-top: 5px;
+}
+/*.dropdown-toggle{
+    width: 170px;
+}*/
