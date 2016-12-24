@@ -200,31 +200,33 @@ router.put('/:servId/:techId/Order', function(req, res) {
 
 	});
 });
+
 // Delete a service specified by <Servld>.
 //	Serv/:servId
 // Delete a service specified by <Servld>. Admin or Service Owner
 // If there is an open ticket for that service only Admin can delete it
 // status 0 for open, 1 pending, 2 closed, 3 cancel
-router.delete('/:servId/Order', function(req, res) {
+router.delete('/:servId/:techId/Order', function(req, res) {
    // function is yet to be implemeneted.
 	var vld = req.validator;
 	var servId = req.params.servId;
 	var loginId = req.session && req.session.id;
-	console.log("servid = " + servId);
+	var techId = req.params.techId;
+	console.log("id = " + servId);
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT * FROM ServicesOffer WHERE id = ? ', servId,
+		cnn.query(' SELECT * FROM servicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
 			function(err, result){
 				if(result.length ){
-					if(result[0].status == 1){
-						if(vld.checkAdmin() || loginId){
-							//continue to delete the following query
-							console.log("It is admin after all to delete the pending service Serv/:servId ");
-						}
-						else
-							cnn.release();
-					}
+					// if(result[0].status == 1){
+						// if(vld.checkAdmin() || loginId){
+						// 	//continue to delete the following query
+						// 	console.log("It is admin after all to delete the pending service Serv/:servId ");
+						// }
+						// else
+						// 	cnn.release();
+					// }
 					//delete it don't require else
-					cnn.query(' DELETE FROM ServicesOffer WHERE id = ? ', servId,
+					cnn.query(' DELETE FROM servicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
 						function(err){
 							if (err)
 								console.log("Error deleting Serv/:servId ");
@@ -243,41 +245,41 @@ router.delete('/:servId/Order', function(req, res) {
    res.end();
 });
 //delete from service table
-router.delete('/:servId', function(req, res) {
-   // function is yet to be implemeneted.
-	var vld = req.validator;
-	var servId = req.params.servId;
-	var loginId = req.session && req.session.id;
-	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT * FROM Services WHERE id = ? ', servId,
-			function(err, result){
-				if(result.length){
-					if(result[0].status == 1){
-						if(vld.checkAdmin()){
-							//continue to delete the following query
-							console.log("It is admin after all to delete the pending service Serv/:servId ");
-						}
-						else
-							cnn.release();
-					}
-
-					//delete it don't require else
-					cnn.query(' DELETE FROM Services WHERE id = ? ', servId,
-						function(err){
-							if (err)
-								console.log("Error deleting Serv/:servId ");
-							res.end();
-							cnn.release();
-						});
-				}
-				else{
-					res.status(404).end();
-					cnn.release();
-				}
-
-		});
-	});
-   res.end();
-});
+// router.delete('/:servId', function(req, res) {
+//    // function is yet to be implemeneted.
+// 	var vld = req.validator;
+// 	var servId = req.params.servId;
+// 	var loginId = req.session && req.session.id;
+// 	connections.getConnection(res, function(cnn) {
+// 		cnn.query(' SELECT * FROM Services WHERE id = ? ', servId,
+// 			function(err, result){
+// 				if(result.length){
+// 					if(result[0].status == 1){
+// 						if(vld.checkAdmin()){
+// 							//continue to delete the following query
+// 							console.log("It is admin after all to delete the pending service Serv/:servId ");
+// 						}
+// 						else
+// 							cnn.release();
+// 					}
+//
+// 					//delete it don't require else
+// 					cnn.query(' DELETE FROM Services WHERE id = ? ', servId,
+// 						function(err){
+// 							if (err)
+// 								console.log("Error deleting Serv/:servId ");
+// 							res.end();
+// 							cnn.release();
+// 						});
+// 				}
+// 				else{
+// 					res.status(404).end();
+// 					cnn.release();
+// 				}
+//
+// 		});
+// 	});
+//    res.end();
+// });
 
 module.exports = router;

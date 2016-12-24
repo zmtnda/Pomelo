@@ -43,6 +43,7 @@
                  <thead>
                    <tr>
                      <th>Service Name</th>
+                     <th>Amount</th>
                      <th>Status</th>
                      <th>Time Stamp</th>
                      <th></th>
@@ -51,12 +52,21 @@
                  <tbody>
                    <tr ng-repeat="ser in listServices">
                      <td>{{ser.serviceName}}</td>
+                     <td>{{ser.amount}}</td>
                      <td ng-if="ser.status === 0">Open</td>
                      <td ng-if="ser.status === 1">Pending</td>
                      <td ng-if="ser.status === 2">Closed</td>
                      <td>{{ser.formatDate}}</td>
-                     <td>
-                       <button type="button" class="btn btn-primary" ng-click="deleteService(ser.id)">Delete</button>
+                     <td ng-if="ser.status === 1">
+                       <button type="button" class="btn btn-primary" style="width:75%;" ng-click="completeService(ser.id, ser.amount, ser.technicianId)">Complete</button>
+                     </td >
+                     <td ng-if="ser.status === 1">
+                       <button type="button" class="btn btn-primary" style="width:75%;" ng-click="cancelService(ser.id, ser.amount, ser.technicianId)">Cancel</button>
+                     </td>
+                     <td ng-if="ser.status === 0">
+                     </td>
+                     <td ng-if="ser.status === 0">
+                       <button type="button" class="btn btn-primary" style="width:75%;" ng-click="deleteService(ser.id, ser.technicianId)">Delete</button>
                      </td>
                    </tr>
                  </tbody>

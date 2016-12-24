@@ -18,17 +18,19 @@
             <h4>BYE</h4>
             <button type="button" class="btn btn-primary" ng-click="deleteCustomer()">Delete this Account</button></li>
         </ul>
-        <div ng-if="isShowServiceOfferField">
-          <h4>Available Services:</h4>
-          <select ng-model="field.serviceName" ng-change="changedValue(field.serviceName)"
-          data-ng-options="item.serviceName for item in listServices">
-          </select>
-        </div>
+
     </div>
 
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="height:100%">
        <h2 style="font-style:italic;">Customer Home Page</h2>
+
        <div class="thumbnail" ng-if="isShowServiceOfferField">
+         <div ng-if="isShowServiceOfferField">
+           <h4>Available Services:</h4>
+           <select ng-model="field.serviceName" ng-change="changedValue(field.serviceName)"
+           data-ng-options="item.serviceName for item in listServices">
+           </select>
+         </div>
          <div ng-if="isShowListServices">
           <div class="table-responsive" style="height:600px; width:100%; overflow:auto;">
               <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "1">
@@ -41,7 +43,7 @@
                    </tr>
                  </thead>
                  <tbody>
-                   <tr ng-repeat="ser in offerServices">
+                   <tr ng-repeat="ser in offerServices | filter: {status: 0}">
                      <td>${{ser.amount}}</td>
                      <td>{{tech[$index]}}</td>
                      <td>{{ser.formatDate}}</td>
@@ -59,7 +61,7 @@
         <div class="thumbnail" ng-if="isShowOrderHistory">
             <h4>My Past Orders</h4><br/>
              <div class="table-responsive" style="height:600px; width:100%; overflow:auto;">
-                <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
+                <table class="table" border = "0" cellpadding = "0" cellspacing = "2">
                   <thead>
                     <tr>
                       <th>Service Name</th>

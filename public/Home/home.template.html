@@ -1,20 +1,39 @@
      <header id="top" class="header">
          <div class="text-vertical-center">
-             <h1>Pomelo Tech</h1>
-             <h3>"Smart people, having fun, looking good" - Dr. Turner</h3>
+             <h1><font color="black">Pomelo Tech</font></h1>
+             <h3><font color="black">"Smart people, having fun, looking good" - Dr. Turner</font></h3>
              <br>
-             <a href="#about" class="btn btn-dark btn-lg">Find Out More Cool Stuff</a>
+             <!---<a href="#about" class="btn btn-dark btn-lg">Find Out More Cool Stuff</a> --->
          </div>
      </header>
+
+          <!-- Call to Action -->
+          <aside class="call-to-action bg-primary">
+              <div class="container">
+                    <form ng-if="!inSession" class="form-signin">
+                    <fieldset class="form-group">
+                      <h2 class="form-signin-heading">Login In</h2>
+                      <label for="inputEmail" class="sr-only">Email address</label>
+                      <input type="email" class="form-control" placeholder="Enter email" ng-model="user.email">
+                    </fieldset>
+                    <fieldset class="form-group">
+                      <label for="inputPassword" class="sr-only">Password</label>
+                      <input type="password" class="form-control" onkeydown = "if (event.keyCode == 13)
+                                  document.getElementById('submit').click()" placeholder="Password" ng-model="user.password">
+                    </fieldset>
+                  </form>
+                  <button type="button" id="submit" class="btn btn-lg btn-light" ng-click="login()">Login In</button>
+                  <button class="btn btn-lg btn-dark" ng-click="addUser()">Sign Up</button>
+              </div>
+          </aside>
 
      <!-- About -->
      <section id="about" class="about">
          <div class="container">
              <div class="row">
                  <div class="col-lg-12 text-center">
-                     <h2>Please finish this page!!</h2>
-                     <p class="lead">This theme features some wonderful photography courtesy of <a target="_blank" href="http://join.deathtothestockphoto.com/">
-                       Death to the Stock Photo</a>.</p>
+                     <h2>Reduce, Reuse, Recycle</h2>
+                     <p class="lead">When your electronics break you shouldn't have to buy a new one. Get connected to technicians in your area, and save your electronics, money, and the earth.</p>
                  </div>
              </div>
              <!-- /.row -->
@@ -38,10 +57,10 @@
                                  <i class="fa fa-cloud fa-stack-1x text-primary"></i>
                              </span>
                                  <h4>
-                                     <strong>Fix iPhone</strong>
+                                     <strong>Fix iPhone & Android</strong>
                                  </h4>
-                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                 <a href="#" class="btn btn-light">Learn More</a>
+                                 <p>Anywhere from cracked screens to broken buttons</p>
+
                              </div>
                          </div>
                          <div class="col-md-3 col-sm-6">
@@ -51,10 +70,10 @@
                                  <i class="fa fa-compass fa-stack-1x text-primary"></i>
                              </span>
                                  <h4>
-                                     <strong>Fix Android</strong>
+                                     <strong>Wi-fi Support & Setup</strong>
                                  </h4>
-                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                 <a href="#" class="btn btn-light">Learn More</a>
+                                 <p>Get connected & stay connected</p>
+
                              </div>
                          </div>
                          <div class="col-md-3 col-sm-6">
@@ -64,10 +83,10 @@
                                  <i class="fa fa-flask fa-stack-1x text-primary"></i>
                              </span>
                                  <h4>
-                                     <strong>Fix laptops</strong>
+                                     <strong>Fix Laptops & Desktops</strong>
                                  </h4>
-                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                 <a href="#" class="btn btn-light">Learn More</a>
+                                 <p>Whether you're Mac or Windows, we've got you covered</p>
+
                              </div>
                          </div>
                          <div class="col-md-3 col-sm-6">
@@ -77,10 +96,10 @@
                                  <i class="fa fa-shield fa-stack-1x text-primary"></i>
                              </span>
                                  <h4>
-                                     <strong>Fix Desktop</strong>
+                                     <strong>Setup Business Networks</strong>
                                  </h4>
-                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                 <a href="#" class="btn btn-light">Learn More</a>
+                                 <p>Your focus should be your business, let us handle the dirty work</p>
+
                              </div>
                          </div>
                      </div>
@@ -95,12 +114,13 @@
 
      <!-- Callout -->
      <aside class="callout">
-         <div class="text-vertical-center">
+         <!--<div class="text-vertical-center">
              <h1>Vertically Centered Text</h1>
-         </div>
+         </div>--->
      </aside>
 
-     <!-- Portfolio -->
+     <!-- Comment out unneeded section until have content to fill it -->
+     <!--- <!-- Portfolio
      <section id="portfolio" class="portfolio">
          <div class="container">
              <div class="row">
@@ -137,42 +157,22 @@
                              </div>
                          </div>
                      </div>
-                     <!-- /.row (nested) -->
+                     <!-- /.row (nested)
                      <a href="#" class="btn btn-dark">View More Items</a>
                  </div>
-                 <!-- /.col-lg-10 -->
+                 <!-- /.col-lg-10
              </div>
-             <!-- /.row -->
+             <!-- /.row
          </div>
-         <!-- /.container -->
-     </section>
-
-     <!-- Call to Action -->
-     <aside class="call-to-action bg-primary">
-         <div class="container">
-               <form ng-if="!inSession" class="form-signin">
-               <fieldset class="form-group">
-                 <h2 class="form-signin-heading">Login In</h2>
-                 <label for="inputEmail" class="sr-only">Email address</label>
-                 <input type="email" class="form-control" placeholder="Enter email" ng-model="user.email">
-               </fieldset>
-               <fieldset class="form-group">
-                 <label for="inputPassword" class="sr-only">Password</label>
-                 <input type="password" class="form-control" onkeydown = "if (event.keyCode == 13)
-                             document.getElementById('submit').click()" placeholder="Password" ng-model="user.password">
-               </fieldset>
-             </form>
-             <button type="button" id="submit" class="btn btn-lg btn-light" ng-click="login()">Login In</button>
-             <button class="btn btn-lg btn-dark" ng-click="addUser()">Sign Up</button>
-         </div>
-     </aside>
+         <!-- /.container
+     </section> --->
 
      <!-- Map -->
      <section id="contact" class="map">
-         <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
+         <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3477.654539657165!2d-120.66486252917552!3d35.30519539043805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b4054c3551%3A0x98b3b48a29d99103!2sCalifornia+Polytechnic+State+University!5e0!3m2!1sen!2sus!4v1481095087621"></iframe>
          <br />
          <small>
-             <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
+             <a href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3477.654539657165!2d-120.66486252917552!3d35.30519539043805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b4054c3551%3A0x98b3b48a29d99103!2sCalifornia+Polytechnic+State+University!5e0!3m2!1sen!2sus!4v1481095087621"></a>
          </small>
          </iframe>
      </section>
@@ -187,7 +187,7 @@
                      <p>San Luis Obispo, CA 93405</p>
                      <ul class="list-unstyled">
                          <li><i class="fa fa-phone fa-fw"></i> (123) 456-7890</li>
-                         <li><i class="fa fa-envelope-o fa-fw"></i> <a href="mailto:name@example.com">name@example.com</a>
+                         <li><i class="fa fa-envelope-o fa-fw"></i> <a href="mailto:name@example.com">contact@pamelotech.com</a>
                          </li>
                      </ul>
                      <br>
@@ -283,4 +283,3 @@
          // Enable map zooming with mouse scroll when the user clicks the map
      $('.map').on('click', onMapClickHandler);
      </script>
->>>>>>> origin/master

@@ -90,14 +90,55 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
         .catch(function(err){noDlg.show(scope, err, "Error")});
     }
 
-    scope.deleteService = function(id){
-      http.delete("Serv/" + id)
+
+
+    scope.completeService = function(id, amount, techId){
+      if(window.confirm("Ok to confirm service completed."))
+      {
+        http.delete('Serv/' + id + "/" + techId + '/Order')
+        var service =
+        {
+          "serviceId": id,
+          "amount": amount
+        };
+  		  console.log("post service " + JSON.stringify(service));
+        http.post("User/" + rscope.loggedUser.id + "/Serv", service)
+        .then(function(){
+            scope.isShowListServices = 1;
+            scope.showListServices();
+        })
+        .catch(function(err){noDlg.show(scope, err, "Error")});
+      }
+    }
+
+    scope.deleteService = function(id, techId){
+      http.delete("Serv/" + id + "/" + techId + '/Order')
       .then(function(){
-          scope.isShowListServices = 0;
+          scope.isShowListServices = 1;
           scope.showListServices();
       })
       .catch(function(err){noDlg.show(scope, err, "Error")});
     }
+
+    scope.cancelService = function(id, amount, techId){
+      if(window.confirm("Are you sure you want to cancel the service?"))
+      {
+        http.delete('Serv/' + id + "/" + techId + '/Order')
+        var service =
+        {
+          "serviceId": id,
+          "amount": amount
+        };
+  		  console.log("post service " + JSON.stringify(service));
+        http.post("User/" + rscope.loggedUser.id + "/Serv", service)
+        .then(function(){
+          scope.isShowListServices = 1;
+          scope.showListServices();
+        })
+        .catch(function(err){noDlg.show(scope, err, "Error")});
+      }
+    }
+
 
     //Delete a Technician
     scope.deleteTechnician = function(){
@@ -115,23 +156,25 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
     //Write a call to do post service
     scope.postService = function()
     {
-		  var service = 
-                     {
-                         "serviceId": scope.field.serviceName.id,
-                         "amount": scope.field.amount
-                     };
-		 
+		  var service =
+      {
+        "serviceId": scope.field.serviceName.id,
+        "amount": scope.field.amount
+      };
+
 		 console.log("post service " + JSON.stringify(service));
        http.post("User/" + rscope.loggedUser.id + "/Serv", service)
        .then(function(){state.reload()})
        .catch(function(err){noDlg.show(scope, err, "Error")});
     }
-	scope.deleteService = function(id){
-      console.log("In Tech delete function\n");
-      http.delete("Serv/" + id + "/Order")
-      .then(function(){
-          state.reload();
-      })
-      .catch(function(err){noDlg.show(scope, err, "Error")});
-    }
+	// scope.deleteService = function(id){
+  //     console.log("In Tech delete function\n");
+  //     http.delete("Serv/" + id + "/Order")
+  //     .then(function(){
+  //         state.reload();
+  //     })
+  //     .catch(function(err){noDlg.show(scope, err, "Error")});
+  //   }
+
+
 }]);
