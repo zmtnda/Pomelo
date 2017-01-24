@@ -1,107 +1,281 @@
-drop database if exists tekcrew_db;
-create database tekcrew_db;
-use tekcrew_db;
+drop database if exists zilikini_db;
+create database zilikini_db;
+use zilikini_db;
 
 -- -----------------------------------------------------
--- Table users
+-- Table Logins
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Users (
-  id INT(11)  AUTO_INCREMENT PRIMARY KEY,
+CREATE  TABLE IF NOT EXISTS Logins (
+  id_log INT(11)  AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(128) NOT NULL ,
-  password VARCHAR(256) NOT NULL ,
+  passwordSalt VARCHAR(30) NOT NULL ,
+  passwordHash VARCHAR(128) NOT NULL ,
   role int(11) UNSIGNED NOT NULL ,
-  firstName VARCHAR(45) NOT NULL ,
-  lastName VARCHAR(45) NOT NULL ,
-  phone VARCHAR(45) NULL ,
   whenRegistered DATETIME not null,
   UNIQUE KEY (email)
 );
 
-/*
 -- -----------------------------------------------------
--- Table reviews
+-- Table Badges
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS reviews (
-  idreview INT(11) NOT NULL AUTO_INCREMENT ,
-  idreviewer INT(11) NOT NULL ,
-  title VARCHAR(128) NOT NULL ,
-  comment VARCHAR(500) NOT NULL ,
-  rating ENUM('1','2','3','4','5') NOT NULL DEFAULT '1' ,
-  users_iduser INT(11) NOT NULL ,
-  users_user_name VARCHAR(15) NOT NULL ,
-  technicians_idtechnician INT(11) NOT NULL ,
-  PRIMARY KEY (idreview, idreviewer) ,
-  INDEX fk_reviews_users1_idx (users_iduser ASC, users_user_name ASC) ,
-  INDEX fk_reviews_technicians1_idx (technicians_idtechnician ASC) ,
-  CONSTRAINT fk_reviews_users1
-    FOREIGN KEY (users_iduser , users_user_name )
-    REFERENCES users (iduser , user_name )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fk_reviews_technicians1
-    FOREIGN KEY (technicians_idtechnician )
-    REFERENCES technicians (idtechnician )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+CREATE  TABLE IF NOT EXISTS Badges (
+  id_bad INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  description INT(11) NOT NULL ,
+  icon VARCHAR (200) NOT NULL
+);
+-- -----------------------------------------------------
+-- Table ServicesCategories
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Categories (
+  id_cat INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  categories VARCHAR(100) NOT NULL
+);
+-- -----------------------------------------------------
+-- Table ServicesManufacturers
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Manufacturers (
+  id_man INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(100) NOT NULL,
+  UNIQUE KEY (email)
+);
+
+-- -----------------------------------------------------
+-- Table Customers
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Customers (
+  id_cus INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(100) NOT NULL
+);
+
+-- -----------------------------------------------------
+-- Table Technicians
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Technicians (
+  id_tec INT(11)  AUTO_INCREMENT PRIMARY KEY,
+  log_id INT(11) NOT NULL ,
+  firstName VARCHAR(45) NOT NULL ,
+  lastName VARCHAR(45) NOT NULL ,
+  hourlyRate NUMERIC (5,2) UNSIGNED NOT NULL ,
+  city VARCHAR(30) NOT NULL,
+  zip VARCHAR(20) NOT NULL,
+  ratings FLOAT(5,4) NOT NULL,
+  bad_id INT(11) NOT NULL,
+  status INT(11) NOT NULL,
+  CONSTRAINT fkTechniciansLogins
+    FOREIGN KEY (log_id )
+    REFERENCES Logins (id_log)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fkTechniciansBadges
+    FOREIGN KEY (bad_id )
+    REFERENCES Badges (id_bad)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-SHOW WARNINGS;*/
+SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- Table services
+-- Table Certifications
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Services (
-  id INT(11) AUTO_INCREMENT PRIMARY KEY,
-  serviceName VARCHAR(500) NOT NULL);
+CREATE  TABLE IF NOT EXISTS Certifications (
+  id_cer INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) NOT NULL ,
+  certificationName VARCHAR(100) NOT NULL ,
+  institution VARCHAR(100) NOT NULL ,
+  yearObtained DATETIME not null,
+  CONSTRAINT fkCertificationsTechnicians
+    FOREIGN KEY (tec_id )
+    REFERENCES Technicians (id_tec)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
 -- -----------------------------------------------------
--- Table services offer by technicians
+-- Table Videos
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS ServicesOffer (
-  id INT(11) AUTO_INCREMENT PRIMARY KEY,
-  serviceId INT(11) NULL ,
-  amount FLOAT NOT NULL DEFAULT 0.00 ,
-  status int NOT NULL DEFAULT 0 ,
-  timestamp DATETIME NOT NULL ,
-  userId INT(11) NULL ,
-  technicianId INT(11) NOT NULL ,
-  CONSTRAINT fkServicesUsers
-    FOREIGN KEY (userId)
-    REFERENCES Users (id )
+CREATE  TABLE IF NOT EXISTS Videos (
+  id_vid INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) NOT NULL ,
+  description VARCHAR(500) NOT NULL ,
+  CONSTRAINT fkVideosTechnicians
+    FOREIGN KEY (tec_id )
+    REFERENCES Technicians (id_tec)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table Photos
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Photos (
+  id_pho INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) NOT NULL ,
+  description VARCHAR(500) NOT NULL ,
+  CONSTRAINT fkPhotosTechnicians
+    FOREIGN KEY (tec_id )
+    REFERENCES Technicians (id_tec)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table ServicesCategoriesManufacturers
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS CategoriesManufacturers (
+  id_catMan INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  cat_id INT(11) NOT NULL ,
+  man_id INT(11) NOT NULL ,
+  model VARCHAR(50) NOT NULL,
+  CONSTRAINT fkCategoriesManufacturersCategories
+    FOREIGN KEY (cat_id)
+    REFERENCES Categories (id_cat)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-	 CONSTRAINT fkServices
-    FOREIGN KEY (serviceId)
-    REFERENCES Services (id )
+  CONSTRAINT fkCategoriesManufacturersManufacturers
+    FOREIGN KEY (man_id )
+    REFERENCES Manufacturers (id_man )
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT fkServicesTechnicians
-    FOREIGN KEY (technicianId )
-    REFERENCES Users (id )
-    ON DELETE CASCADE
-    ON UPDATE CASCADE);
-  
+    ON UPDATE CASCADE
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
+
 -- -----------------------------------------------------
--- Table technicians
+-- Table CategoriesIssues
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS serviceHistory (
-  id INT(11) AUTO_INCREMENT PRIMARY KEY,
-  userId INT(11) NOT NULL ,
-  technicianId INT(11) NOT NULL ,
-  serviceId INT(11) NOT NULL ,
-  whenCompleted DATETIME NOT NULL ,
-  CONSTRAINT fkHistoryUsers
-    FOREIGN KEY (userId)
-    REFERENCES Users (id)
+CREATE  TABLE IF NOT EXISTS CategoriesIssues (
+  id_catIss INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  cat_id INT(11) NOT NULL ,
+  issues VARCHAR(500) NOT NULL ,
+  CONSTRAINT fkCategoriesIssuesCategories
+    FOREIGN KEY (cat_id)
+    REFERENCES Categories (id_cat)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table ServicesOfferedByTech
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
+  id_serTec INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) NOT NULL ,
+  catMan_id INT(11) NOT NULL ,
+  catIss_id INT(11) NOT NULL ,
+  status INT(11) NOT NULL,
+  CONSTRAINT fkServicesOfferedByTechTechnicians
+    FOREIGN KEY (tec_id)
+    REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-	CONSTRAINT fkHistoryServices
-	 FOREIGN KEY (serviceId)
-    REFERENCES ServicesOffer (serviceId)
+  CONSTRAINT fkServicesOfferedByTechCategoriesManufacturers
+    FOREIGN KEY (catMan_id)
+    REFERENCES CategoriesManufacturers (id_catMan)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-	CONSTRAINT fkHistoryUsers1
-    FOREIGN KEY (technicianId)
-    REFERENCES Users (id)
+  CONSTRAINT fkServicesOfferedByTechCategoriesIssues
+    FOREIGN KEY (catIss_id)
+    REFERENCES CategoriesIssues (id_catIss)
     ON DELETE CASCADE
-    ON UPDATE CASCADE);
+    ON UPDATE CASCADE
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table ServicesHistory
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS ServicesHistory (
+  id_serHis INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  serTec_id INT(11) NOT NULL ,
+  cus_id INT(11) NOT NULL ,
+  description VARCHAR(500) NOT NULL ,
+  amount NUMERIC (5,2) UNSIGNED NOT NULL ,
+  status INT(11) NOT NULL,
+  orderedDate DATETIME NOT NULL,
+  completedDate DATETIME NOT NULL,
+  CONSTRAINT fkServicesHistoryServicesOfferedByTech
+    FOREIGN KEY (serTec_id)
+    REFERENCES ServicesOfferedByTech (id_serTec)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fkServicesHistoryCustomers
+    FOREIGN KEY (cus_id)
+    REFERENCES Customers (id_cus)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table Reviews
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Reviews (
+  id_rev INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  stars TINYINT UNSIGNED NOT NULL ,
+  comment VARCHAR(500),
+  cus_id INT(11) NOT NULL,
+  tec_id INT(11) NOT NULL,
+  CONSTRAINT fkReviewsTechnicians
+    FOREIGN KEY (tec_id)
+    REFERENCES Technicians (id_tec)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fkReviewsCustomers
+    FOREIGN KEY (cus_id)
+    REFERENCES Customers (id_cus)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table Portfolio
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Portfolio (
+  id_por INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) NOT NULL ,
+  websites VARCHAR(200) NULL DEFAULT NULL ,
+  aboutMe VARCHAR(500) NULL DEFAULT NULL ,
+  companyName VARCHAR(100) NULL DEFAULT NULL ,
+  companyAddress VARCHAR(100) NULL DEFAULT NULL ,
+  companyPhone VARCHAR(45) NULL DEFAULT NULL ,
+  vid_id INT(11) NULL DEFAULT NULL ,
+  pho_id INT(11) NULL DEFAULT NULL ,
+  CONSTRAINT fkPortfolioTechnicians
+    FOREIGN KEY (tec_id)
+    REFERENCES Technicians (id_tec)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fkPortfolioVideos
+    FOREIGN KEY (vid_id)
+    REFERENCES Videos (id_vid)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fkPortfolioPhotos
+    FOREIGN KEY (pho_id)
+    REFERENCES Photos (id_pho)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
