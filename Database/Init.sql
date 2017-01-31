@@ -6,7 +6,7 @@ use zilikini_db;
 -- Table Logins
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Logins (
-  id_log INT(11)  AUTO_INCREMENT PRIMARY KEY,
+  id_log INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(128) NOT NULL ,
   passwordSalt VARCHAR(30) NOT NULL ,
   passwordHash VARCHAR(128) NOT NULL ,
@@ -19,22 +19,22 @@ CREATE  TABLE IF NOT EXISTS Logins (
 -- Table Badges
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Badges (
-  id_bad INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  description INT(11) NOT NULL ,
+  id_bad INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  description VARCHAR (500) NULL ,
   icon VARCHAR (200) NOT NULL
 );
 -- -----------------------------------------------------
 -- Table ServicesCategories
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Categories (
-  id_cat INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id_cat INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   categories VARCHAR(100) NOT NULL
 );
 -- -----------------------------------------------------
 -- Table ServicesManufacturers
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Manufacturers (
-  id_man INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id_man INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(100) NOT NULL,
   UNIQUE KEY (email)
 );
@@ -43,7 +43,7 @@ CREATE  TABLE IF NOT EXISTS Manufacturers (
 -- Table Customers
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Customers (
-  id_cus INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id_cus INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(100) NOT NULL
 );
 
@@ -51,15 +51,15 @@ CREATE  TABLE IF NOT EXISTS Customers (
 -- Table Technicians
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Technicians (
-  id_tec INT(11)  AUTO_INCREMENT PRIMARY KEY,
-  log_id INT(11) NOT NULL ,
+  id_tec INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  log_id INT(11) UNSIGNED NOT NULL ,
   firstName VARCHAR(45) NOT NULL ,
   lastName VARCHAR(45) NOT NULL ,
   hourlyRate NUMERIC (5,2) UNSIGNED NOT NULL ,
   city VARCHAR(30) NOT NULL,
   zip VARCHAR(20) NOT NULL,
   ratings FLOAT(5,4) NOT NULL,
-  bad_id INT(11) NOT NULL,
+  bad_id INT(11) UNSIGNED NOT NULL,
   status INT(11) NOT NULL,
   CONSTRAINT fkTechniciansLogins
     FOREIGN KEY (log_id )
@@ -81,8 +81,8 @@ SHOW WARNINGS;
 -- Table Certifications
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Certifications (
-  id_cer INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) NOT NULL ,
+  id_cer INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
   certificationName VARCHAR(100) NOT NULL ,
   institution VARCHAR(100) NOT NULL ,
   yearObtained DATETIME not null,
@@ -97,8 +97,8 @@ CREATE  TABLE IF NOT EXISTS Certifications (
 -- Table Videos
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Videos (
-  id_vid INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) NOT NULL ,
+  id_vid INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
   description VARCHAR(500) NOT NULL ,
   CONSTRAINT fkVideosTechnicians
     FOREIGN KEY (tec_id )
@@ -111,8 +111,8 @@ CREATE  TABLE IF NOT EXISTS Videos (
 -- Table Photos
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Photos (
-  id_pho INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) NOT NULL ,
+  id_pho INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
   description VARCHAR(500) NOT NULL ,
   CONSTRAINT fkPhotosTechnicians
     FOREIGN KEY (tec_id )
@@ -125,9 +125,9 @@ CREATE  TABLE IF NOT EXISTS Photos (
 -- Table ServicesCategoriesManufacturers
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS CategoriesManufacturers (
-  id_catMan INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  cat_id INT(11) NOT NULL ,
-  man_id INT(11) NOT NULL ,
+  id_catMan INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  cat_id INT(11) UNSIGNED NOT NULL ,
+  man_id INT(11) UNSIGNED NOT NULL ,
   model VARCHAR(50) NOT NULL,
   CONSTRAINT fkCategoriesManufacturersCategories
     FOREIGN KEY (cat_id)
@@ -149,8 +149,8 @@ SHOW WARNINGS;
 -- Table CategoriesIssues
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS CategoriesIssues (
-  id_catIss INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  cat_id INT(11) NOT NULL ,
+  id_catIss INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  cat_id INT(11) UNSIGNED NOT NULL ,
   issues VARCHAR(500) NOT NULL ,
   CONSTRAINT fkCategoriesIssuesCategories
     FOREIGN KEY (cat_id)
@@ -167,10 +167,10 @@ SHOW WARNINGS;
 -- Table ServicesOfferedByTech
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
-  id_serTec INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) NOT NULL ,
-  catMan_id INT(11) NOT NULL ,
-  catIss_id INT(11) NOT NULL ,
+  id_serTec INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
+  catMan_id INT(11) UNSIGNED NOT NULL ,
+  catIss_id INT(11) UNSIGNED NOT NULL ,
   status INT(11) NOT NULL,
   CONSTRAINT fkServicesOfferedByTechTechnicians
     FOREIGN KEY (tec_id)
@@ -197,9 +197,9 @@ SHOW WARNINGS;
 -- Table ServicesHistory
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS ServicesHistory (
-  id_serHis INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  serTec_id INT(11) NOT NULL ,
-  cus_id INT(11) NOT NULL ,
+  id_serHis INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  serTec_id INT(11) UNSIGNED NOT NULL ,
+  cus_id INT(11) UNSIGNED NOT NULL ,
   description VARCHAR(500) NOT NULL ,
   amount NUMERIC (5,2) UNSIGNED NOT NULL ,
   status INT(11) NOT NULL,
@@ -225,11 +225,17 @@ SHOW WARNINGS;
 -- Table Reviews
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Reviews (
-  id_rev INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id_rev INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   stars TINYINT UNSIGNED NOT NULL ,
   comment VARCHAR(500),
-  cus_id INT(11) NOT NULL,
-  tec_id INT(11) NOT NULL,
+  serHis_id INT(11) UNSIGNED NOT NULL,
+  cus_id INT(11) UNSIGNED NOT NULL,
+  tec_id INT(11) UNSIGNED NOT NULL,
+  CONSTRAINT fkReviewsServicesHistory
+    FOREIGN KEY (serHis_id)
+    REFERENCES ServicesHistory (id_serHis)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   CONSTRAINT fkReviewsTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
@@ -250,15 +256,15 @@ SHOW WARNINGS;
 -- Table Portfolio
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Portfolio (
-  id_por INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) NOT NULL ,
+  id_por INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
   websites VARCHAR(200) NULL DEFAULT NULL ,
   aboutMe VARCHAR(500) NULL DEFAULT NULL ,
   companyName VARCHAR(100) NULL DEFAULT NULL ,
   companyAddress VARCHAR(100) NULL DEFAULT NULL ,
   companyPhone VARCHAR(45) NULL DEFAULT NULL ,
-  vid_id INT(11) NULL DEFAULT NULL ,
-  pho_id INT(11) NULL DEFAULT NULL ,
+  vid_id INT(11) UNSIGNED NULL DEFAULT NULL ,
+  pho_id INT(11) UNSIGNED NULL DEFAULT NULL ,
   CONSTRAINT fkPortfolioTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
