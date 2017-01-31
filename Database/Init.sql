@@ -35,8 +35,12 @@ CREATE  TABLE IF NOT EXISTS Categories (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Manufacturers (
   id_man INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+<<<<<<< HEAD
+  manufacturer VARCHAR(100) NOT NULL
+=======
   email VARCHAR(100) NOT NULL,
   UNIQUE KEY (email)
+>>>>>>> origin
 );
 
 -- -----------------------------------------------------
@@ -76,6 +80,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 SHOW WARNINGS;
+<<<<<<< HEAD
 
 -- -----------------------------------------------------
 -- Table Certifications
@@ -124,6 +129,56 @@ CREATE  TABLE IF NOT EXISTS Photos (
 -- -----------------------------------------------------
 -- Table ServicesCategoriesManufacturers
 -- -----------------------------------------------------
+=======
+
+-- -----------------------------------------------------
+-- Table Certifications
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Certifications (
+  id_cer INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
+  certificationName VARCHAR(100) NOT NULL ,
+  institution VARCHAR(100) NOT NULL ,
+  yearObtained DATETIME not null,
+  CONSTRAINT fkCertificationsTechnicians
+    FOREIGN KEY (tec_id )
+    REFERENCES Technicians (id_tec)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------
+-- Table Videos
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Videos (
+  id_vid INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
+  description VARCHAR(500) NOT NULL ,
+  CONSTRAINT fkVideosTechnicians
+    FOREIGN KEY (tec_id )
+    REFERENCES Technicians (id_tec)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table Photos
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Photos (
+  id_pho INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL ,
+  description VARCHAR(500) NOT NULL ,
+  CONSTRAINT fkPhotosTechnicians
+    FOREIGN KEY (tec_id )
+    REFERENCES Technicians (id_tec)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table ServicesCategoriesManufacturers
+-- -----------------------------------------------------
+>>>>>>> origin
 CREATE  TABLE IF NOT EXISTS CategoriesManufacturers (
   id_catMan INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cat_id INT(11) UNSIGNED NOT NULL ,
