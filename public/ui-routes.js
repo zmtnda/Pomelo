@@ -18,6 +18,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
          templateUrl: 'Customer/customer.template.html',
          controller: 'customerController',
       })
+      .state('about', {
+         url: '/about',
+         templateUrl: 'About/about.html',
+        //  controller: '',
+      })
       .state('admin', {
          url: '/admin',
          templateUrl: 'Admin/admin.template.html',

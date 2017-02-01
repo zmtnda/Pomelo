@@ -10,6 +10,11 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
 		 .then(function(){state.reload()});
    }
 
+   scope.goToAbout = function()
+   {
+     goSer.goToAbout();
+   }
+
    rscope.logout = logSer.logout;
 
    rscope.goMain = function(role){
