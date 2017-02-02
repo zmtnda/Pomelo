@@ -1,8 +1,8 @@
 	/*
 		Role:
-			1 - Admin
-			2 - Tech
-			3 - Customer
+			2 - Admin
+			1 - Tech
+			0 - Customer
 	*/
 
 	-- Insert data for badges --
@@ -14,27 +14,27 @@
 
 	-- Insert data for login --
 	insert into `Logins` (`email`, `passwordSalt`, `passwordHash`, `role`, `whenRegistered`) values
-		('admin@pomelo.com', 10 ,'$2a$10$uXRcyuIDmu4v6DZ20FOn.eIsRo6jtT1gnsrmSacp6Q/5c6bfCi.1.', 1, NOW()),
-		('tech1@pomelo.com', 8, '$2a$08$mN2pZ9h/2LB9QA/FObvPHeVxur76cAZPoPb2/DUM0YJ9uUjUNkRtO', 2, NOW()),
-		('tech2@pomelo.com', 9, '$2a$09$h4HlgpizApxZ6gdi/QuUBup5H0bOeK6WvN8p6rTdt/fo/sFzjSDsO', 2, NOW()),
-		('tech3@pomelo.com', 9, '$2a$09$h4HlgpizApxZ6gdi/QuUBup5H0bOeK6WvN8p6rTdt/fo/sFzjSDsO', 2, NOW());
+		('admin@pomelo.com', 10 ,'$2a$10$uXRcyuIDmu4v6DZ20FOn.eIsRo6jtT1gnsrmSacp6Q/5c6bfCi.1.', 2, NOW()),
+		('tech1@pomelo.com', 8, '$2a$08$mN2pZ9h/2LB9QA/FObvPHeVxur76cAZPoPb2/DUM0YJ9uUjUNkRtO', 1, NOW()),
+		('tech2@pomelo.com', 9, '$2a$09$h4HlgpizApxZ6gdi/QuUBup5H0bOeK6WvN8p6rTdt/fo/sFzjSDsO', 1, NOW()),
+		('tech3@pomelo.com', 9, '$2a$09$h4HlgpizApxZ6gdi/QuUBup5H0bOeK6WvN8p6rTdt/fo/sFzjSDsO', 1, NOW());
 
 	-- insert data into technicians --
 	-- status 1: active, 0: not --
-	insert into `Technicians` (`log_id`, `firstName`, `lastName`, `hourlyRate`, 
+	insert into `Technicians` (`log_id`, `firstName`, `lastName`, `hourlyRate`,
 		`City`, `Zip`, `ratings`, `bad_id`, `status`) values
 		(2, 'Tech_1', 'Byakugan', 46.5, 'SLO', 93405, 3.5, 2, 1),
 		(3, 'Tech_2', 'Uhara', 30.0, 'Santa Clara', 95050, 4.2, 3, 1),
 		(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 0);
 
-	-- insert into certification -- 
+	-- insert into certification --
 	insert into `Certifications` (`tec_id`, `certificationName`, `institution`, `yearObtained`) values
 		(1, 'Bachelor in CS', 'Cal Poly', '2017-01-12'),
 		(1, 'Bachelor in Math', 'Cal Poly', '2017-01-25'),
 		(2, 'Master in CS', 'UCLA', '2015-02-23');
 
 	-- insert data into profolio --
-	insert into `Portfolio` (`tec_id`, `websites`, `aboutMe`, `companyName`, 
+	insert into `Portfolio` (`tec_id`, `websites`, `aboutMe`, `companyName`,
 		`CompanyAddress`, `CompanyPhone`) values
 		(1, 'url', 'tech1 is me', 'Company_tec_1', 'SLO', 'xxx-xxx-xxxx'),
 		(2, 'url', 'tech2 is me', 'Company_tec_2', 'LA', 'xxx-xxx-xxxx');
@@ -77,7 +77,7 @@
 		(1, 'Upgrade RAM'), -- 2
 		(2, 'Can\'t turn on'), -- 3
 		(2, 'Can\'t connect to WiFi'), -- 4
-		(2, 'Keyboard doesn\'t work'), -- 5 
+		(2, 'Keyboard doesn\'t work'), -- 5
 		(3, 'Broken Screen'), -- 6
 		(3, 'Can\'t turn on'), -- 7
 		(4, 'Broken Screen'), -- 8
@@ -106,4 +106,3 @@
 		(2, 1, 1, 1.0, 'Bad Service'),
 		(3, 2, 1, 4.5, 'Okay but slow'),
 		(4, 2, 2, 3.5, 'worked for 2 weeks happen again');
-
