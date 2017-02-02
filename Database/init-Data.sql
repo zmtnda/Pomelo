@@ -3,6 +3,9 @@
 			2 - Admin
 			1 - Tech
 			0 - Customer
+		Service Type:
+			0 - item base
+			1 - time base
 	*/
 
 	-- Insert data for badges --
@@ -84,13 +87,14 @@
 		(4, 'Replace battery'); -- 9
 
 	-- insert data into Service offer by tech --
-	insert into `ServicesOfferedByTech` (`tec_id`, `catMan_id`, `catIss_id`, `status`) values
-		(1, 1, 1, 1), -- dell desktop cant turn on -- 1
-		(1, 3, 4, 1), -- macbook 2015 cant connect wifi -- 2
-		(1, 5, 8, 1), -- ipad 2 mini broken screen -- 3
-		(1, 7, 9, 1), -- galaxy 7 replace baterry -- 4
-		(2, 6, 9, 1), -- galaxy s6 replace baterry -- 5
-		(2, 4, 5, 1); -- xps13 keyboard doesn't work -- 6
+	insert into `ServicesOfferedByTech` (`tec_id`, `catMan_id`, `catIss_id`,
+		`servType`, `estAmount`, `status`) values
+		(1, 1, 1, 0, 50.99, 1), -- dell desktop cant turn on -- 1
+		(1, 3, 4, 1, 46.50, 1), -- macbook 2015 cant connect wifi -- 2
+		(1, 5, 8, 0, 60.99, 1), -- ipad 2 mini broken screen -- 3
+		(1, 7, 9, 0, 149.99, 1), -- galaxy 7 replace baterry -- 4
+		(2, 6, 9, 0, 99.99, 1), -- galaxy s6 replace baterry -- 5
+		(2, 4, 5, 1, 30.00, 1); -- xps13 keyboard doesn't work -- 6
 
 	-- insert data into ServiceHistory --
 	insert into `ServicesHistory` (`serTec_id`, `cus_id`, `description`, `amount`, `status`,

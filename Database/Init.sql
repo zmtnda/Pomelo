@@ -10,7 +10,7 @@ CREATE  TABLE IF NOT EXISTS Logins (
   email VARCHAR(128) NOT NULL ,
   passwordSalt VARCHAR(30) NOT NULL ,
   passwordHash VARCHAR(128) NOT NULL ,
-  role int(11) UNSIGNED NOT NULL ,
+  role INT(11) UNSIGNED NOT NULL ,
   whenRegistered DATETIME not null,
   UNIQUE KEY (email)
 );
@@ -54,7 +54,7 @@ CREATE  TABLE IF NOT EXISTS Technicians (
   log_id INT(11) UNSIGNED NOT NULL ,
   firstName VARCHAR(45) NOT NULL ,
   lastName VARCHAR(45) NOT NULL ,
-  hourlyRate NUMERIC (5,2) UNSIGNED NOT NULL ,
+  hourlyRate NUMERIC (6,2) UNSIGNED NOT NULL ,
   city VARCHAR(30) NOT NULL,
   zip VARCHAR(20) NOT NULL,
   ratings FLOAT(5,4) NOT NULL,
@@ -218,6 +218,8 @@ CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
   tec_id INT(11) UNSIGNED NOT NULL ,
   catMan_id INT(11) UNSIGNED NOT NULL ,
   catIss_id INT(11) UNSIGNED NOT NULL ,
+  servType TINYINT UNSIGNED NOT NULL,
+  estAmount NUMERIC(6,2) UNSIGNED NOT NULL,
   status INT(11) NOT NULL,
   CONSTRAINT fkServicesOfferedByTechTechnicians
     FOREIGN KEY (tec_id)
