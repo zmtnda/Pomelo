@@ -57,6 +57,7 @@ CREATE  TABLE IF NOT EXISTS Technicians (
   hourlyRate NUMERIC (6,2) UNSIGNED NOT NULL ,
   city VARCHAR(30) NOT NULL,
   zip VARCHAR(20) NOT NULL,
+  avatar VARCHAR (200) NULL,
   ratings FLOAT(5,4) NOT NULL,
   bad_id INT(11) UNSIGNED NOT NULL,
   status INT(11) NOT NULL,
@@ -98,10 +99,11 @@ CREATE  TABLE IF NOT EXISTS Certifications (
 CREATE  TABLE IF NOT EXISTS Videos (
   id_vid INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL ,
+  directory VARCHAR (200) NOT NULL,
   description VARCHAR(500) NOT NULL ,
   CONSTRAINT fkVideosTechnicians
-    FOREIGN KEY (tec_id )
-    REFERENCES Technicians (id_tec)
+    FOREIGN KEY (tec_id)
+    REFERENCES Technicians(id_tec)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -112,6 +114,7 @@ CREATE  TABLE IF NOT EXISTS Videos (
 CREATE  TABLE IF NOT EXISTS Photos (
   id_pho INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL ,
+  directory VARCHAR (200) NOT NULL,
   description VARCHAR(500) NOT NULL ,
   CONSTRAINT fkPhotosTechnicians
     FOREIGN KEY (tec_id )
@@ -121,55 +124,7 @@ CREATE  TABLE IF NOT EXISTS Photos (
 );
 
 -- -----------------------------------------------------
--- Table ServicesCategoriesManufacturers
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Table Certifications
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Certifications (
-  id_cer INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) UNSIGNED NOT NULL ,
-  certificationName VARCHAR(100) NOT NULL ,
-  institution VARCHAR(100) NOT NULL ,
-  yearObtained DATETIME not null,
-  CONSTRAINT fkCertificationsTechnicians
-    FOREIGN KEY (tec_id )
-    REFERENCES Technicians (id_tec)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-
--- -----------------------------------------------------
--- Table Videos
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Videos (
-  id_vid INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) UNSIGNED NOT NULL ,
-  description VARCHAR(500) NOT NULL ,
-  CONSTRAINT fkVideosTechnicians
-    FOREIGN KEY (tec_id )
-    REFERENCES Technicians (id_tec)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-);
-
--- -----------------------------------------------------
--- Table Photos
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Photos (
-  id_pho INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) UNSIGNED NOT NULL ,
-  description VARCHAR(500) NOT NULL ,
-  CONSTRAINT fkPhotosTechnicians
-    FOREIGN KEY (tec_id )
-    REFERENCES Technicians (id_tec)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-);
-
--- -----------------------------------------------------
--- Table ServicesCategoriesManufacturers
+-- Table CategoriesManufacturers
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS CategoriesManufacturers (
   id_catMan INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
