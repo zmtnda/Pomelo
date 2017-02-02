@@ -35,12 +35,7 @@ CREATE  TABLE IF NOT EXISTS Categories (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Manufacturers (
   id_man INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-<<<<<<< HEAD
   manufacturer VARCHAR(100) NOT NULL
-=======
-  email VARCHAR(100) NOT NULL,
-  UNIQUE KEY (email)
->>>>>>> origin
 );
 
 -- -----------------------------------------------------
@@ -80,7 +75,6 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 SHOW WARNINGS;
-<<<<<<< HEAD
 
 -- -----------------------------------------------------
 -- Table Certifications
@@ -129,7 +123,6 @@ CREATE  TABLE IF NOT EXISTS Photos (
 -- -----------------------------------------------------
 -- Table ServicesCategoriesManufacturers
 -- -----------------------------------------------------
-=======
 
 -- -----------------------------------------------------
 -- Table Certifications
@@ -178,7 +171,6 @@ CREATE  TABLE IF NOT EXISTS Photos (
 -- -----------------------------------------------------
 -- Table ServicesCategoriesManufacturers
 -- -----------------------------------------------------
->>>>>>> origin
 CREATE  TABLE IF NOT EXISTS CategoriesManufacturers (
   id_catMan INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cat_id INT(11) UNSIGNED NOT NULL ,
