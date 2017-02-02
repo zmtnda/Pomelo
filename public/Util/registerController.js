@@ -6,7 +6,7 @@
         //console.log(JSON.stringify(scope.user));
         //Do a post caToll
 		  scope.submitted = 1;
-		  logSer.addUser(scope.user.role, scope.user.email, scope.user.password, scope.user.firstName, scope.user.lastName, scope.user.phone)
+		  logSer.addUser(scope.user.role, scope.user.email, scope.user.password, scope.user.firstName, scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
 		  .then (function(){
 			   if(rscope.loggedUser.email !== 'Admin@11.com'){
 					console.log("I am not admin" +rscope.loggedUser.email );
@@ -16,8 +16,8 @@
 					console.log("I am admin");
 					state.reload();
 				}
-		  }) 
-		  .catch(function(err){noDlg.show(scope, err, "Error")}); 
+		  })
+		  .catch(function(err){noDlg.show(scope, err, "Error")});
 	}
 }])
 /*

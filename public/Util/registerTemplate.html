@@ -3,42 +3,50 @@
     <div id="login-form">
         <form method="post">
             <table align="center" width="90%" border="0">
-                <tr><
+                <tr><br>
                     <td>
-                        <a>Please select one</a>
+                        <a>Please select one*</a>
                         <select type ="userType" name="type" ng-model="user.role">
-                            <option class = "elType" id = "customer" name="Customer" value=0 selected>Customer</option>
-                            <option class = "elType" id = "technician" value=1 name="Technician">Technician</option>
+                            <option selected="selected" class = "elType" id = "technician" value=1 name="Technician">Technician</option>
+                            <option disabled="disabled" class = "elType" id = "customer" name="Customer" value=0 selected>Customer (Feature available in later release)</option>
                         </select>
                     </td>
                 </tr>
 
                 <tr>
-                    <td><input type="email" name="email" value="" style="display: none"/>
-                    <input type="email" name="email" ng-model="user.email" placeholder="Your Email" required /></td>
+                    <td><input type="email" name="email" ng-model="user.email" placeholder="Your Email*" required /></td>
                 </tr>
 
                 <tr>
-                    <td><input type="password" name="pass" ng-model="user.password" placeholder="Your Password" required /></td>
+                    <td><input type="password" name="pass" ng-model="user.password" placeholder="Your Password*" required /></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="first_name" ng-model="user.firstName" placeholder="First Name" required /></td>
+                    <td><input type="text" name="first_name" ng-model="user.firstName" placeholder="First Name*" required /></td>
                 </tr>
 
                 <tr>
-                    <td><input type="text" name="last_name" ng-model="user.lastName" placeholder="Last Name" required /></td>
+                    <td><input type="text" name="last_name" ng-model="user.lastName" placeholder="Last Name*" required /></td>
                 </tr>
 
                 <tr>
-                    <td><input type="number" name="phone" ng-model="user.phone" placeholder="Phone#" optional /></td>
+                    <td><input type="number" name="HourlyRate" ng-model="user.hourlyRate" placeholder="Service Rate* (Default rate: $25/hour)" required /></td>
                 </tr>
 
                 <tr>
-                    <td><button type="submit" name="btn-signup" ng-if="!submitted" ng-click="postUser()">Sign Me Up</button>
-                        <button type="submit" name="btn-signup" ng-click="$close()">Cancel</button></td>
+                    <td><input type="text" name="city" ng-model="user.city" placeholder="City*" required /></td>
+                </tr>
+
+                <tr>
+                    <td><input type="number" name="zip" ng-model="user.zip" placeholder="Zip code*" required /></td>
+                </tr>
+
+                <tr>
+                    <td><button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-if="!submitted" ng-click="postUser()">Sign Me Up</button>
+                        <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="$close()">Cancel</button></td>
                 </tr>
             </table>
+            <br>
         </form>
     </div>
 </center>
