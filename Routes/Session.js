@@ -42,7 +42,7 @@ Session.prototype.isTechnician = function() {
 };
 
 exports.makeSession = function makeSession(user, res) {
-	
+
 	console.log("make session");
    var cookie = crypto.randomBytes(16).toString('hex');
    var session = new Session(user);

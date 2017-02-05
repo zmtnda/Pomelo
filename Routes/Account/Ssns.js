@@ -4,6 +4,7 @@ var Tags = require('../Validator.js').Tags;
 var ssnUtil = require('../Session.js');
 var router = Express.Router({caseSensitive: true});
 var bcrypt = require('bcryptjs');
+const saltRounds = 10;
 
 router.baseURL = '/Ssns';
 
@@ -15,7 +16,7 @@ router.baseURL = '/Ssns';
 //             usrId  - ID of User logged in
 router.get('/', function(req, res) {
    var body = [], ssn;
-
+   console.log("In get / ssns");
    if (req.validator.checkAdmin()) {
       for (cookie in ssnUtil.sessions) {
          ssn = ssnUtil.sessions[cookie];
@@ -39,12 +40,22 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
    var cookie;
 	console.log('POST Ssns/');
-
+   console.log(req.body.email);
+   console.log(req.body.password);
    connections.getConnection(res, function(cnn) {
-      cnn.query('select * from Users where email = ?', [req.body.email], function(err, result) {
-         if (req.validator.check(result.length  && bcrypt.compareSync(req.body.password, result[0].password), Tags.badLogin)) {
+      cnn.query('select * from logins l left join technicians t on t.log_id = l.id_log and l.email = ?', [req.body.email], function(err, result) {
+         console.log("In query: " + JSON.stringify(result));
+         console.log ("error " + err);
+         if (bcrypt.compareSync(req.body.password, result[0].passwordHash))
+            console.log("same pass");
+         else
+            console.log("diff pass");
+         //req.body.password = bcrypt.hashSync(req.body.password, 10);
+
+         console.log(result.length);
+         if (req.validator.check(result.length  && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
             cookie = ssnUtil.makeSession(result[0], res);
-            res.location(router.baseURL + '/'  + cookie).end();
+            res.location(router.baseURL + '/'  + cookie).send(result);
          }
          cnn.release();
       });
