@@ -17,9 +17,16 @@
 					state.reload();
 				}
 		  })
-		  .catch(function(err){noDlg.show(scope, err, "Error")});
+		  .catch(function(err){console.log("ERROR!!!!!");noDlg.show(scope, err, "Error")});
 	}
+
+  scope.isValidZip = function(value){
+      return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
+  }
 }])
+
+
+
 /*
 app.controller('registerController', ['$scope', '$state', 'goToServices','logService', '$http', 'notifyDlg', function(scope, state, goSer, logSer, http, noDlg) {
     scope.user = {};
