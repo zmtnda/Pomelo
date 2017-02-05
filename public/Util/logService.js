@@ -67,5 +67,4 @@ function(rscope, http, state, nDlg, route) {
          return 0;
         }
       }
-
 }]);
