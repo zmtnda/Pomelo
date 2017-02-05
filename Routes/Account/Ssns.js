@@ -38,10 +38,14 @@ router.get('/', function(req, res) {
 //       }
 router.post('/', function(req, res) {
    var cookie;
-	console.log('POST Ssns/');
-
+	 console.log('POST Ssns/');
+  console.log("password: " + req.body.password + "\n" + "email: " + req.body.email)
    connections.getConnection(res, function(cnn) {
-      cnn.query('select * from Users where email = ?', [req.body.email], function(err, result) {
+     console.log(cnn)
+      cnn.query('select * from logins where email = ?', [req.body.email], function(err, result) {
+        // Change the salt
+        // before encrpy, get the salt from the DB
+        console.log("password: " + req.body.password)
          if (req.validator.check(result.length  && bcrypt.compareSync(req.body.password, result[0].password), Tags.badLogin)) {
             cookie = ssnUtil.makeSession(result[0], res);
             res.location(router.baseURL + '/'  + cookie).end();

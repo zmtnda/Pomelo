@@ -1,0 +1,124 @@
+
+<body class="container issueGuidancePage" style="98%">
+       <div class="progress">
+         <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="progressBarDisplay">
+                  {{ progressPercentage }} Complete
+         </div>
+       </div>
+       <div class="row">
+
+       <div class="col-xs-12 col-md-2">
+         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+           <h3>Type(s)</h3>
+           <div class="btn-group" role="group" aria-label="...">
+             <button type="button" class="btn btn-success">Done</button>
+           </div>
+           <div class = "table-responsive">
+             <table class = "table">
+               <tbody>
+                 <tr ng-repeat = "type in allTypes track by $index" data-drag="true" data-index="{{$index}}" jqyoui-draggable>
+                    <td><button type="button" class="btn btn-default"> {{ type }} </button></td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+
+       <div class="col-xs-12 col-md-2">
+         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+           <h3>Manufacturer(s)</h3>
+           <div class="btn-group" role="group" aria-label="...">
+             <button type="button" class="btn btn-success">Done</button>
+           </div>
+           <!-- Use a list here instead-->
+           <div class = "table-responsive">
+             <table class = "table">
+               <tbody>
+                 <tr ng-repeat = "manu in manufactueres track by $index">
+                    <td><button type="button" class="btn btn-default"> {{ manu }} </button></td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+
+       <div class="col-xs-12 col-md-2">
+         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+           <h3>Model(s)</h3>
+           <div class="btn-group" role="group" aria-label="...">
+             <button type="button" class="btn btn-success" ng-click = "addItem(3)">Done</button>
+           </div>
+           <!-- Use a list here instead-->
+           <div class = "table-responsive">
+             <table class = "table">
+               <tbody>
+                 <tr ng-repeat = "model in models track by $index">
+                    <td><button type="button" class="btn btn-default"> {{ model }} </button></td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+
+       <div class="col-xs-12 col-md-2">
+         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+           <h3>Issue(s)</h3>
+           <div class="btn-group" role="group" aria-label="...">
+             <button type="button" class="btn btn-success" ng-click = "addItem(3)">Done</button>
+           </div>
+           <!-- Use a list here instead-->
+           <div class = "table-responsive">
+             <table class = "table">
+               <tbody>
+                 <tr ng-repeat = "issue in issues track by $index">
+                   <td><button type="button" class="btn btn-default">{{ issue }}</button></td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+
+       <div class="col-xs-12 col-md-2">
+         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+           <h3>Amount</h3>
+           <div class="btn-group" role="group" aria-label="...">
+             <button type="button" class="btn btn-success" ng-click = "addItem(3)">Done</button>
+           </div>
+           <!-- Use a list here instead-->
+           <div class = "table-responsive">
+             <table class = "table">
+               <tbody>
+                 <tr ng-repeat = "item in allCompletedItems track by $index">
+                   <td>{{ item.coworker }}</td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+
+       <div class="col-xs-12 col-md-2">
+         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+           <h3>You're offering:</h3>
+           <div class="btn-group" role="group" aria-label="...">
+             <button type="button" class="btn btn-success" ng-click = "addItem(3)">Done</button>
+           </div>
+           <!-- Use a list here instead-->
+           <div class = "table-responsive">
+             <table class = "table">
+               <tbody>
+                 <tr ng-repeat = "item in allCompletedItems track by $index">
+                   <td>{{ item.coworker }}</td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+
+   </div>
+</body>

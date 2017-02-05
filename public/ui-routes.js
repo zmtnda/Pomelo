@@ -23,6 +23,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
          templateUrl: 'About/about.html',
         //  controller: '',
       })
+      .state('issueGudiance', {
+         url: '/technician/IssueGuidance',
+         templateUrl: 'Technician/IssueGuidance/issueGuidance.template.html',
+         controller: 'issueGuidanceController',
+      })
       .state('admin', {
          url: '/admin',
          templateUrl: 'Admin/admin.template.html',

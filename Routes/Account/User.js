@@ -90,12 +90,10 @@ router.post('/', function(req, res) {
 	console.log("POST Users/");
    var vld = req.validator;  // Shorthands
    var body = req.body;
-   /* var admin = req.session && req.session.isAdmin(); */
-var admin = req.session;
+   var admin = req.session;
 	 if (admin && !body.password)
-	//if (!body.password)
 
-      body.password = "*";                       // Blockig password
+   body.password = "*";                       // Blockig password
    body.whenRegistered = new Date();
 
    if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'password', 'role']) // this checks for key existance
@@ -159,7 +157,7 @@ router.put('/:id', function(req, res) {
    { // check to see if the user is trying to change the password
      console.log(JSON.stringify(body));
           connections.getConnection(res, function(cnn) { // Done with if conditional
-              if(body.password) { 
+              if(body.password) {
                   body.password = bcrypt.hashSync(body.password, saltRounds);
               }
            cnn.query("update Users set ? where id = ?", [req.body, req.params.id],
