@@ -38,28 +38,20 @@ router.get('/', function(req, res) {
 //          password : Password of user
 //       }
 router.post('/', function(req, res) {
-   var cookie;
-	console.log('POST Ssns/');
-   console.log(req.body.email);
-   console.log(req.body.password);
-   connections.getConnection(res, function(cnn) {
-      cnn.query('select * from logins l left join technicians t on t.log_id = l.id_log and l.email = ?', [req.body.email], function(err, result) {
-         console.log("In query: " + JSON.stringify(result));
-         console.log ("error " + err);
-         if (bcrypt.compareSync(req.body.password, result[0].passwordHash))
-            console.log("same pass");
-         else
-            console.log("diff pass");
-         //req.body.password = bcrypt.hashSync(req.body.password, 10);
-
-         console.log(result.length);
-         if (req.validator.check(result.length  && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
-            cookie = ssnUtil.makeSession(result[0], res);
-            res.location(router.baseURL + '/'  + cookie).send(result);
-         }
-         cnn.release();
-      });
-   });
+  var cookie;
+  console.log('POST Ssns/');
+  console.log(req.body.email);
+  console.log(req.body.passwordHash);
+  connections.getConnection(res, function(cnn) {
+    cnn.query('SELECT * FROM Logins JOIN Technicians ON log_id = id_log AND email = ?', req.body.email, function(err, result) {
+      if (req.validator.check(result.length && bcrypt.compare(req.body.passwordHash, result[0].passwordHash), Tags.badLogin)) {
+        console.log("same pass");
+         cookie = ssnUtil.makeSession(result[0], res);
+         res.location(router.baseURL + '/'  + cookie).send(result);
+      }
+      cnn.release();
+    });
+  });
 });
 
 // Begin 'Ssns/:cookie' functions
