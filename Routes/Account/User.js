@@ -79,40 +79,74 @@ router.get('/', function(req, res) {
 
 // Adds a new User, returning the location of the newly added User.
 // No AU required.
-//    email - unique Email for new User
-//    firstName
-//    lastName
-//    password
-//    phone (optional)
-//    role 0 for consumer, 1 for technician, 2 for admin
-//    WhenRegistered When was the user first registered
 router.post('/', function(req, res) {
-	console.log("POST Users/");
-   var vld = req.validator;  // Shorthands
-   var body = req.body;
-   /* var admin = req.session && req.session.isAdmin(); */
-var admin = req.session;
-	 if (admin && !body.password)
-	//if (!body.password)
+  console.log("POST Users/");
+  var vld = req.validator;  // Shorthands
+  var body = req.body;
+  /* var admin = req.session && req.session.isAdmin(); */
+  var admin = req.session;
+  if (admin && !body.passwordHash)
+  //if (!body.password)
 
-      body.password = "*";                       // Blockig password
-   body.whenRegistered = new Date();
+  body.passwordHash = "*";                       // Blockig password
+  body.whenRegistered = new Date();
 
-   if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'password', 'role']) // this checks for key existance
-      && vld.chain(body["email"], Tags.missingField) // this checks for value existance
-      .chain(body["firstName"], Tags.missingField)
-      .chain(body["lastName"], Tags.missingField)
-      .chain(body["password"], Tags.missingField)
+   if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'passwordHash', 'role', 'hourlyRate', 'city', 'zip'])
+      && vld.chain(body["email"], Tags.missingField)
+      .chain(body["firstName"], Tags.missingField) // z : we might not need this since hasFields
+      .chain(body["lastName"], Tags.missingField) // z : called chain on each
+      .chain(body["passwordHash"], Tags.missingField)
       .check(body.role >= 0 && body.role <=2, Tags.badValue, ["role"])) {
          connections.getConnection(res, function(cnn) {
-            body.password = bcrypt.hashSync(body.password, saltRounds); // Hash passwords using Bcrypt.
-            cnn.query('INSERT INTO Users SET ?', body, function(err, result) {
-               if(err) {
-                  res.status(400).json(err);
-               } else {
-                  res.location(router.baseURL + '/' + result.insertId).end();
-               }
-            });
+           bcrypt.genSalt(saltRounds, function(err, salt) {
+             bcrypt.hash(body.passwordHash, salt, function(err, hash) {
+               // Store hash in your password DB.
+               body.passwordSalt = salt;
+               console.log(salt);
+               body.passwordHash = hash;
+               var log_id = 0;
+               var attrLoginTable = {email: body.email, passwordSalt: body.passwordSalt, passwordHash: body.passwordHash,
+                 role: body.role, whenRegistered: body.whenRegistered};
+                 cnn.query('INSERT INTO Logins SET ?', attrLoginTable, function(err, result) {
+                    if(err) {
+                       res.status(400).json(err);
+                    } else {
+                      log_id = result.insertId;
+                      console.log("success login insert and id_lod = " + log_id);
+                      var attrTechTable = {log_id: log_id, firstName: body.firstName, lastName: body.lastName,
+                        hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '1'};
+                        console.log(JSON.stringify(attrTechTable));
+                      cnn.query('INSERT INTO Technicians SET ?', attrTechTable, function(err, result) {
+                        if(err) {
+                          console.log("fail technician insert");
+                           res.status(400).json(err);
+                        } else {
+                          console.log("success technician insert");
+                        }
+                      });
+                       res.location(router.baseURL + '/' + log_id).end();
+                    }
+                 });
+             });
+           });
+          //  {email: emailP, passwordHash: passwordP, role: roleP,
+          //    firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP}
+          // var attrTechTable = {log_id: body.email, passwordSalt: body.passwordSalt, passwordHash: body.passwordHash,
+          //    role: body.role, whenRegistered: body.whenRegistered};
+              // CREATE  TABLE IF NOT EXISTS Technicians (
+              //   id_tec INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+              //   log_id INT(11) UNSIGNED NOT NULL ,
+              //   firstName VARCHAR(45) NOT NULL ,
+              //   lastName VARCHAR(45) NOT NULL ,
+              //   hourlyRate NUMERIC (6,2) UNSIGNED NOT NULL ,
+              //   city VARCHAR(30) NOT NULL,
+              //   zip VARCHAR(20) NOT NULL,
+              //   avatar VARCHAR (200) NULL,
+              //   ratings FLOAT(5,4) NOT NULL,
+              //   bad_id INT(11) UNSIGNED NOT NULL,
+              //   status INT(11) NOT NULL,
+          //  body.passwordHash = bcrypt.hashSync(body.password, saltRounds); // Hash passwords using Bcrypt.
+
             cnn.release();
          });
    }
@@ -159,7 +193,7 @@ router.put('/:id', function(req, res) {
    { // check to see if the user is trying to change the password
      console.log(JSON.stringify(body));
           connections.getConnection(res, function(cnn) { // Done with if conditional
-              if(body.password) { 
+              if(body.password) {
                   body.password = bcrypt.hashSync(body.password, saltRounds);
               }
            cnn.query("update Users set ? where id = ?", [req.body, req.params.id],

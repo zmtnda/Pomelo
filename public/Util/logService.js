@@ -4,13 +4,14 @@ function(rscope, http, state, nDlg, route) {
       rscope.inSession = null;
       rscope.cookie = null;
 
-		this.addUser = function(roleP, emailP, passwordP, fName, lName, phoneP)
+		this.addUser = function(emailP, passwordP, roleP, fNameP, lNameP, hRateP, cityP, zipP)
 		{
-			return http.post("User", {email: emailP, password: passwordP, role: roleP, firstName: fName, lastName: lName, phone: phoneP});
-		}		
+			return http.post("User", {email: emailP, passwordHash: passwordP, role: roleP,
+        firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP});
+		}
       this.login = function(emailParam, passwordParam)
       {
-        http.post("Ssns", {email: emailParam, password: passwordParam})
+        http.post("Ssns", {email: emailParam, passwordHash: passwordParam})
         .then(function(response){
           var location;
           location = response.headers().location.split('/');
