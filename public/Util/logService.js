@@ -13,6 +13,7 @@ function(rscope, http, state, nDlg, route) {
       {
         http.post("Ssns", {email: emailParam, passwordHash: passwordParam})
         .then(function(response){
+           console.log("Logged In");
           var location;
           location = response.headers().location.split('/');
           rscope.cookie = location[location.length - 1];
@@ -22,6 +23,7 @@ function(rscope, http, state, nDlg, route) {
           return http.get('/User?email=' + emailParam + '&all=true');
         })
         .then(function(response){
+          console.log("???" + JSON.stringify(response.data))
           rscope.loggedUser.id = response.data[0].id || response.data.id;
           rscope.loggedUser.email = emailParam;
           rscope.loggedUser.password = passwordParam;
@@ -38,11 +40,12 @@ function(rscope, http, state, nDlg, route) {
              state.go('admin');
         })
         .catch(function(err){
+           console.log("what ? ? "+ JSON.stringify(err));
             for (var key in rscope.loggedUser)
                 rscope.loggedUser.key = null;
             rscope.inSession = null;
             rscope.cookie = null;
-            nDlg.show(rscope, "Invalid Input");
+            nDlg.show(rscope, "Invalid Input??????");
         });
       }
 
@@ -64,5 +67,4 @@ function(rscope, http, state, nDlg, route) {
          return 0;
         }
       }
-
 }]);
