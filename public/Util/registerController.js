@@ -7,7 +7,16 @@
         //Do a post caToll
 		  scope.submitted = 1;
 		  logSer.addUser(scope.user.role, scope.user.email, scope.user.password, scope.user.firstName, scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
-		  .then (function(){
+      // .then (function(){
+      //   if (isValidZip(scope.user.zip)){
+      //     console.log("It is valid ZIP code")
+      //   }
+      //   else{
+      //     console.log("It is not valid zip code!");
+      //   }
+      // })
+      // .catch(function(err){console.log("NOT ABLE TO PARSE")})
+      .then (function(){
 			   if(rscope.loggedUser.email !== 'Admin@11.com'){
 					console.log("I am not admin" +rscope.loggedUser.email );
 					logSer.login(scope.user.email, scope.user.password);
@@ -17,9 +26,16 @@
 					state.reload();
 				}
 		  })
-		  .catch(function(err){noDlg.show(scope, err, "Error")});
+		  .catch(function(err){console.log("ERROR!!!!!");noDlg.show(scope, err, "Error")});
 	}
+
+  scope.isValidZip = function(value){
+      return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
+  }
 }])
+
+
+
 /*
 app.controller('registerController', ['$scope', '$state', 'goToServices','logService', '$http', 'notifyDlg', function(scope, state, goSer, logSer, http, noDlg) {
     scope.user = {};
