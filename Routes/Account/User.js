@@ -45,7 +45,7 @@ router.get('/serviceHistory/all', function(req, res) {
 // id - id of user with said email, so that URI would be User/<id>
 router.get('/', function(req, res) {
    var specifier = req.query.email || !req.session.isAdmin() && req.session.email;
-   var getAllBasedEmail = req.query.all;
+   var getAllBasedOnEmail = req.query.all;
    connections.getConnection(res, function(cnn) {
       var handler = function(err, prsArr) {
          res.json(prsArr[0]); // array notation to grab first person.
@@ -58,22 +58,25 @@ router.get('/', function(req, res) {
 
       if(req.query.soFull)
       {
-        cnn.query('SELECT *' + formatDate + ' FROM Users', function(err, prsArr){
+        cnn.query('SELECT * FROM logins l left join technicians t '
+                  + 'on l.id_log = t.log_id order by l.id_log', function(err, prsArr){
+         console.log(JSON.stringify(prsArr));
           res.json(prsArr); // array notation to grab first person.
           cnn.release();
 
         });
       }
-      else if(getAllBasedEmail)
+      else if(getAllBasedOnEmail)
       {
-         cnn.query("SELECT * FROM Users where email = ?", [specifier], allHandler);
+         cnn.query("SELECT * FROM logins l left join technicians t on " +
+               "l.id_log = t.log_id and email = ?", [specifier], allHandler);
       }
       else if (specifier)
       {
-         cnn.query('SELECT id, email FROM Users WHERE email = ?', [specifier], handler);
+         cnn.query('SELECT id_log, email FROM logins WHERE email = ?', [specifier], handler);
       }
       else
-         cnn.query('SELECT id, email FROM Users', handler);
+         cnn.query('SELECT id_log, email FROM logins', handler);
    });
 });
 
@@ -159,7 +162,7 @@ router.put('/:id', function(req, res) {
    { // check to see if the user is trying to change the password
      console.log(JSON.stringify(body));
           connections.getConnection(res, function(cnn) { // Done with if conditional
-              if(body.password) { 
+              if(body.password) {
                   body.password = bcrypt.hashSync(body.password, saltRounds);
               }
            cnn.query("update Users set ? where id = ?", [req.body, req.params.id],

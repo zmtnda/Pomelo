@@ -17,7 +17,7 @@ router.get('/', function(req, res) {
 
 	if(vld.check(user, Tags.noPermission)){
 		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT * FROM Services ',
+			cnn.query(' SELECT * FROM ServicesOfferedByTech ',
 			function(err, result){
 				if(!err){
 					res.json(result);
