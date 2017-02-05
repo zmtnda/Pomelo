@@ -5,5 +5,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.manufactueres = ["Apple", "Sony"]
     scope.models = ["iPhone 6"]
     scope.issues = ["Cracked Screen", "Broken Keyboard"]
-
+    scope.progressBarDisplay = {'background-color':'blue'}
+    scope.progressPercentage = "70%"
+    scope.progressBarDisplay = {"width": "70%"};
 }]);
