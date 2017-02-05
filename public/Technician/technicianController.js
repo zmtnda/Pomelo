@@ -1,4 +1,5 @@
-app.controller('technicianController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg',function(scope, state, logSer, http, rscope, noDlg) {
+app.controller('technicianController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg',
+  function(scope, state, logSer, http, rscope, noDlg) {
     scope.user = {};
     scope.viewEnum = {
       NONE: 0,

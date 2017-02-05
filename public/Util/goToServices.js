@@ -12,9 +12,14 @@ function(state, route) {
       state.go('technician');
    }
 
-   this.goToAbout= function()
+   this.goToAbout = function()
    {
      state.go('about');
+   }
+
+   this.goToissueGudiance = function()
+   {
+     state.go('issueGudiance');
    }
 
    this.retnHm = function(){
