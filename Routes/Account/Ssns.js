@@ -43,7 +43,8 @@ router.post('/', function(req, res) {
   console.log(req.body.email);
   console.log(req.body.passwordHash);
   connections.getConnection(res, function(cnn) {
-    cnn.query('SELECT * FROM Logins JOIN Technicians ON log_id = id_log AND email = ?', req.body.email, function(err, result) {
+    cnn.query('SELECT * FROM (SELECT * FROM logins WHERE email = ?) l LEFT JOIN ' +
+              'Technicians t ON l.id_log = t.log_id', req.body.email, function(err, result) {
       if (req.validator.check(result.length && bcrypt.compare(req.body.passwordHash, result[0].passwordHash), Tags.badLogin)) {
         console.log("same pass");
          cookie = ssnUtil.makeSession(result[0], res);
