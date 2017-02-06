@@ -28,7 +28,7 @@ CREATE  TABLE IF NOT EXISTS Badges (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Categories (
   id_cat INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  categories VARCHAR(100) NOT NULL
+  category VARCHAR(100) NOT NULL
 );
 -- -----------------------------------------------------
 -- Table ServicesManufacturers
@@ -153,7 +153,7 @@ SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS CategoriesIssues (
   id_catIss INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cat_id INT(11) UNSIGNED NOT NULL ,
-  issues VARCHAR(500) NOT NULL ,
+  issue VARCHAR(500) NOT NULL ,
   CONSTRAINT fkCategoriesIssuesCategories
     FOREIGN KEY (cat_id)
     REFERENCES Categories (id_cat)

@@ -17,10 +17,10 @@
 
 	-- Insert data for login --
 	insert into `Logins` (`email`, `passwordSalt`, `passwordHash`, `role`, `whenRegistered`) values
-		('admin@pomelo.com', 10 ,'$2a$10$uXRcyuIDmu4v6DZ20FOn.eIsRo6jtT1gnsrmSacp6Q/5c6bfCi.1.', 2, NOW()),
-		('tech1@pomelo.com', 8, '$2a$08$mN2pZ9h/2LB9QA/FObvPHeVxur76cAZPoPb2/DUM0YJ9uUjUNkRtO', 1, NOW()),
-		('tech2@pomelo.com', 9, '$2a$09$h4HlgpizApxZ6gdi/QuUBup5H0bOeK6WvN8p6rTdt/fo/sFzjSDsO', 1, NOW()),
-		('tech3@pomelo.com', 9, '$2a$09$h4HlgpizApxZ6gdi/QuUBup5H0bOeK6WvN8p6rTdt/fo/sFzjSDsO', 1, NOW());
+		('admin@pomelo.com', '$2a$10$ewWJ0dmjgHYT6hdAzCSem.' ,'$2a$10$ewWJ0dmjgHYT6hdAzCSem.6THkdBnkh1gAa1QOpGxzjG3L8kuSVq6', 2, NOW()),
+		('tech1@pomelo.com', '$2a$10$U4DwDhzPEgQbWJ6OCO1tVu', '$2a$10$U4DwDhzPEgQbWJ6OCO1tVumEcF7njvmQgERpPrLKPjrIqq2Y9Zxxa', 1, NOW()),
+		('tech2@pomelo.com', '$2a$10$3gXUMRKrLya6GD7OfaCeme', '$2a$10$3gXUMRKrLya6GD7OfaCeme63Vkg5oZApaPpEyeJJRDe6HzHE2e6qW', 1, NOW()),
+		('tech3@pomelo.com', '$2a$10$nVvbCL0BdtwBuVKvDAs2ye', '$2a$10$nVvbCL0BdtwBuVKvDAs2ye7JkA6mu3nPNIypti9OaHp1S6xvtK4SK', 1, NOW());
 
 	-- insert data into technicians --
 	-- status 1: active, 0: not --
@@ -48,7 +48,7 @@
 		('cus2@pomelo.com');
 
 	-- insert data into categories --
-	insert into `Categories` (`categories`) values
+	insert into `Categories` (`category`) values
 		('Desktop'),
 		('Laptop'),
 		('Tablet'),
@@ -75,7 +75,7 @@
 		(4, 2, 'iPhone 6'); -- 9
 
 	-- insert into categories issues --
-	insert into `CategoriesIssues` (`cat_id`, `issues`) values
+	insert into `CategoriesIssues` (`cat_id`, `issue`) values
 		(1, 'Can\'t turn on'), -- 1
 		(1, 'Upgrade RAM'), -- 2
 		(2, 'Can\'t turn on'), -- 3
