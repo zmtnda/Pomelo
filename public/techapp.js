@@ -2,7 +2,8 @@
 var app = angular.module('mainApp', [
    'ui.router',
    'ui.bootstrap',
-   'ngRoute'
+   'ngRoute',
+   'ngCookies'
 ]).filter("btnState", function(){
    var stateNames = ["btn-warning", "btn-success"];
 

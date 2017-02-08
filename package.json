@@ -4,12 +4,13 @@
   "description": "Test",
   "main": "main.js",
   "dependencies": {
+    "angular-cookies": "^1.5.7",
     "async": "^2.0.0-rc.6",
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
-    "mysql": "^2.11.1",
-    "bcryptjs": "^2.3.0"
+    "mysql": "^2.11.1"
   },
   "devDependencies": {},
   "scripts": {
