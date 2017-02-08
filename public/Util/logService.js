@@ -1,7 +1,8 @@
-app.service("logService", ["$rootScope", '$http', '$state', 'notifyDlg', '$route',
-function(rscope, http, state, nDlg, route) {
+app.service("logService", ["$rootScope", '$http', '$state', 'notifyDlg', '$route', 'userPersistenceService',
+function(rscope, http, state, nDlg, route, persisService) {
       rscope.loggedUser = {email:null};
-      rscope.inSession = null;
+      rscope.inSession = persisService.getInSession();
+
       rscope.cookie = null;
 
 		this.addUser = function(emailP, passwordP, roleP, fNameP, lNameP, hRateP, cityP, zipP)
@@ -9,8 +10,20 @@ function(rscope, http, state, nDlg, route) {
 			return http.post("User", {email: emailP, passwordHash: passwordP, role: roleP,
         firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP});
 		}
-      this.login = function(emailParam, passwordParam)
+    this.logout = function(){
+        return http.delete('Ssns/'+rscope.cookie)
+        .then(function(){
+          for (var key in rscope.loggedUser)
+              rscope.loggedUser.key = null;
+          rscope.inSession = null;
+          rscope.cookie = null;
+          state.go('home');
+          persisService.clearCookieData();
+        });
+    }
+    this.login = function(emailParam, passwordParam)
       {
+        this.logout();
         http.post("Ssns", {email: emailParam, passwordHash: passwordParam})
         .then(function(response){
            console.log("Logged In");
@@ -31,7 +44,8 @@ function(rscope, http, state, nDlg, route) {
           rscope.loggedUser.firstName = response.data[0].firstName || response.data.firstName;
           rscope.loggedUser.lastName = response.data[0].lastName || response.data.lastName;
           rscope.inSession = true;
-
+          persisService.setInSession(true);
+          persisService.setCookieData(emailParam, passwordParam);
           if(rscope.loggedUser.role === 0)
              state.go('customer');
           else if(rscope.loggedUser.role === 1)
@@ -49,16 +63,7 @@ function(rscope, http, state, nDlg, route) {
         });
       }
 
-      this.logout = function(){
-          return http.delete('Ssns/'+rscope.cookie)
-          .then(function(){
-            for (var key in rscope.loggedUser)
-                rscope.loggedUser.key = null;
-            rscope.inSession = null;
-            rscope.cookie = null;
-            state.go('home');
-          });
-      }
+
 
       this.isLoggedIn = function(){
         if(rscope.inSession == true)
@@ -66,5 +71,12 @@ function(rscope, http, state, nDlg, route) {
         else {
          return 0;
         }
+      }
+
+
+      if(rscope.inSession){
+        var email = persisService.getCookieEmail();
+        var pass = persisService.getCookiePass();
+        this.login(email, pass);
       }
 }]);
