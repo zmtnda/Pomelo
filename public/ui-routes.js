@@ -27,6 +27,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
          url: '/technician/IssueGuidance',
          templateUrl: 'Technician/IssueGuidance/issueGuidance.template.html',
          controller: 'issueGuidanceController',
+         /*resolve: {
+           cates: ['$q', '$http', '$stateParams', function($q, http, prms){
+             return http.get('Cate/')
+             .then(function(response){
+               return $q.resolve(response.data)
+             })
+           }]
+         }*/
       })
       .state('admin', {
          url: '/admin',
@@ -36,14 +44,12 @@ app.config(['$stateProvider', '$urlRouterProvider',
             servs: ['$q', '$http', '$stateParams', function($q, http, prms) {
                return http.get('Serv/')
                .then(function(response) {
-                 //console.log("ra"+JSON.stringify(response.data));
                   return $q.resolve(response.data)//Note resolve() will put all the data in $scope
                });
             }],//need one to get all users
             users: ['$q', '$http', '$stateParams', function($q, http, prms){
                return http.get('User/?soFull=true')
                .then(function(response){
-                 //console.log("scope.servs response"+JSON.stringify(response));
                   return $q.resolve(response.data)
                });
             }]

@@ -41,11 +41,12 @@ app.use(function(req, res, next) {
 		res.status(401).json([{tag: Validator.Tags.noLogin}]);
 	} */
 
-}); 
+});
 
 app.use('/User', require('./Routes/Account/User'));
 app.use('/Ssns', require('./Routes/Account/Ssns'));
 app.use('/Serv', require('./Routes/Service/Serv'));
+//app.use('/Cate', require('./Routes/Service/Cate'));
 
 // Clear all content from the database,
 // reset all autoincrement IDs to 1,

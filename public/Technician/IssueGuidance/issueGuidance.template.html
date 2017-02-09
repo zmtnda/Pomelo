@@ -1,6 +1,6 @@
 
 <body class="container">
-   <h3>Start from types</h3>
+   <h3 ng-bind = "progressMessage">Start from types</h3>
    <div class="progress">
      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="progressBarDisplay">
               {{ progressPercentage }} Complete
@@ -9,14 +9,14 @@
    <div class="row">
 
        <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+         <div class="thumbnail">
            <h3>Type(s)</h3>
              <button type="button" class="btn btn-success">Done</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
-                 <tr ng-repeat = "type in allTypes track by $index" data-drag="true" data-index="{{$index}}" jqyoui-draggable>
-                    <td><button type="button" class="btn btn-default"> {{ type }} </button></td>
+                 <tr ng-repeat = "type in allTypes track by $index" data-drag="true" data-index="{{$index}}">
+                    <td><button type="button" class="btn btn-default" ng-click="selectType(type)"> {{ type }} </button></td>
                  </tr>
                </tbody>
              </table>
@@ -25,14 +25,14 @@
        </div>
 
        <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+         <div class="thumbnail" ng-show="hasSelectedType">
            <h3>Manufacturer(s)</h3>
              <button type="button" class="btn btn-success">Done</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
                  <tr ng-repeat = "manu in manufactueres track by $index">
-                    <td><button type="button" class="btn btn-default"> {{ manu }} </button></td>
+                    <td><button type="button" class="btn btn-default" ng-click="selectManu(manu)"> {{ manu }} </button></td>
                  </tr>
                </tbody>
              </table>
@@ -41,14 +41,14 @@
        </div>
 
        <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+         <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu">
            <h3>Model(s)</h3>
              <button type="button" class="btn btn-success">Done</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
                  <tr ng-repeat = "model in models track by $index">
-                    <td><button type="button" class="btn btn-default"> {{ model }} </button></td>
+                    <td><button type="button" class="btn btn-default" ng-click="selectModel(model)"> {{ model }} </button></td>
                  </tr>
                </tbody>
              </table>
@@ -57,14 +57,14 @@
        </div>
 
        <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+         <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
            <h3>Issue(s)</h3>
              <button type="button" class="btn btn-success">Done</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
                  <tr ng-repeat = "issue in issues track by $index">
-                   <td><button type="button" class="btn btn-default">{{ issue }}</button></td>
+                   <td><button type="button" class="btn btn-default" ng-click="selectIssue(issue)">{{ issue }}</button></td>
                  </tr>
                </tbody>
              </table>
@@ -73,7 +73,7 @@
        </div>
 
        <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+         <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel && hasSelectedIssue">
            <h3>Amount</h3>
              <button type="button" class="btn btn-success">Done</button>
            <div class = "table-responsive">
@@ -89,7 +89,7 @@
        </div>
 
        <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" data-drag="true" jqyoui-draggable>
+         <div class="thumbnail">
            <h3>You're offering:</h3>
              <button type="button" class="btn btn-success" ng-click = "addItem(3)">Done</button>
            <div class = "table-responsive">

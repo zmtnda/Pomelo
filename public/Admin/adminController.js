@@ -8,8 +8,6 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
 
     scope.addUser = function(){
       regPopSer = regPopSer.show(scope, "Add an User")
-      //.then(function(){state.reload()})
-      //.then(function(){state.reload()})
       .then(function(){state.reload()});
     }
 
