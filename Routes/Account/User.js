@@ -93,12 +93,10 @@ router.post('/', function(req, res) {
 	console.log("POST Users/");
    var vld = req.validator;  // Shorthands
    var body = req.body;
-   /* var admin = req.session && req.session.isAdmin(); */
-var admin = req.session;
+   var admin = req.session;
 	 if (admin && !body.password)
-	//if (!body.password)
 
-      body.password = "*";                       // Blockig password
+   body.password = "*";                       // Blockig password
    body.whenRegistered = new Date();
 
    if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'password', 'role']) // this checks for key existance

@@ -39,6 +39,7 @@ router.get('/', function(req, res) {
 //       }
 router.post('/', function(req, res) {
    var cookie;
+
 	console.log('POST Ssns/');
    console.log(req.body.email);
    console.log(req.body.password);

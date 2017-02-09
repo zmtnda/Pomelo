@@ -15,6 +15,10 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
      goSer.goToAbout();
    }
 
+   scope.goToAbout = goSer.goToAbout;
+
+   scope.goToissueGudiance = goSer.goToissueGudiance;
+
    rscope.logout = logSer.logout;
 
    rscope.goMain = function(role){
