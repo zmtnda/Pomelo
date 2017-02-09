@@ -4,7 +4,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.allTypes = ["Laptop", "Desktop", "Smart Phones", "Software", "Tablet"]
     scope.allManufactueres = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
-
+    
     scope.manufactueres = ["Apple", "Sony"]
     scope.models = ["iPhone 6"]
     scope.issues = ["Cracked Screen", "Broken Keyboard"]
@@ -12,4 +12,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressPercentage = "70%"
     scope.progressBarDisplay = {"width": "70%"};
 
+	var decideManu = function (type)
+	{
+		if (type === "Desktop")
+		{
+			manufactueres.append("Apple", "Window")
+		}
+	}
 }]);

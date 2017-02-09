@@ -83,6 +83,7 @@ router.get('/', function(req, res) {
 // Adds a new User, returning the location of the newly added User.
 // No AU required.
 router.post('/', function(req, res) {
+
   console.log("POST Users/");
   var vld = req.validator;  // Shorthands
   var body = req.body;
