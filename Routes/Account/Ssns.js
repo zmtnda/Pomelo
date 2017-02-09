@@ -55,6 +55,7 @@ router.post('/', function(req, res) {
 
          console.log(result.length);
          if (req.validator.check(result.length  && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
+
             cookie = ssnUtil.makeSession(result[0], res);
             res.location(router.baseURL + '/'  + cookie).send(result);
          }
