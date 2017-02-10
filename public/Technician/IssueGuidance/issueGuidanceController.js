@@ -33,6 +33,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
          selectedButtonValues["selectedModel"].includes(input) ||
          selectedButtonValues["selectedIssue"].includes(input))
         return {"background-color": "grey"}
+      else {
+        return {"background-color": "white"}
+      }
     }
 
     scope.selectType = function(selectedType)

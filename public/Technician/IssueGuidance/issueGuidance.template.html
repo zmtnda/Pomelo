@@ -11,7 +11,7 @@
        <div class="col-xs-12 col-md-2">
          <div class="thumbnail">
            <h3>Type(s)</h3>
-             <button type="button" class="btn btn-success" ng-click="selectType()">Skip</button>
+             <button type="button" class="btn btn-success" ng-show="!hasSelectedType" ng-click="selectType()">Skip</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
@@ -27,7 +27,7 @@
        <div class="col-xs-12 col-md-2">
          <div class="thumbnail" ng-show="hasSelectedType">
            <h3>Manufacturer(s)</h3>
-             <button type="button" class="btn btn-success" ng-click="selectManu()">Skip</button>
+             <button type="button" class="btn btn-success" ng-show="!hasSelectedType || !hasSelectedManu" ng-click="selectManu()">Skip</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
@@ -43,7 +43,7 @@
        <div class="col-xs-12 col-md-2">
          <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu">
            <h3>Model(s)</h3>
-             <button type="button" class="btn btn-success" ng-click="selectModel()">Skip</button>
+             <button type="button" class="btn btn-success" ng-click="selectModel()" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Skip</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
@@ -59,7 +59,7 @@
        <div class="col-xs-12 col-md-2">
          <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
            <h3>Issue(s)</h3>
-             <button type="button" class="btn btn-success" ng-click="selectIssue()">Skip</button>
+             <button type="button" class="btn btn-success" ng-click="selectIssue()" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Skip</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
@@ -71,23 +71,21 @@
            </div>
          </div>
        </div>
-
+      <!--
        <div class="col-xs-12 col-md-1">
          <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel && hasSelectedIssue">
            <h3>Amount</h3>
              <button type="button" class="btn btn-success">Per Service</button>
              </br>
              <button type="button" class="btn btn-success">Hourly Rate</button>
-             <form>
-               $ <input type="text" name="price" ng-model="priceModel">
-             </form>
+             <input type="text" name="price" ng-model="priceModel">
          </div>
-       </div>
+       </div> -->
 
-       <div class="col-xs-12 col-md-3">
+       <div class="col-xs-12 col-md-4">
         <div class="thumbnail">
           <h3>You're offering:</h3>
-           <button type="button" class="btn btn-success" ng-click = "addItem(3)">Skip</button>
+           <button type="button" class="btn btn-success">Skip</button>
            <div class = "table-responsive">
              <table class = "table">
                <tbody>
