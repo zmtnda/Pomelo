@@ -25,7 +25,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.manufactueres = ["Apple", "Sony"]
     scope.models = ["iPhone 6"]
     scope.issues = ["Cracked Screen", "Broken Keyboard"]
-    scope.offerings = [[], [] , []]
+    scope.offerings = [["Apple", "iPhone 7", "Virus"], [], [] , []]
 
     // Style for the progress bar
     scope.progressBarDisplay = {'background-color':'blue'}
