@@ -20,33 +20,52 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
 
+    var selectedButtonValues = {
+      "selectedType": null,
+      "selectedManu": [],
+      "selectedModel": [],
+      "selectedIssue": []
+    }
+
+    scope.buttonStyle = function(input){
+      if(selectedButtonValues["selectType"] === input ||
+         selectedButtonValues["selectedManu"].includes(input) ||
+         selectedButtonValues["selectedModel"].includes(input) ||
+         selectedButtonValues["selectedIssue"].includes(input))
+        return {"background-color": "grey"}
+    }
+
     scope.selectType = function(selectedType)
     {
       console.log(selectedType)
+      selectedButtonValues["selectType"] = selectedType
       scope.progressMessage = "Select the manufactuer"
       scope.progressPercentage = "20%"
       scope.progressBarDisplay = {"width": "20%"};
       scope.hasSelectedType = true
     }
 
-    scope.selectManu = function(selectedType)
+    scope.selectManu = function(selectedManu)
     {
+      selectedButtonValues["selectedManu"].push(selectedManu)
       scope.progressMessage = "Select a model"
       scope.progressPercentage = "40%"
       scope.progressBarDisplay = {"width": "40%"};
       scope.hasSelectedManu = true
     }
 
-    scope.selectModel = function(selectedType)
+    scope.selectModel = function(selectedModel)
     {
+      selectedButtonValues["selectedModel"].push(selectedModel)
       scope.progressMessage = "Select an issue"
       scope.progressPercentage = "60%"
       scope.progressBarDisplay = {"width": "60%"};
       scope.hasSelectedModel = true
     }
 
-    scope.selectIssue = function(selectedType)
+    scope.selectIssue = function(selectedIssue)
     {
+      selectedButtonValues["selectedIssue"].push(selectedIssue)
       scope.progressMessage = "Make a price"
       scope.progressPercentage = "80%"
       scope.progressBarDisplay = {"width": "80%"};
