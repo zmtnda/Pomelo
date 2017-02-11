@@ -1,10 +1,11 @@
 app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg',
-  function(scope, state, logSer, http, rscope, noDlg, cate) {
+  function(scope, state, logSer, http, rscope, noDlg, cate)
+  {
     scope.progressMessage = "Please select the general type you can fix"
 
     // Store the data of the buttons seletced by the user
-    var selectedButtonValues = {
-      "selectedType": null,
+    scope.selectedButtonValues = {
+      "selectedType": [],
       "selectedManu": [],
       "selectedModel": [],
       "selectedIssue": []
@@ -19,13 +20,13 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     // Data fetched from DB:
     scope.user = {};
     scope.allTypes = ["Laptop", "Desktop", "Smart Phones", "Software", "Tablet"]
-    scope.allManufactueres = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
+    scope.allManufacturers = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
 
     // Data being displayed
-    scope.manufactueres = ["Apple", "Sony"]
+    scope.manufacturers = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
     scope.models = ["iPhone 6"]
     scope.issues = ["Cracked Screen", "Broken Keyboard"]
-    scope.offerings = [["Apple", "iPhone 7", "Virus"], [], [] , []]
+    scope.offerings = [[], [], [], []]
 
     // Style for the progress bar
     scope.progressBarDisplay = {'background-color':'blue'}
@@ -35,11 +36,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     // A function that determines the styles of buttons
     // Logic: Buttons turn grey if they are selected.
     scope.buttonStyle = function(input){
-      if(selectedButtonValues["selectType"] === input ||
+      var selectedButtonValues = scope.selectedButtonValues;
+      if(selectedButtonValues["selectedType"].includes(input) ||
          selectedButtonValues["selectedManu"].includes(input) ||
          selectedButtonValues["selectedModel"].includes(input) ||
          selectedButtonValues["selectedIssue"].includes(input))
-        return {"background-color": "grey"}
+        return {"background-color": "#D3D3D3"}
       else {
         return {"background-color": "white"}
       }
@@ -52,33 +54,45 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.progressBarDisplay = {"width": percent};
     }
 
+    var canGoToNext = function(isConfirmed, selected, message, percent)
+    {
+        if (isConfirmed === 1 && scope.selectedButtonValues[selected].length != 0)
+        {
+            updateProgressBar(message, percent);
+            return true
+        }
+        return false
+    }
+
     scope.selectType = function(selectedType)
     {
-      console.log(selectedType)
-      selectedButtonValues["selectType"] = selectedType
-      updateProgressBar("Select the manufactuer", "25%")
-      scope.hasSelectedType = true
+      if (selectedType !== 1)
+        scope.selectedButtonValues["selectedType"].push(selectedType)
+      if (canGoToNext(selectedType, "selectedType", "Select the Manufacturers", "20%"))
+        scope.hasSelectedType = true
     }
 
     scope.selectManu = function(selectedManu)
     {
-      selectedButtonValues["selectedManu"].push(selectedManu)
-      updateProgressBar("Select a model", "50%")
-      scope.hasSelectedManu = true
+      if (selectedManu !== 1)
+        scope.selectedButtonValues["selectedManu"].push(selectedManu)
+      if (canGoToNext(selectedManu, "selectedManu", "Select a model", "40%"))
+        scope.hasSelectedManu = true
     }
 
     scope.selectModel = function(selectedModel)
     {
-      selectedButtonValues["selectedModel"].push(selectedModel)
-      updateProgressBar("Select an issue", "75%")
-      scope.hasSelectedModel = true
+      if (selectedModel !== 1)
+        scope.selectedButtonValues["selectedModel"].push(selectedModel)
+      if (canGoToNext(selectedModel, "selectedModel", "Select a model", "60%"))
+        scope.hasSelectedModel = true
     }
 
     scope.selectIssue = function(selectedIssue)
     {
-      selectedButtonValues["selectedIssue"].push(selectedIssue)
-      updateProgressBar("Select an issue", "80%")
-      scope.hasSelectedIssue = true
+      if (selectedIssue !== 1)
+        scope.selectedButtonValues["selectedIssue"].push(selectedIssue)
+      if (canGoToNext(selectedIssue, "selectedIssue", "Select an issue", "80%"))
+        scope.hasSelectedIssue = true
     }
-
 }]);

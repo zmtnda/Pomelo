@@ -6,97 +6,96 @@
               {{ progressPercentage }} Complete
      </div>
    </div>
+
    <div class="row">
-
-       <div class="col-xs-12 col-md-2">
-         <div class="thumbnail">
-           <h3>Type(s)</h3>
-             <button type="button" class="btn btn-success" ng-show="!hasSelectedType" ng-click="selectType()">Skip</button>
-           <div class = "table-responsive">
-             <table class = "table">
-               <tbody>
-                 <tr ng-repeat = "type in allTypes track by $index" data-index="{{$index}}">
-                    <td><button type="button" class="btn btn-default" ng-style="buttonStyle(type)" ng-click="selectType(type)"> {{ type }} </button></td>
-                 </tr>
-               </tbody>
-             </table>
-           </div>
-         </div>
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail">
+         <h3>Type(s)</h3>
+           <button type="button" class="btn btn-success"  ng-show="hasSelectedType">Redo</button>
+           <button type="button" class="btn btn-success" ng-show="!hasSelectedType" ng-click="selectType(1)">Confirm</button>
+         <div class = "table-responsive">
+           <table class = "table">
+             <tbody>
+               <tr ng-repeat = "type in allTypes track by $index" data-index="{{$index}}">
+                  <td><button type="button" class="btn btn-default" ng-style="buttonStyle(type)" ng-click="selectType(type)"> {{ type }} </button></td>
+               </tr>
+             </tbody>
+           </table>
+          </div>
        </div>
+     </div>
 
-       <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" ng-show="hasSelectedType">
-           <h3>Manufacturer(s)</h3>
-             <button type="button" class="btn btn-success" ng-show="!hasSelectedType || !hasSelectedManu" ng-click="selectManu()">Skip</button>
-           <div class = "table-responsive">
-             <table class = "table">
-               <tbody>
-                 <tr ng-repeat = "manu in manufactueres track by $index">
-                    <td><button type="button" class="btn btn-default" ng-style="buttonStyle(manu)" ng-click="selectManu(manu)"> {{ manu }} </button></td>
-                 </tr>
-               </tbody>
-             </table>
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail" ng-show="hasSelectedType">
+         <h3>Manufacturer(s)</h3>
+           <button type="button" class="btn btn-success" ng-show="!hasSelectedType || !hasSelectedManu" ng-click="selectManu(1)">Confirm</button>
+           <button type="button" class="btn btn-success" ng-show="hasSelectedType && hasSelectedManu">Redo</button>
+           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedType track by $index">
+             <h5>{{ selected }}</h5>
+             <h3><div ng-style="buttonStyle(manu)" ng-click="selectManu(manu)" ng-repeat="manu in manufacturers track by $index"
+                class="label label-default"> {{ manu }}</div></h3>
            </div>
-         </div>
        </div>
+     </div>
 
-       <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu">
-           <h3>Model(s)</h3>
-             <button type="button" class="btn btn-success" ng-click="selectModel()" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Skip</button>
-           <div class = "table-responsive">
-             <table class = "table">
-               <tbody>
-                 <tr ng-repeat = "model in models track by $index">
-                    <td><button type="button" class="btn btn-default" ng-style="buttonStyle(model)" ng-click="selectModel(model)"> {{ model }} </button></td>
-                 </tr>
-               </tbody>
-             </table>
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu">
+         <h3>Model(s)</h3>
+           <button type="button" class="btn btn-success" ng-click="selectModel(1)" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="selectModel(1)" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">Redo</button>
+           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedManu track by $index">
+             <h5>{{ selected }}</h5>
+             <h3><span ng-style="buttonStyle(model)" ng-click="selectModel(model)" ng-repeat="model in models track by $index" class="label label-default">{{ model }}</span></h3>
            </div>
-         </div>
        </div>
+     </div>
 
-       <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
            <h3>Issue(s)</h3>
-             <button type="button" class="btn btn-success" ng-click="selectIssue()" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Skip</button>
-           <div class = "table-responsive">
-             <table class = "table">
-               <tbody>
-                 <tr ng-repeat = "issue in issues track by $index">
-                   <td><button type="button" class="btn btn-default" ng-style="buttonStyle(issue)" ng-click="selectIssue(issue)">{{ issue }}</button></td>
-                 </tr>
-               </tbody>
-             </table>
+           <button type="button" class="btn btn-success" ng-click="selectIssue(1)" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="selectIssue(1)" ng-show="hasSelectedType && !hasSelectedManu && hasSelectedModel && hasSelectedIssue">Redo</button>
+           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedModel track by $index">
+             <h5>{{ selected }}</h5>
+             <h3><span ng-style="buttonStyle(issue)" ng-click="selectIssue(issue)" ng-repeat = "issue in issues track by $index" class="label label-default">{{ issue }}</span></h3>
            </div>
-         </div>
        </div>
-      <!--
-       <div class="col-xs-12 col-md-1">
-         <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel && hasSelectedIssue">
-           <h3>Amount</h3>
-             <button type="button" class="btn btn-success">Per Service</button>
-             </br>
-             <button type="button" class="btn btn-success">Hourly Rate</button>
-             <input type="text" name="price" ng-model="priceModel">
-         </div>
-       </div> -->
+     </div>
+    <!--
+     <div class="col-xs-12 col-md-1">
+       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel && hasSelectedIssue">
+         <h3>Amount</h3>
+           <button type="button" class="btn btn-success">Per Service</button>
+           </br>
+           <button type="button" class="btn btn-success">Hourly Rate</button>
+           <input type="text" name="price" ng-model="priceModel">
+       </div>
+     </div> -->
 
-       <div class="col-xs-12 col-md-4">
-        <div class="thumbnail">
-          <h3>You're offering:</h3>
-           <button type="button" class="btn btn-success">Skip</button>
-           <div class = "table-responsive">
-             <table class = "table">
-               <tbody>
-                 <tr ng-repeat = "offer in offerings track by $index">
-                   <td>{{ offer }}</td>
-                 </tr>
-               </tbody>
-             </table>
-           </div>
+     <div class="col-xs-12 col-md-4">
+      <div class="thumbnail">
+        <h3>You're offering:</h3>
+         <button type="button" class="btn btn-success">Confirm</button>
+         <div class = "table-responsive">
+           <table class = "table">
+             <thead>
+               <th>Categories</th>
+               <th>Manufacturer(s)</th>
+               <th>Model(s)</th>
+               <th>Issue</th>
+             </thead>
+             <tbody>
+               <tr ng-repeat = "offer in selectedButtonValues.selectedType track by $index">
+                 <td>{{ selectedButtonValues.selectedType[$index] }}</td>
+                 <td>{{ selectedButtonValues.selectedManu[$index] }}</td>
+                 <td>{{ selectedButtonValues.selectedModel[$index] }}</td>
+                 <td>{{ selectedButtonValues.selectedIssue[$index] }}</td>
+               </tr>
+             </tbody>
+           </table>
          </div>
        </div>
+     </div>
 
    </div>
 </body>
