@@ -163,8 +163,7 @@ router.post('/:catId/issues', function(req, res) {
                   console.log("Error checking exsiting issue or issue already exist");
                   res.status(400).json(err);
                }
-            }
-         });
+         	});
          cnn.release();
       });
    }
