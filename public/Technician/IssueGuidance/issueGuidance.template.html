@@ -11,13 +11,13 @@
      <div class="col-xs-12 col-md-2">
        <div class="thumbnail">
          <h3>Type(s)</h3>
-           <button type="button" class="btn btn-success"  ng-show="hasSelectedType">Redo</button>
-           <button type="button" class="btn btn-success" ng-show="!hasSelectedType" ng-click="selectType(1)">Confirm</button>
+           <button type="button" class="btn btn-success"  ng-show="hasSelectedType" ng-click="cancelSelection('type')">Redo</button>
+           <button type="button" class="btn btn-success" ng-show="!hasSelectedType" ng-click="confirm('type')">Confirm</button>
          <div class = "table-responsive">
            <table class = "table">
              <tbody>
                <tr ng-repeat = "type in allTypes track by $index" data-index="{{$index}}">
-                  <td><button type="button" class="btn btn-default" ng-style="buttonStyle(type)" ng-click="selectType(type)"> {{ type }} </button></td>
+                  <td><button type="button" class="btn btn-default" ng-class="typeButtonStatesArray[$index] | buttonFilter" ng-click="selectType(type, $index)"> {{ type }} </button></td>
                </tr>
              </tbody>
            </table>
@@ -28,8 +28,8 @@
      <div class="col-xs-12 col-md-2">
        <div class="thumbnail" ng-show="hasSelectedType">
          <h3>Manufacturer(s)</h3>
-           <button type="button" class="btn btn-success" ng-show="!hasSelectedType || !hasSelectedManu" ng-click="selectManu(1)">Confirm</button>
-           <button type="button" class="btn btn-success" ng-show="hasSelectedType && hasSelectedManu">Redo</button>
+           <button type="button" class="btn btn-success" ng-show="!hasSelectedType || !hasSelectedManu" ng-click="confirm('manu')">Confirm</button>
+           <button type="button" class="btn btn-success" ng-show="hasSelectedType && hasSelectedManu" ng-click="cancelSelection('manu')">Redo</button>
            <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedType track by $index">
              <h5>{{ selected }}</h5>
              <h3><div ng-style="buttonStyle(manu)" ng-click="selectManu(manu)" ng-repeat="manu in manufacturers track by $index"
@@ -41,8 +41,8 @@
      <div class="col-xs-12 col-md-2">
        <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu">
          <h3>Model(s)</h3>
-           <button type="button" class="btn btn-success" ng-click="selectModel(1)" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Confirm</button>
-           <button type="button" class="btn btn-success" ng-click="selectModel(1)" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">Redo</button>
+           <button type="button" class="btn btn-success" ng-click="confirm('model')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">Redo</button>
            <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedManu track by $index">
              <h5>{{ selected }}</h5>
              <h3><span ng-style="buttonStyle(model)" ng-click="selectModel(model)" ng-repeat="model in models track by $index" class="label label-default">{{ model }}</span></h3>
@@ -53,8 +53,8 @@
      <div class="col-xs-12 col-md-2">
        <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
            <h3>Issue(s)</h3>
-           <button type="button" class="btn btn-success" ng-click="selectIssue(1)" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Confirm</button>
-           <button type="button" class="btn btn-success" ng-click="selectIssue(1)" ng-show="hasSelectedType && !hasSelectedManu && hasSelectedModel && hasSelectedIssue">Redo</button>
+           <button type="button" class="btn btn-success" ng-click="confirm('model')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="cancelSelection('issue')" ng-show="hasSelectedType && !hasSelectedManu && hasSelectedModel && hasSelectedIssue">Redo</button>
            <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedModel track by $index">
              <h5>{{ selected }}</h5>
              <h3><span ng-style="buttonStyle(issue)" ng-click="selectIssue(issue)" ng-repeat = "issue in issues track by $index" class="label label-default">{{ issue }}</span></h3>
