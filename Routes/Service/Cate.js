@@ -68,8 +68,8 @@ router.get('/:catId/manu', function(req, res) {
    var catId = req.params.catId;
 
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT m.id_man, m.manufacturer FROM manufacturers m, categoriesmanufacturers c' +
-					 'WHERE c.man_id = m.id_man AND c.cat_id = ?', catId,
+		cnn.query(' SELECT m.id_man, m.manufacturer FROM manufacturers m, categoriesmanufacturers c ' +
+					 ' WHERE c.man_id = m.id_man AND c.cat_id = ?', catId,
 			function(err, result) {
 				if(err) {
 					console.log("error get manufactures for category");
@@ -92,7 +92,7 @@ router.get('/:catId/:manId/model', function(req, res) {
    var manId = req.params.manId;
 
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT id_catMan AS id_model, model FROM categoriesmanufacturers' +
+		cnn.query(' SELECT id_catMan AS id_model, model FROM categoriesmanufacturers ' +
 					 ' WHERE cat_id = ? AND man_id = ? ', [catId, manId],
 			function(err, result) {
 				if(err) {
