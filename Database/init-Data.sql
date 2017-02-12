@@ -63,7 +63,7 @@
 		('ASUS');
 
 	-- insert data into catergories manufacture --
-	insert into `CategoriesManufacturers` (`cat_id`, `man_id`, `model`) values
+	insert into `Models` (`cat_id`, `man_id`, `model`) values
 		(1, 4, 'Dell Dekstop'), -- 1
 		(1, 2, 'Apple Mac Station'), -- 2
 		(2, 2, 'Macbook 2015'), -- 3
@@ -75,7 +75,7 @@
 		(4, 2, 'iPhone 6'); -- 9
 
 	-- insert into categories issues --
-	insert into `CategoriesIssues` (`cat_id`, `issue`) values
+	insert into `Issues` (`cat_id`, `issue`) values
 		(1, 'Can\'t turn on'), -- 1
 		(1, 'Upgrade RAM'), -- 2
 		(2, 'Can\'t turn on'), -- 3
@@ -87,7 +87,7 @@
 		(4, 'Replace battery'); -- 9
 
 	-- insert data into Service offer by tech --
-	insert into `ServicesOfferedByTech` (`tec_id`, `catMan_id`, `catIss_id`,
+	insert into `ServicesOfferedByTech` (`tec_id`, `mod_id`, `iss_id`,
 		`servType`, `estAmount`, `status`) values
 		(1, 1, 1, 0, 50.99, 1), -- dell desktop cant turn on -- 1
 		(1, 3, 4, 1, 46.50, 1), -- macbook 2015 cant connect wifi -- 2

@@ -124,19 +124,19 @@ CREATE  TABLE IF NOT EXISTS Photos (
 );
 
 -- -----------------------------------------------------
--- Table CategoriesManufacturers
+-- Table models
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS CategoriesManufacturers (
-  id_catMan INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE  TABLE IF NOT EXISTS Models (
+  id_mod INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cat_id INT(11) UNSIGNED NOT NULL ,
   man_id INT(11) UNSIGNED NOT NULL ,
   model VARCHAR(50) NOT NULL,
-  CONSTRAINT fkCategoriesManufacturersCategories
+  CONSTRAINT fkModelsCategories
     FOREIGN KEY (cat_id)
     REFERENCES Categories (id_cat)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT fkCategoriesManufacturersManufacturers
+  CONSTRAINT fkModelsManufacturers
     FOREIGN KEY (man_id )
     REFERENCES Manufacturers (id_man )
     ON DELETE CASCADE
@@ -148,13 +148,13 @@ DEFAULT CHARACTER SET = utf8;
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- Table CategoriesIssues
+-- Table Issues
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS CategoriesIssues (
-  id_catIss INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE  TABLE IF NOT EXISTS Issues (
+  id_iss INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cat_id INT(11) UNSIGNED NOT NULL ,
   issue VARCHAR(500) NOT NULL ,
-  CONSTRAINT fkCategoriesIssuesCategories
+  CONSTRAINT fkIssuesCategories
     FOREIGN KEY (cat_id)
     REFERENCES Categories (id_cat)
     ON DELETE CASCADE
@@ -171,8 +171,8 @@ SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
   id_serTec INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL ,
-  catMan_id INT(11) UNSIGNED NOT NULL ,
-  catIss_id INT(11) UNSIGNED NOT NULL ,
+  mod_id INT(11) UNSIGNED NOT NULL ,
+  iss_id INT(11) UNSIGNED NOT NULL ,
   servType TINYINT UNSIGNED NOT NULL,
   estAmount NUMERIC(6,2) UNSIGNED NOT NULL,
   status INT(11) NOT NULL,
@@ -181,14 +181,14 @@ CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT fkServicesOfferedByTechCategoriesManufacturers
-    FOREIGN KEY (catMan_id)
-    REFERENCES CategoriesManufacturers (id_catMan)
+  CONSTRAINT fkServicesOfferedByTechModels
+    FOREIGN KEY (mod_id)
+    REFERENCES Models (id_mod)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT fkServicesOfferedByTechCategoriesIssues
-    FOREIGN KEY (catIss_id)
-    REFERENCES CategoriesIssues (id_catIss)
+  CONSTRAINT fkServicesOfferedByTechIssues
+    FOREIGN KEY (iss_id)
+    REFERENCES Issues (id_iss)
     ON DELETE CASCADE
     ON UPDATE CASCADE
   )
