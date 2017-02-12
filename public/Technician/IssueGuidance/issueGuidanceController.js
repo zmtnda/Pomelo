@@ -27,26 +27,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.models = ["iPhone 6"]
     scope.issues = ["Cracked Screen", "Broken Keyboard"]
     scope.offerings = [[], [], [], []]
+    
+    scope.typeButtonStatesArray = []
+    scope.manuButtonStatesJSON = {}
+    scope.modelButtonStatesJSON = {}
+    scope.issueButtonStatesJSON = {}
 
     // Style for the progress bar
     scope.progressBarDisplay = {'background-color':'blue'}
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
-
-    // A function that determines the styles of buttons
-    // Logic: Buttons turn grey if they are selected.
-    // DEPROCATED!!
-    /*scope.buttonStyle = function(input){
-      var selectedButtonValues = scope.selectedButtonValues;
-      if(selectedButtonValues["selectedType"].includes(input) ||
-         selectedButtonValues["selectedManu"].includes(input) ||
-         selectedButtonValues["selectedModel"].includes(input) ||
-         selectedButtonValues["selectedIssue"].includes(input))
-        return {"background-color": "#D3D3D3"}
-      else {
-        return {"background-color": "white"}
-      }
-    } */
 
     var updateProgressBar = function(message, percent)
     {
@@ -55,9 +45,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.progressBarDisplay = {"width": percent};
     }
 
-    var canGoToNext = function(isConfirmed, selected, message, percent)
+    var canGoToNext = function(selected, message, percent)
     {
-        if (isConfirmed === 1 && scope.selectedButtonValues[selected].length != 0)
+        if (scope.selectedButtonValues[selected].length != 0)
         {
             updateProgressBar(message, percent);
             return 1
@@ -65,54 +55,80 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         return 0
     }
 
-    var updateButtonState = function()
-    {
-
-
-    }
-
     scope.confirm = function(input)
     {
-      if(input === "selectedType")
+      if(input === "type")
       {
-        if (canGoToNext(selectedType, "selectedType", "Select the Manufacturers", "20%"))
-          scope.hasSelectedType = 1
+        if (canGoToNext("selectedType", "Select the Manufacturers", "20%"))
+          scope.hasSelectedType = true
+      }
+      else if(input === "manu")
+      {
+        if (canGoToNext("selectedManu", "Select a model", "40%"))
+          scope.hasSelectedManu = true
+      }
+      else if(input === "model")
+      {
+        if (canGoToNext("selectedModel", "Select a model", "60%"))
+          scope.hasSelectedModel = true
+      }
+      else if(input === "issue")
+      {
+        if (canGoToNext("selectedIssue", "Select an issue", "80%"))
+          scope.hasSelectedIssue = true
       }
     }
 
-    scope.typeButtonStatesArray = [[], [], [], []];
     // find a way to keep track of index
     scope.selectType = function(selectedType, typeInIndex)
     {
-      scope.selectedButtonValues["selectedType"].push(selectedType)
       if (scope.typeButtonStatesArray[typeInIndex] === 1)
         scope.typeButtonStatesArray[typeInIndex] = 0
       else {
         scope.typeButtonStatesArray[typeInIndex] = 1
+        scope.selectedButtonValues["selectedType"].push(selectedType)
       }
     }
 
-    scope.selectManu = function(selectedManu)
+    scope.selectManu = function(selectedManu, selectedType, manuInIndex)
     {
-      if (selectedManu !== 1)
+      if (scope.manuButtonStatesJSON[selectedType] === undefined) {
+        scope.manuButtonStatesJSON[selectedType] = []
+      }
+
+      if (scope.manuButtonStatesJSON[selectedType][manuInIndex] === 1)
+        scope.manuButtonStatesJSON[selectedType][manuInIndex] = 0
+      else {
+        scope.manuButtonStatesJSON[selectedType][manuInIndex] = 1
         scope.selectedButtonValues["selectedManu"].push(selectedManu)
-      if (canGoToNext(selectedManu, "selectedManu", "Select a model", "40%"))
-        scope.hasSelectedManu = 1
+      }
     }
 
-    scope.selectModel = function(selectedModel)
+    scope.selectModel = function(selectedModel, selectedManu, modelInIndex)
     {
-      if (selectedModel !== 1)
+      if (scope.modelButtonStatesJSON[selectedManu] === undefined) {
+        scope.modelButtonStatesJSON[selectedManu] = []
+      }
+
+      if (scope.modelButtonStatesJSON[selectedManu][modelInIndex] === 1)
+        scope.modelButtonStatesJSON[selectedManu][modelInIndex] = 0
+      else {
+        scope.modelButtonStatesJSON[selectedManu][modelInIndex] = 1
         scope.selectedButtonValues["selectedModel"].push(selectedModel)
-      if (canGoToNext(selectedModel, "selectedModel", "Select a model", "60%"))
-        scope.hasSelectedModel = 1
+      }
     }
 
-    scope.selectIssue = function(selectedIssue)
+    scope.selectIssue = function(selectedIssue, selectedModel, issueInIndex)
     {
-      if (selectedIssue !== 1)
+      if (scope.issueButtonStatesJSON[selectedModel] === undefined) {
+        scope.issueButtonStatesJSON[selectedModel] = []
+      }
+
+      if (scope.issueButtonStatesJSON[selectedModel][issueInIndex] === 1)
+        scope.issueButtonStatesJSON[selectedModel][issueInIndex] = 0
+      else {
+        scope.issueButtonStatesJSON[selectedModel][issueInIndex] = 1
         scope.selectedButtonValues["selectedIssue"].push(selectedIssue)
-      if (canGoToNext(selectedIssue, "selectedIssue", "Select an issue", "80%"))
-        scope.hasSelectedIssue = 1
+      }
     }
 }]);
