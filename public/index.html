@@ -16,14 +16,18 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="ngCss/ngCss.css" type="text/css"/>
+  <link rel="stylesheet" href="css/Technician/issueGuidance.css" type="text/css"/>
+  <link rel="stylesheet" href="css/ngCss.css" type="text/css"/>
   <link rel="stylesheet" href="css/Customer/cust.css" type="text/css"/>
   <link rel="stylesheet" href="Util/cssFiles/regTmp.css" type="text/css"/>
 
-  <script src="techapp.js"></script>
+  <script src="pomeloApp.js"></script>
 
   <script src="Home/homeController.js"></script>
+  <script src="Filter/buttonFilter.js"></script>
   <script src="Customer/customerController.js"></script>
+  <script src="Technician/IssueGuidance/issueGuidanceCustomDirective.js"></script>
+  <script src="Technician/IssueGuidance/issueGuidanceController.js"></script>
   <script src="Technician/technicianController.js"></script>
   <script src="Util/dialogService.js"></script>
   <script src="Util/logService.js"></script>
@@ -63,9 +67,11 @@
           <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li class="active" role="presentation" ng-click="retnHm()"><a href="#">Home</a></li>
+              <li role="presentation"><a href="#" ng-if="inSession" ng-click="goToAddService()">Provide a Service</a></li>
               <li role="presentation"><a href="#" ng-click="goToAbout()">About Us</a></li>
               <li role="presentation"><a href="https://docs.google.com/forms/d/1N1yCBjDKHL5MWz1AoMRSwKthJza7xi7KPRRWh2k6fYo/viewform?embedded=true">Give Us Your Opinion</a></li>
               <li role="presentation"><a href="#">Terms and Conditions</a></li><!--TODO-->
+              <li role="presentation" ng-click="goToissueGudiance()"><a href="#">Add a Service</a></li>
               <li role="presentation" ng-if="inSession" ng-click="logout()"><a href="#">Logout</a></li>
             </ul>
           </div>

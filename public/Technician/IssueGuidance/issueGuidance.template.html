@@ -1,0 +1,105 @@
+
+<body class="container">
+   <h3 ng-bind = "progressMessage">Start from types</h3>
+   <div class="progress">
+     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="progressBarDisplay">
+              {{ progressPercentage }} Complete
+     </div>
+   </div>
+
+   <div class="row">
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail">
+         <h3>Type(s)</h3>
+           <button type="button" class="btn btn-success"  ng-show="hasSelectedType" ng-click="cancelSelection('type')">Redo</button>
+           <button type="button" class="btn btn-success" ng-show="!hasSelectedType" ng-click="confirm('type')">Confirm</button>
+         <div class = "table-responsive">
+           <table class = "table">
+             <tbody>
+               <tr ng-repeat = "type in allTypes track by $index" data-index="{{$index}}">
+                  <td><button type="button" class="btn btn-default" ng-class="typeButtonStatesArray[$index] | buttonFilter"
+                     ng-click="selectType(type, $index)"> {{ type }} </button></td>
+               </tr>
+             </tbody>
+           </table>
+          </div>
+       </div>
+     </div>
+
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail" ng-show="hasSelectedType">
+         <h3>Manufacturer(s)</h3>
+           <button type="button" class="btn btn-success" ng-show="!hasSelectedType || !hasSelectedManu" ng-click="confirm('manu')">Confirm</button>
+           <button type="button" class="btn btn-success" ng-show="hasSelectedType && hasSelectedManu" ng-click="cancelSelection('manu')">Redo</button>
+           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedType track by $index">
+             <h5>{{ selected }}</h5>
+             <h3><div ng-style="buttonStyle(manu)" ng-click="selectManu(manu, selected, $index)" ng-class="manuButtonStatesJSON[selected][$index] | buttonFilter"
+                ng-repeat="manu in manufacturers track by $index"
+                class="label label-default"> {{ manu }}</div></h3>
+           </div>
+       </div>
+     </div>
+
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu">
+         <h3>Model(s)</h3>
+           <button type="button" class="btn btn-success" ng-click="confirm('model')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">Redo</button>
+           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedManu track by $index">
+             <h5>{{ selected }}</h5>
+             <h3><span ng-style="buttonStyle(model)" ng-click="selectModel(model, selected, $index)" ng-class="modelButtonStatesJSON[selected][$index] | buttonFilter" class="label label-default"
+               ng-repeat="model in models track by $index" >{{ model }}</span></h3>
+           </div>
+       </div>
+     </div>
+
+     <div class="col-xs-12 col-md-2">
+       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
+           <h3>Issue(s)</h3>
+           <button type="button" class="btn btn-success" ng-click="confirm('issue')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="cancelSelection('issue')" ng-show="hasSelectedType && !hasSelectedManu && hasSelectedModel && hasSelectedIssue">Redo</button>
+           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedModel track by $index">
+             <h5>{{ selected }}</h5>
+             <h3><span ng-style="buttonStyle(issue)" ng-click="selectIssue(issue, selected, $index)" ng-class="issueButtonStatesJSON[selected][$index] | buttonFilter" class="label label-default"
+               ng-repeat = "issue in issues track by $index" >{{ issue }}</span></h3>
+           </div>
+       </div>
+     </div>
+    <!--
+     <div class="col-xs-12 col-md-1">
+       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel && hasSelectedIssue">
+         <h3>Amount</h3>
+           <button type="button" class="btn btn-success">Per Service</button>
+           </br>
+           <button type="button" class="btn btn-success">Hourly Rate</button>
+           <input type="text" name="price" ng-model="priceModel">
+       </div>
+     </div> -->
+
+     <div class="col-xs-12 col-md-4">
+      <div class="thumbnail">
+        <h3>You're offering:</h3>
+         <button type="button" class="btn btn-success">Confirm</button>
+         <div class = "table-responsive">
+           <table class = "table">
+             <thead>
+               <th>Categories</th>
+               <th>Manufacturer(s)</th>
+               <th>Model(s)</th>
+               <th>Issue</th>
+             </thead>
+             <tbody>
+               <tr ng-repeat = "offer in selectedButtonValues.selectedType track by $index">
+                 <td>{{ selectedButtonValues.selectedType[$index] }}</td>
+                 <td>{{ selectedButtonValues.selectedManu[$index] }}</td>
+                 <td>{{ selectedButtonValues.selectedModel[$index] }}</td>
+                 <td>{{ selectedButtonValues.selectedIssue[$index] }}</td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+
+   </div>
+</body>
