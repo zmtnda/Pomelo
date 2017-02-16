@@ -49,60 +49,93 @@
 
 	-- insert data into categories --
 	insert into `Categories` (`category`) values
-		('Desktop'),
-		('Laptop'),
-		('Tablet'),
-		('Smart Phone');
+		('Desktop'), -- 1
+		('Laptop'), -- 2
+		('Tablet'), -- 3
+		('Smart Phone'); -- 4
 
 	-- insert data into Manufactures --
 	insert into `Manufacturers` (`manufacturer`) values
-		('Samsung'),
-		('Apple'),
-		('Google'),
-		('Dell'),
-		('ASUS');
+		('Samsung'), -- 1
+		('Apple'), -- 2
+		('Google'), -- 3
+		('Dell'), -- 4
+		('ASUS'); -- 5
 
 	-- insert data into catergories manufacture --
-	insert into `Models` (`cat_id`, `man_id`, `model`) values
-		(1, 4, 'Dell Dekstop'), -- 1
-		(1, 2, 'Apple Mac Station'), -- 2
-		(2, 2, 'Macbook 2015'), -- 3
-		(2, 4, 'XPS 13'), -- 4
-		(3, 2, 'iPad 2 mini'), -- 5
-		(4, 1, 'Galaxy s6'), -- 6
-		(4, 1, 'Galaxy s7'), -- 7
-		(4, 2, 'iPhone 7'), -- 8
-		(4, 2, 'iPhone 6'); -- 9
+	insert into `CategoriesManufacturers` (`cat_id`, `man_id`) values
+		(1, 1), (1, 2), (1, 4), (1, 5),
+		(2, 1), (2, 2), (2, 3), (2, 4), (2, 5),
+		(3, 1), (3, 2), (3, 3),
+		(4, 1), (4, 2), (4, 3);
+
+	-- insert into Models table --
+	insert into `Models` (`catMan_id`, `model`) values
+		(3, 'Dell Dekstop'), -- 1
+		(2, 'Apple Mac Station'), -- 2
+		(6, 'Macbook 2015'), -- 3
+		(8, 'XPS 13'), -- 4
+		(11, 'iPad 2 mini'), -- 5
+		(13, 'Galaxy s6'), -- 6
+		(13, 'Galaxy s7'), -- 7
+		(14, 'iPhone 7'), -- 8
+		(14, 'iPhone 6'); -- 9
 
 	-- insert into categories issues --
-	insert into `Issues` (`cat_id`, `issue`) values
-		(1, 'Can\'t turn on'), -- 1
-		(1, 'Upgrade RAM'), -- 2
-		(2, 'Can\'t turn on'), -- 3
-		(2, 'Can\'t connect to WiFi'), -- 4
-		(2, 'Keyboard doesn\'t work'), -- 5
-		(3, 'Broken Screen'), -- 6
-		(3, 'Can\'t turn on'), -- 7
-		(4, 'Broken Screen'), -- 8
-		(4, 'Replace battery'); -- 9
+	insert into `Issues` (`issue`) values
+		('Can\'t turn on'), -- 1
+		('Upgrade RAM'), -- 2
+		('Can\'t turn on'), -- 3
+		('Can\'t connect to WiFi'), -- 4
+		('Keyboard doesn\'t work'), -- 5
+		('Broken Screen'), -- 6
+		('Replace battery'); -- 7
+
+	-- insert into ModelsIssues --
+	insert into `ModelsIssues` (`mod_id`, `iss_id`) values
+		(1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
+		(2, 1), (2, 2), (2, 3), (2, 4), (2, 5),
+		(3, 1), (3, 2), (3, 3), (3, 4), (3, 5),
+		(4, 1), (4, 2), (4, 3), (4, 4), (4, 5);
+
+	insert into `ModelsIssues` (`mod_id`, `iss_id`) values
+		(5, 3), (5, 4), (5, 6), (5, 7),
+		(6, 3), (6, 4), (6, 6), (6, 7),
+		(7, 3), (7, 4), (7, 6), (7, 7),
+		(8, 3), (8, 4), (8, 6), (8, 7),
+		(9, 3), (9, 4), (9, 6), (9, 7);
 
 	-- insert data into Service offer by tech --
-	insert into `ServicesOfferedByTech` (`tec_id`, `mod_id`, `iss_id`,
+	insert into `ServicesOfferedByTech` (`tec_id`, `modIss_id`,
 		`servType`, `estAmount`, `status`) values
-		(1, 1, 1, 0, 50.99, 1), -- dell desktop cant turn on -- 1
-		(1, 3, 4, 1, 46.50, 1), -- macbook 2015 cant connect wifi -- 2
-		(1, 5, 8, 0, 60.99, 1), -- ipad 2 mini broken screen -- 3
-		(1, 7, 9, 0, 149.99, 1), -- galaxy 7 replace baterry -- 4
-		(2, 6, 9, 0, 99.99, 1), -- galaxy s6 replace baterry -- 5
-		(2, 4, 5, 1, 30.00, 1); -- xps13 keyboard doesn't work -- 6
+		(1, 1, 0, 50.99, 1),
+		(1, 2, 1, 46.50, 1),
+		(1, 3, 0, 60.99, 1),
+		(1, 4, 0, 50.99, 1),
+		(1, 5, 1, 46.50, 1),
+		(1, 6, 0, 60.99, 1),
+		(1, 4, 0, 149.99, 1),
+		(1, 16, 1, 46.50, 1),
+		(1, 17, 0, 60.99, 1),
+		(1, 18, 0, 149.99, 1),
+		(2, 5, 0, 99.99, 1),
+		(2, 6, 1, 30.00, 1),
+		(2, 10, 0, 149.99, 1),
+		(2, 11, 0, 99.99, 1),
+		(2, 12, 1, 30.00, 1),
+		(2, 1, 0, 99.99, 1),
+		(2, 2, 1, 30.00, 1),
+		(2, 3, 0, 149.99, 1),
+		(2, 20, 0, 99.99, 1),
+		(2, 22, 1, 30.00, 1);
 
 	-- insert data into ServiceHistory --
 	insert into `ServicesHistory` (`serTec_id`, `cus_id`, `description`, `amount`, `status`,
 		`orderedDate`, `completedDate`) values
 		(1, 1, 'My Dell Desktop deosn\'t turn on, please help!', 200.50, 3, '2016-02-22', now()),
-		(2, 1, 'Can\'t connect wifi help!!', 149.99, 4, '2017-01-10', '2017-01-12'),
-		(3, 2, 'ipad mini 2 broken screen', 69.99, 3, '2016-04-21', '2016-04-25'),
-		(6, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15');
+		(2, 1, 'Upgrade Ram PLS', 149.99, 4, '2017-01-10', '2017-01-12'),
+		(20, 2, 'ipad mini 2 can\'t connect to WIFI', 69.99, 3, '2016-04-21', '2016-04-25'),
+		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15');
 
 	-- insert data into review --
 	insert into `reviews` (`serHis_id`, `cus_id`, `tec_id`, `stars`, `comment`) values

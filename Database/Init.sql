@@ -23,20 +23,6 @@ CREATE  TABLE IF NOT EXISTS Badges (
   description VARCHAR (500) NULL ,
   icon VARCHAR (200) NOT NULL
 );
--- -----------------------------------------------------
--- Table ServicesCategories
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Categories (
-  id_cat INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  category VARCHAR(100) NOT NULL
-);
--- -----------------------------------------------------
--- Table ServicesManufacturers
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Manufacturers (
-  id_man INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  manufacturer VARCHAR(100) NOT NULL
-);
 
 -- -----------------------------------------------------
 -- Table Customers
@@ -124,24 +110,57 @@ CREATE  TABLE IF NOT EXISTS Photos (
 );
 
 -- -----------------------------------------------------
--- Table models
+-- Table ServicesCategories
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Models (
-  id_mod INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE  TABLE IF NOT EXISTS Categories (
+  id_cat INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  category VARCHAR(100) NOT NULL
+);
+
+-- -----------------------------------------------------
+-- Table ServicesManufacturers
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Manufacturers (
+  id_man INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  manufacturer VARCHAR(100) NOT NULL
+);
+
+-- -----------------------------------------------------
+-- Table CategoriesManufacturers
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS CategoriesManufacturers (
+  id_catMan INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cat_id INT(11) UNSIGNED NOT NULL ,
   man_id INT(11) UNSIGNED NOT NULL ,
-  model VARCHAR(50) NOT NULL,
-  CONSTRAINT fkModelsCategories
+  CONSTRAINT fkCategoriesManufacturesCategories
     FOREIGN KEY (cat_id)
     REFERENCES Categories (id_cat)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT fkModelsManufacturers
-    FOREIGN KEY (man_id )
-    REFERENCES Manufacturers (id_man )
+    ON UPDATE NO ACTION,
+  CONSTRAINT fkCategoriesManufacturesManufacturers
+    FOREIGN KEY (man_id)
+    REFERENCES Manufacturers (id_man)
     ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON UPDATE NO ACTION
   )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Table Models
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS Models (
+  id_mod INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  catMan_id INT(11) UNSIGNED NOT NULL,
+  model VARCHAR(50) NOT NULL DEFAULT "",
+  CONSTRAINT fkModelsCategoriesManufacturers
+    FOREIGN KEY (catMan_id)
+    REFERENCES CategoriesManufacturers (id_catMan)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -152,14 +171,27 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Issues (
   id_iss INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  cat_id INT(11) UNSIGNED NOT NULL ,
-  issue VARCHAR(500) NOT NULL ,
-  CONSTRAINT fkIssuesCategories
-    FOREIGN KEY (cat_id)
-    REFERENCES Categories (id_cat)
+  issue VARCHAR(500) NOT NULL
+);
+
+-- -----------------------------------------------------
+-- Table ModelsIssues
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS ModelsIssues (
+  id_modIss INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  mod_id INT(11) UNSIGNED NOT NULL,
+  iss_id INT(11) UNSIGNED NOT NULL,
+  CONSTRAINT fkModelsIssuesModels
+    FOREIGN KEY (mod_id)
+    REFERENCES Models (id_mod)
     ON DELETE CASCADE
-    ON UPDATE CASCADE
-  )
+    ON UPDATE NO ACTION,
+  CONSTRAINT fkModelsIssuesIssues
+    FOREIGN KEY (iss_id)
+    REFERENCES Issues (id_iss)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -171,8 +203,7 @@ SHOW WARNINGS;
 CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
   id_serTec INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL ,
-  mod_id INT(11) UNSIGNED NOT NULL ,
-  iss_id INT(11) UNSIGNED NOT NULL ,
+  modIss_id INT(11) UNSIGNED NOT NULL,
   servType TINYINT UNSIGNED NOT NULL,
   estAmount NUMERIC(6,2) UNSIGNED NOT NULL,
   status INT(11) NOT NULL,
@@ -180,17 +211,12 @@ CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT fkServicesOfferedByTechModels
-    FOREIGN KEY (mod_id)
-    REFERENCES Models (id_mod)
+    ON UPDATE NO ACTION,
+  CONSTRAINT fkServicesOfferedByTechModelsIssues
+    FOREIGN KEY (modIss_id)
+    REFERENCES ModelsIssues (id_modIss)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT fkServicesOfferedByTechIssues
-    FOREIGN KEY (iss_id)
-    REFERENCES Issues (id_iss)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON UPDATE NO ACTION
   )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -289,3 +315,74 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 SHOW WARNINGS;
+
+-- -----------------------------------------------------
+-- Create View for all cat man
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewAllCategoriesManufactures;
+CREATE VIEW ViewAllCategoriesManufactures AS
+   SELECT cm.*, c.category, m.manufacturer
+   FROM CategoriesManufacturers cm, Categories c, Manufacturers m
+   WHERE cm.cat_id = c.id_cat AND cm.man_id = m.id_man
+   ORDER BY c.category ASC, m.manufacturer ASC;
+
+-- -----------------------------------------------------
+-- Create View for all model issues
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewALLModelsIssues;
+CREATE VIEW ViewALLModelsIssues AS
+   SELECT MI.*, M.model, Iss.issue
+   FROM ModelsIssues MI, Issues Iss, Models M
+   WHERE MI.mod_id = M.id_mod AND MI.iss_id = Iss.id_iss
+   ORDER BY M.model ASC, Iss.issue ASC;
+
+-- -----------------------------------------------------
+-- Create View for all services offer with all status
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewAllServicesOffer;
+CREATE VIEW ViewAllServicesOffer AS
+   SELECT T.id_tec, T.lastName, T.firstName, SO.id_serTec,M.id_mod, M.model, Iss.id_iss,
+   	Iss.issue, SO.servType, SO.estAmount, SO.status
+   FROM ServicesOfferedByTech SO, ModelsIssues MI, Models M, Issues Iss, Technicians T
+   WHERE SO.tec_id = T.id_tec AND SO.modIss_id = MI.id_modIss
+   	AND MI.mod_id = M.id_mod AND MI.iss_id = Iss.id_iss
+   ORDER BY T.id_tec ASC, M.model ASC, Iss.issue ASC;
+
+-- -----------------------------------------------------
+-- Create View for all services offer with status is 1 - visible to customer
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewAllServicesOfferForCustomer;
+CREATE VIEW ViewAllServicesOfferForCustomer AS
+   SELECT T.id_tec, T.lastName, T.firstName, SO.id_serTec,M.id_mod, M.model, Iss.id_iss,
+   	Iss.issue, SO.servType, SO.estAmount, SO.status
+   FROM ServicesOfferedByTech SO, ModelsIssues MI, Models M, Issues Iss, Technicians T
+   WHERE SO.tec_id = T.id_tec AND SO.modIss_id = MI.id_modIss
+   	AND MI.mod_id = M.id_mod AND MI.iss_id = Iss.id_iss AND SO.status = 1
+   ORDER BY T.id_tec ASC, M.model ASC, Iss.issue ASC;
+
+-- -----------------------------------------------------
+-- Create View for all services history
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewAllServicesHistory;
+CREATE VIEW ViewAllServicesHistory AS
+   SELECT SH.id_serHis, C.id_cus, C.email, SO.id_serTec, T.id_tec, T.lastName, T.firstName,
+      M.model, I.issue, SH.description, SH.amount, SH.status, SH.orderedDate, SH.completedDate
+   FROM ServicesHistory SH ,Technicians T, Customers C, ServicesOfferedByTech SO,
+      ModelsIssues MI, Models M, Issues I
+   WHERE SH.serTec_id = SO.id_serTec AND SH.cus_id = C.id_cus
+      AND SO.tec_id = T.id_tec AND SO.modIss_id = MI.id_modIss
+      AND MI.mod_id = M.id_mod AND MI.iss_id = I.id_iss;
+
+-- -----------------------------------------------------
+-- Create View for all reivews
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewAllReviews;
+CREATE VIEW ViewAllReviews AS
+   SELECT SH.id_serHis, C.id_cus, C.email, SO.id_serTec, T.id_tec, T.lastName, T.firstName,
+   	M.model, I.issue, SH.description, SH.amount, SH.status, SH.orderedDate,
+   	SH.completedDate, R.stars, R.comment
+   FROM Reviews R, ServicesHistory SH ,Technicians T, Customers C,
+   	ServicesOfferedByTech SO, ModelsIssues MI, Models M, Issues I
+   WHERE R.serHis_id = SH.id_serHis AND SH.serTec_id = SO.id_serTec AND SH.cus_id = C.id_cus
+      AND SO.tec_id = T.id_tec AND SO.modIss_id = MI.id_modIss
+      AND MI.mod_id = M.id_mod AND MI.iss_id = I.id_iss;
