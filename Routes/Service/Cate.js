@@ -36,23 +36,23 @@ router.post('/', function(req, res) {
 	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newCategory'])) {
 		connections.getConnection(res, function(cnn) {
          cnn.query(' SELECT count(*) FROM Categories WHERE category = ?', body.newCategory,
-            function(err, result) {
-               if(result.length == 0) {
-                  cnn.query(' INSERT INTO catergoies (category) values (?) ', body.newCategory,
-         			function(err, result){
-         				if(err) {
-         					console.log("error create new category");
-         					res.status(400).json(err);
-         				} else {
-         					console.log("create new category successful");
-                        res.end();
-         				}
-         			});
-               } else {
-                  console.log("Error check for existing cate, or cate already exist");
-   					res.status(400).json(err);
-               }
-            })
+      	function(err, result) {
+            if(result.length == 0) {
+               cnn.query(' INSERT INTO catergoies (category) values (?) ', body.newCategory,
+      			function(err, result){
+      				if(err) {
+      					console.log("error create new category");
+      					res.status(400).json(err);
+      				} else {
+      					console.log("create new category successful");
+                     res.end();
+      				}
+      			});
+            } else {
+               console.log("Error check for existing cate, or cate already exist");
+					res.status(400).json(err);
+            }
+         });
 			cnn.release();
 		});
 	}
@@ -70,16 +70,72 @@ router.get('/:catId/manu', function(req, res) {
 	connections.getConnection(res, function(cnn) {
 		cnn.query(' SELECT m.id_man AS manId, m.manufacturer FROM manufacturers m, ' +
 					 ' categoriesmanufacturers c WHERE c.man_id = m.id_man AND c.cat_id = ?', catId,
+		function(err, result) {
+			if(err) {
+				console.log("error get manufactures for category");
+				res.status(400).json(err);
+			} else {
+				console.log("get manufactures for cat successful");
+				res.json(result);
+			}
+		});
+	});
+});
+
+// Insert new CategoriesManufacturers
+// require catId, and new manufactures
+router.post('/:catId/manu', function(req, res) {
+	console.log("Add new CategoriesManufacturers");
+	var vld = req.validator;
+   var admin = req.session && req.session.isAdmin();
+   var body = req.body;
+	var catId = req.params.catId;
+
+	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newManufacturer'])) {
+		connections.getConnection(res, function(cnn) {
+			cnn.query(' SELECT COUNT(*), id_man FROM Manufacturers WHERE ' +
+						 ' LCASE(manufacturer) = LCASE(?) GROUP BY id_man ', body.newManufacturer,
 			function(err, result) {
 				if(err) {
-					console.log("error get manufactures for category");
+					console.log("Error check exist manufacturer");
 					res.status(400).json(err);
-				} else {
-					console.log("get manufactures for cat successful");
-					res.json(result);
+				} else if (result.length > 0) { //create new CategoriesManufacturers
+					cnn.query(' INSERT INTO CategoriesManufacturers (cat_id, man_id) VALUES ' +
+								 ' (?, ?) ', catId, result[0].id_man ,
+					function(err, result) {
+						if(err) {
+							console.log("Error insert new CategoriesManufacturers with exist man");
+							res.status(400).json(err);
+						} else {
+							console.log("Add new CategoriesManufacturers successful");
+							res.end();
+						}
+					});
+				} else { // no manufacturer - need to create new manufacturer
+					cnn.query(' INSERT INTO Manufacturers (manufacturer) VALUES (?) ', body.newManufacturer,
+					function(err, result) {
+						if (err) {
+							console.log("Error add new Manufacturers");
+							res.status(400).json(err);
+						} else { // insert into CategoriesManufacturers
+							cnn.query(' INSERT INTO CategoriesManufacturers (cat_id, man_id) VALUES ' +
+										 ' (?, ?) ', [catId, result.insertId],
+							function(err, result) {
+								if(err) {
+									console.log("Error insert new CategoriesManufacturers with new man");
+									res.status(400).json(err);
+								} else {
+									console.log("Add new CategoriesManufacturers successful");
+									res.end();
+								}
+							});
+						}
+					});
 				}
 			});
-	});
+			cnn.release();
+		});
+	}
 });
 
 // Get all models for a specific category and manufactures
@@ -94,17 +150,57 @@ router.get('/:catId/:manId/model', function(req, res) {
 	connections.getConnection(res, function(cnn) {
 		cnn.query(' SELECT M.id_mod AS modelId, M.model FROM Models M, CategoriesManufacturers CM ' +
 					 ' WHERE CM.id_catMan = M.catMan_id and CM.cat_id = ? and CM.man_id = ? ', [catId, manId],
-			function(err, result) {
-				if(err) {
-					console.log("error get models");
-					res.status(400).json(err);
-				} else {
-					console.log("get models successful");
-					res.json(result);
-				}
-			});
+		function(err, result) {
+			if(err) {
+				console.log("error get models");
+				res.status(400).json(err);
+			} else {
+				console.log("get models successful");
+				res.json(result);
+			}
+		});
 		cnn.release();
 	});
+});
+
+// Add new model based on category and manufacturer
+// Require categoryId, manufacturerId, and new model name
+// Need admin Authorization
+router.post('/:catId/:manId/model', function(req, res) {
+	console.get("Add new models")
+	var vld = req.validator;
+	var admin = req.session && req.session.isAdmin();
+	var body = req.body;
+	var catId = req.params.catId;
+	var manId = req.params.manId;
+
+	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newModel'])) {
+		connections.getConnection(res, function(cnn) {
+			cnn.query(' SELECT count(*) FROM Models M, CategoriesManufacturers CM WHERE ' +
+						 ' LCASE(M.model) = LCASE(?) AND M.catMan_id = CM.id_catMan AND CM.cat_id = ? ' +
+					 	 ' AND CM.man_id = ? ', [body.newModel, catId, manId],
+			function(err, result){
+				if(err || result.length > 0) {
+					console.log("Error get models or models already exists");
+				} else {
+					cnn.query(' INSERT INTO Models (model, catMan_id) values (?, ' +
+								 ' (SELECT id_catMan FROM CategoriesManufacturers WHERE ' +
+								 ' cat_id = ?  AND man_id = ?))', [body.newModel, catId, manId],
+					function(err, result) {
+						if(err) {
+							console.log("Error insert new model");
+							res.status(400).json(err);
+						} else {
+							console.log("Add new model successful");
+							res.end();
+						}
+					});
+				}
+			});
+			cnn.release();
+		});
+	}
+
 });
 
 // Get all issues
@@ -142,24 +238,23 @@ router.post('/issues', function(req, res) {
    if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newIssue'])) {
       connections.getConnection(res, function(cnn) {
          cnn.query(' SELECT count(*) FROM Issues WHERE issue = ?', newIssue,
-            function(err, result) {
-               if(result.length == 0) {
-                  cnn.query(' INSERT INTO Issues (issue) ' +
-                            ' VALUES (?)', newIssue,
-                     function(err, result) {
-                        if(err) {
-                           console.log("error create new issue");
-            					res.status(400).json(err);
-                        } else {
-                           console.log("create new issue successful");
-                           res.end();
-                        }
-                  });
-               } else {
-                  console.log("Error checking exsiting issue or issue already exist");
-                  res.status(400).json(err);
-               }
-         	});
+         function(err, result) {
+            if(result.length == 0) {
+               cnn.query(' INSERT INTO Issues (issue) VALUES (?)', newIssue,
+               function(err, result) {
+                  if(err) {
+                     console.log("error create new issue");
+      					res.status(400).json(err);
+                  } else {
+                     console.log("create new issue successful");
+                     res.end();
+                  }
+               });
+            } else {
+               console.log("Error checking exsiting issue or issue already exist");
+               res.status(400).json(err);
+            }
+      	});
          cnn.release();
       });
    }
