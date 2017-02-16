@@ -68,8 +68,8 @@ router.get('/:catId/manu', function(req, res) {
    var catId = req.params.catId;
 
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT m.id_man, m.manufacturer FROM manufacturers m, categoriesmanufacturers c ' +
-					 ' WHERE c.man_id = m.id_man AND c.cat_id = ?', catId,
+		cnn.query(' SELECT m.id_man AS manId, m.manufacturer FROM manufacturers m, ' +
+					 ' categoriesmanufacturers c WHERE c.man_id = m.id_man AND c.cat_id = ?', catId,
 			function(err, result) {
 				if(err) {
 					console.log("error get manufactures for category");
@@ -92,8 +92,8 @@ router.get('/:catId/:manId/model', function(req, res) {
    var manId = req.params.manId;
 
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT id_catMan AS id_model, model FROM categoriesmanufacturers ' +
-					 ' WHERE cat_id = ? AND man_id = ? ', [catId, manId],
+		cnn.query(' SELECT M.id_mod AS modelId, M.model FROM Models M, CategoriesManufacturers CM ' +
+					 ' WHERE CM.id_catMan = M.catMan_id and CM.cat_id = ? and CM.man_id = ? ', [catId, manId],
 			function(err, result) {
 				if(err) {
 					console.log("error get models");
@@ -107,16 +107,14 @@ router.get('/:catId/:manId/model', function(req, res) {
 	});
 });
 
-// Get all issues based on category
-// Require categoryId
+// Get all issues
 // No need Authorization for this
-router.get('/:catId/issues', function(req, res) {
+router.get('/issues', function(req, res) {
 		console.log("get issues based on category");
 		var vld = req.validator;
-		var catId = req.params.catId;
 
 		connections.getConnection(res, function(cnn) {
-			cnn.query('SELECT id_catIss, issue from categoriesIssues WHERE cat_id = ?', catId,
+			cnn.query(' SELECT id_iss as issueId, issue FROM Issues ',
 			function(err, result) {
 				if (err) {
 					console.log("error get issues");
@@ -131,25 +129,23 @@ router.get('/:catId/issues', function(req, res) {
 });
 
 // Add a new issues based on category type
-// Rquired catId, newIssue
+// Rquired newIssue
 // Require Admin Authorization to access this
 // Check if the issue already exist first
 // Yes -> fail to add. No -> add new issue
-router.post('/:catId/issues', function(req, res) {
+router.post('/issues', function(req, res) {
    console.log('Add new issue');
    var vld = req.validator;
    var admin = req.session && req.session.isAdmin();
    var body = req.body;
-   var catId = req.params.catId
 
    if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newIssue'])) {
       connections.getConnection(res, function(cnn) {
-         cnn.query(' SELECT count(*) FROM CategoriesIssues WHERE ' +
-                   ' cat_id = ? AND issue = ?', [catId, newIssue],
+         cnn.query(' SELECT count(*) FROM Issues WHERE issue = ?', newIssue,
             function(err, result) {
                if(result.length == 0) {
-                  cnn.query(' INSERT INTO CategoriesIssues (cat_id, issue) ' +
-                            ' VALUES (?,?)',[cat_id, newIssue],
+                  cnn.query(' INSERT INTO Issues (issue) ' +
+                            ' VALUES (?)', newIssue,
                      function(err, result) {
                         if(err) {
                            console.log("error create new issue");
