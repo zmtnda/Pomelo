@@ -27,14 +27,20 @@ app.config(['$stateProvider', '$urlRouterProvider',
          url: '/technician/IssueGuidance',
          templateUrl: 'Technician/IssueGuidance/issueGuidance.template.html',
          controller: 'issueGuidanceController',
-         /*resolve: {
+         resolve: {
            cates: ['$q', '$http', '$stateParams', function($q, http, prms){
              return http.get('Cate/')
              .then(function(response){
                return $q.resolve(response.data)
              })
+           }],
+           manus: ['$q', '$http', '$stateParams', function($q, http, prms){
+             return http.get('Cate/')
+             .then(function(response){
+               return $q.resolve(response.data)
+             })
            }]
-         }*/
+         }
       })
       .state('admin', {
          url: '/admin',

@@ -1,5 +1,5 @@
-app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg',
-  function(scope, state, logSer, http, rscope, noDlg, cate)
+app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates',
+  function(scope, state, logSer, http, rscope, noDlg, cates)
   {
     scope.progressMessage = "Please select the general type you can fix"
 
@@ -19,15 +19,25 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     // Data fetched from DB:
     scope.user = {};
-    scope.allTypes = ["Laptop", "Desktop", "Smart Phones", "Software", "Tablet"]
+
+    // Initializes all types
+    scope.allTypes = cates
+    cates.forEach(function(value, key, map)
+    {
+      console.log(JSON.stringify(cates))
+      // use the cate's id to get all manufacturers based by categories
+    });
+
     scope.allManufacturers = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
 
     // Data being displayed
     scope.manufacturers = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
     scope.models = ["iPhone 6"]
     scope.issues = ["Cracked Screen", "Broken Keyboard"]
-    scope.offerings = [[], [], [], []]
-    
+
+    scope.offerings = {}
+    var numOfferings = 0
+
     scope.typeButtonStatesArray = []
     scope.manuButtonStatesJSON = {}
     scope.modelButtonStatesJSON = {}
@@ -60,7 +70,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       if(input === "type")
       {
         if (canGoToNext("selectedType", "Select the Manufacturers", "20%"))
+        {
           scope.hasSelectedType = true
+        }
       }
       else if(input === "manu")
       {
@@ -83,52 +95,62 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.selectType = function(selectedType, typeInIndex)
     {
       if (scope.typeButtonStatesArray[typeInIndex] === 1)
+      {
         scope.typeButtonStatesArray[typeInIndex] = 0
-      else {
-        scope.typeButtonStatesArray[typeInIndex] = 1
-        scope.selectedButtonValues["selectedType"].push(selectedType)
+      }
+      else
+      {
+        console.log(JSON.stringify(selectedType))
+        scope.offerings[numOfferings++] = {'type': selectedType.category,
+                                           'typeId': selectedType["id_cat"]}
       }
     }
 
-    scope.selectManu = function(selectedManu, selectedType, manuInIndex)
+    scope.selectManu = function(selectedManu, offerId)
     {
       if (scope.manuButtonStatesJSON[selectedType] === undefined) {
         scope.manuButtonStatesJSON[selectedType] = []
       }
 
       if (scope.manuButtonStatesJSON[selectedType][manuInIndex] === 1)
+      {
         scope.manuButtonStatesJSON[selectedType][manuInIndex] = 0
-      else {
-        scope.manuButtonStatesJSON[selectedType][manuInIndex] = 1
-        scope.selectedButtonValues["selectedManu"].push(selectedManu)
+      }
+      else
+      {
+        scope.offerings[offerId]["manu"] = selectedManu
       }
     }
 
-    scope.selectModel = function(selectedModel, selectedManu, modelInIndex)
+    scope.selectModel = function(selectedModel, offerId)
     {
       if (scope.modelButtonStatesJSON[selectedManu] === undefined) {
         scope.modelButtonStatesJSON[selectedManu] = []
       }
 
       if (scope.modelButtonStatesJSON[selectedManu][modelInIndex] === 1)
+      {
         scope.modelButtonStatesJSON[selectedManu][modelInIndex] = 0
-      else {
-        scope.modelButtonStatesJSON[selectedManu][modelInIndex] = 1
-        scope.selectedButtonValues["selectedModel"].push(selectedModel)
+      }
+      else
+      {
+        scope.offerings[offerId]["model"] = selectedModel
       }
     }
 
-    scope.selectIssue = function(selectedIssue, selectedModel, issueInIndex)
+    scope.selectIssue = function(selectedIssue, offerId)
     {
       if (scope.issueButtonStatesJSON[selectedModel] === undefined) {
         scope.issueButtonStatesJSON[selectedModel] = []
       }
 
       if (scope.issueButtonStatesJSON[selectedModel][issueInIndex] === 1)
+      {
         scope.issueButtonStatesJSON[selectedModel][issueInIndex] = 0
-      else {
-        scope.issueButtonStatesJSON[selectedModel][issueInIndex] = 1
-        scope.selectedButtonValues["selectedIssue"].push(selectedIssue)
+      }
+      else
+      {
+        scope.offerings[offerId]["issue"] = selectedIssue
       }
     }
 }]);

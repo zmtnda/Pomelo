@@ -10,12 +10,13 @@ router.baseURL = '/Cate';
 router.get('/', function(req, res) {
 	console.log("Get all catergoies");
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT id_cat, category from Categories ',
+		cnn.query('SELECT id_cat, category from Categories ',
 		function(err, result){
 			if(err){
+				console.log(JSON.stringify(err))
 				console.log("error get cats from database");
 				res.status(404).end();
-			} else{
+			} else {
 				console.log("get all cats successful");
 				res.json(result);
 			}
@@ -45,7 +46,7 @@ router.post('/', function(req, res) {
          					res.status(400).json(err);
          				} else {
          					console.log("create new category successful");
-                        res.end();
+                  res.end();
          				}
          			});
                } else {
