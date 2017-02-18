@@ -260,4 +260,65 @@ router.post('/issues', function(req, res) {
    }
 });
 
+// get issues based on models
+// Require model ID on link
+router.get('/:modelId/issues', function(req, res) {
+	var vld = req.validator;
+	var modelId = req.params.modelId;
+
+	connections.getConnection(res, function(cnn) {
+		cnn.query(' SELECT I.id_iss as issueId, I.issue FROM ModelsIssues MI, Models M ,Issues I ' +
+					 ' WHERE MI.mod_id = ? AND MI.mod_id = M.id_mod AND MI.iss_id = I.id_iss', modelId,
+		function(err, result) {
+			if(err) {
+				console.log("Error getting issues for model");
+				res.status(400).json(err);
+			} else {
+				console.log("Get issues for model successful");
+				res.json(result);
+			}
+		});
+		cnn.release();
+	});
+});
+
+// Assign new issue to specific model
+// Require modelId on link and pass in issue Id
+router.post('/:modelId/issues', function(req, res) {
+	console.log('Assign issue to model');
+   var vld = req.validator;
+   var admin = req.session && req.session.isAdmin();
+	var modelId = req.params.modelId;
+   var body = req.body;
+
+	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['issueId'])) {
+		connections.getConnection(res, function(cnn) {
+			cnn.query(' SELECT COUNT(*) FROM ModelsIssues ' +
+						 ' WHERE mod_id=? AND iss_id=? ', [modelId, body.issueId],
+		 	function(err, result){
+				if(err) {
+					console.log("Error checking for exist model issue");
+					res.status(400).json(err);
+				} else if (result.length > 0) {
+					console.log("Issue for this model already exists");
+					res.end();
+				} else {
+					cnn.query(' INSERT INTO ModelsIssues (mod_id, iss_id) ' +
+								 ' VALUES (?,?) ', [modelId, body.issueId],
+					function(err, result) {
+						if(err) {
+							console.log("Err assign issue into model");
+							res.status(400).json(err);
+						} else {
+							console.log("Assign issue to model successful");
+							res.end();
+						}
+					});
+				}
+			});
+			cnn.release();
+		});
+	}
+});
+
 module.exports = router;
