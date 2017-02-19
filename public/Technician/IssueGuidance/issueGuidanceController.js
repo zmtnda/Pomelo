@@ -17,9 +17,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.hasConfirmedModel = 0
     scope.hasConfirmedIssue = 0
 
-    // Data fetched from DB:
-    scope.user = {};
-
     // Initializes all categories
     scope.allCates = cates
 
@@ -45,7 +42,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
     {
-      scope.offerrings[numOfferings] = {"cate": selectedCategoryName,
+      scope.offerrings[numOfferings] = {"offerId": numOfferings,
+                                        "cate": selectedCategoryName,
                                         "cateId": selectedCategoryId,
                                         "offer": {"manus": [],
                                                   "models": [],
@@ -55,6 +53,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                     "issues": []}}
       numOfferings = numOfferings + 1
     }
+
+    /////           categories              //////
 
     // A helper that avoids http calls share the same enviroment.
     var onClickConfirmCategoryHelper = function(offerId)
@@ -81,19 +81,20 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         onClickConfirmCategoryHelper(offerId)
       }
+      goToNext("Please select Manufacturer(s)", "20%");
       scope.hasConfirmedCate = 1
     }
 
-    var onClickConfirmManusHelper = function(offerId)
+    /////           Manu              //////
+    var onClickConfirmManusHelper2 = function(offerId, indexForLoopingOfferManus)
     {
-      console.log(JSON.stringify(scope.offerrings));
       http.get('Cate/'+ scope.offerrings[offerId]["cateId"] + '/' +
-       scope.offerrings[offerId]["offer"]["manus"]["manuId"] + '/manu')
+       scope.offerrings[offerId]["offer"]["manus"][indexForLoopingOfferManus]["manuId"] + '/model') //manuId is not accessible. I have to have loop catch each element
       .then(function(response)
       {
         return response["modelId"]
       })
-      .then(function()
+      .then(function(prev)
       {
         scope.offerrings[offerId]["display"]["models"] = prev
       })
@@ -101,6 +102,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         noDlg.show(scope, err, "Error")
       })
+    }
+
+    var onClickConfirmManusHelper = function(offerId)
+    {
+      var offeredManuIds =  scope.offerrings[offerId]["offer"]["manus"]
+      //console.log(JSON.stringify(scope.offerrings[offerId]["offer"]));
+      for(var i = 0; i < offeredManuIds.length; i++)
+      {
+        onClickConfirmManusHelper2(offerId, i)
+      }
     }
 
     scope.onClickConfirmManus = function(offerId)
@@ -112,6 +123,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.hasConfirmedManu = 1
     }
 
+    scope.onClickManu = function(offerId, selectedManuId, selectedManuName)
+    {
+      console.log(selectedManuId + " || " + selectedManuName)
+      scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
+                                                        "manuName": selectedManuName})
+    }
+
+    /////           model              //////
     var onClickConfirmModelHelper = function(offerId)
     {
       http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"]["modelId"] + '/issue')
@@ -137,33 +156,27 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
-    scope.onClickManu = function(offerId, selectedManuId, selectedManuName)
-    {
-      console.log(selectedManuId + " || " + selectedManuName)
-      scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
-                                                        "manuName": selectedManuName})
-    }
-
     scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
     {
       scope.offerrings[offerId]["offer"]["model"].push({"modelId": selectedModelId,
                                                         "modelName": selectedModelName})
     }
 
+    /////           issue              //////
     scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
     {
       scope.offerrings[offerId]["offer"]["issue"].push({"issueId": selectedIssueId,
                                                         "issueName": selectedIssueName})
     }
 
-    scope.canGoToNext = function(selected, message, percent)
+    var goToNext = function(message, percent)
     {
-        if (scope.selectedButtonValues[selected].length != 0)
-        {
+        //if (scope.selectedButtonValues[selected].length != 0)
+        //{
             updateProgressBar(message, percent);
-            return 1
-        }
-        return 0
+        //    return 1
+        //}
+        //return 0
     }
 
 }]);
