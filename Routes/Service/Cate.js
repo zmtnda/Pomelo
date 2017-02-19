@@ -33,27 +33,26 @@ router.post('/', function(req, res) {
 	var vld = req.validator;
    var admin = req.session && req.session.isAdmin();
    var body = req.body;
-
 	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newCategory'])) {
 		connections.getConnection(res, function(cnn) {
-         cnn.query(' SELECT count(*) FROM Categories WHERE category = ?', body.newCategory,
-            function(err, result) {
-               if(result.length == 0) {
-                  cnn.query(' INSERT INTO catergoies (category) values (?) ', body.newCategory,
-         			function(err, result){
-         				if(err) {
-         					console.log("error create new category");
-         					res.status(400).json(err);
-         				} else {
-         					console.log("create new category successful");
-                  res.end();
-         				}
-         			});
-               } else {
-                  console.log("Error check for existing cate, or cate already exist");
-   					res.status(400).json(err);
-               }
-            })
+       cnn.query(' SELECT count(*) AS count FROM Categories WHERE category = ?', [body.newCategory],
+    	function(err, result) {
+          if(result[0].count == 0) {
+             cnn.query(' INSERT INTO Categories (category) values (?) ', [body.newCategory],
+    			function(err, result){
+    				if(err) {
+    					console.log("error create new category");
+    					res.status(400).json(err);
+    				} else {
+    					console.log("create new category successful");
+                   res.end();
+    				}
+    			});
+          } else {
+             console.log("Error check for existing cate, or cate already exist");
+				res.status(400).json(err);
+          }
+       });
 			cnn.release();
 		});
 	}
@@ -70,7 +69,7 @@ router.get('/:catId/manu', function(req, res) {
 
 	connections.getConnection(res, function(cnn) {
 		cnn.query(' SELECT m.id_man AS manId, m.manufacturer FROM manufacturers m, ' +
-					 ' categoriesmanufacturers c WHERE c.man_id = m.id_man AND c.cat_id = ?', catId,
+					 ' categoriesmanufacturers c WHERE c.man_id = m.id_man AND c.cat_id = ?', [catId],
 		function(err, result) {
 			if(err) {
 				console.log("error get manufactures for category");
@@ -94,15 +93,15 @@ router.post('/:catId/manu', function(req, res) {
 
 	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newManufacturer'])) {
 		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT COUNT(*), id_man FROM Manufacturers WHERE ' +
-						 ' LCASE(manufacturer) = LCASE(?) GROUP BY id_man ', body.newManufacturer,
+			cnn.query(' SELECT count(*) AS count, id_man FROM Manufacturers WHERE ' +
+						 ' LCASE(manufacturer) = LCASE(?) GROUP BY id_man ', [body.newManufacturer],
 			function(err, result) {
 				if(err) {
 					console.log("Error check exist manufacturer");
 					res.status(400).json(err);
-				} else if (result.length > 0) { //create new CategoriesManufacturers
+				} else if (result.length && result[0].count > 0) { //create new CategoriesManufacturers
 					cnn.query(' INSERT INTO CategoriesManufacturers (cat_id, man_id) VALUES ' +
-								 ' (?, ?) ', catId, result[0].id_man ,
+								 ' (?, ?) ', [catId, result[0].id_man] ,
 					function(err, result) {
 						if(err) {
 							console.log("Error insert new CategoriesManufacturers with exist man");
@@ -113,7 +112,7 @@ router.post('/:catId/manu', function(req, res) {
 						}
 					});
 				} else { // no manufacturer - need to create new manufacturer
-					cnn.query(' INSERT INTO Manufacturers (manufacturer) VALUES (?) ', body.newManufacturer,
+					cnn.query(' INSERT INTO Manufacturers (manufacturer) VALUES (?) ', [body.newManufacturer],
 					function(err, result) {
 						if (err) {
 							console.log("Error add new Manufacturers");
@@ -168,7 +167,7 @@ router.get('/:catId/:manId/model', function(req, res) {
 // Require categoryId, manufacturerId, and new model name
 // Need admin Authorization
 router.post('/:catId/:manId/model', function(req, res) {
-	console.get("Add new models")
+	console.log("Add new models")
 	var vld = req.validator;
 	var admin = req.session && req.session.isAdmin();
 	var body = req.body;
@@ -177,12 +176,17 @@ router.post('/:catId/:manId/model', function(req, res) {
 
 	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newModel'])) {
 		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT count(*) FROM Models M, CategoriesManufacturers CM WHERE ' +
+			cnn.query(' SELECT count(*) AS count FROM Models M, CategoriesManufacturers CM WHERE ' +
 						 ' LCASE(M.model) = LCASE(?) AND M.catMan_id = CM.id_catMan AND CM.cat_id = ? ' +
 					 	 ' AND CM.man_id = ? ', [body.newModel, catId, manId],
 			function(err, result){
-				if(err || result.length > 0) {
-					console.log("Error get models or models already exists");
+				if(err){
+					console.log("Err checking exist model");
+					res.status(400).json(err);
+				}
+				else if(result.length && result[0].count > 0) {
+					console.log("models already exists");
+					res.end();
 				} else {
 					cnn.query(' INSERT INTO Models (model, catMan_id) values (?, ' +
 								 ' (SELECT id_catMan FROM CategoriesManufacturers WHERE ' +
@@ -201,7 +205,6 @@ router.post('/:catId/:manId/model', function(req, res) {
 			cnn.release();
 		});
 	}
-
 });
 
 // Get all issues
@@ -238,10 +241,17 @@ router.post('/issues', function(req, res) {
 
    if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newIssue'])) {
       connections.getConnection(res, function(cnn) {
-         cnn.query(' SELECT count(*) FROM Issues WHERE issue = ?', newIssue,
+         cnn.query(' SELECT count(*) AS count FROM Issues WHERE LCASE(issue) = LCASE(?)', [body.newIssue],
          function(err, result) {
-            if(result.length == 0) {
-               cnn.query(' INSERT INTO Issues (issue) VALUES (?)', newIssue,
+				if(err) {
+					console.log("Err get count issues");
+					res.status(400).json(err);
+				}
+            else if(result.length && result[0].count > 0) {
+					console.log("Issue already exist");
+               res.end();
+            } else {
+					cnn.query(' INSERT INTO Issues (issue) VALUES (?)', [body.newIssue],
                function(err, result) {
                   if(err) {
                      console.log("error create new issue");
@@ -251,14 +261,72 @@ router.post('/issues', function(req, res) {
                      res.end();
                   }
                });
-            } else {
-               console.log("Error checking exsiting issue or issue already exist");
-               res.status(400).json(err);
             }
       	});
          cnn.release();
       });
    }
+});
+
+// get issues based on models
+// Require model ID on link
+router.get('/:modelId/issues', function(req, res) {
+	var vld = req.validator;
+	var modelId = req.params.modelId;
+
+	connections.getConnection(res, function(cnn) {
+		cnn.query(' SELECT I.id_iss as issueId, I.issue FROM ModelsIssues MI, Models M ,Issues I ' +
+					 ' WHERE MI.mod_id = ? AND MI.mod_id = M.id_mod AND MI.iss_id = I.id_iss', [modelId],
+		function(err, result) {
+			if(err) {
+				console.log("Error getting issues for model");
+				res.status(400).json(err);
+			} else {
+				console.log("Get issues for model successful");
+				res.json(result);
+			}
+		});
+		cnn.release();
+	});
+});
+
+// Assign new issue to specific model
+// Require modelId on link and pass in issue Id
+router.post('/:modelId/issues', function(req, res) {
+	console.log('Assign issue to model');
+   var vld = req.validator;
+   var admin = req.session && req.session.isAdmin();
+	var modelId = req.params.modelId;
+   var body = req.body;
+
+	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['issueId'])) {
+		connections.getConnection(res, function(cnn) {
+			cnn.query(' SELECT count(*) AS count FROM ModelsIssues ' +
+						 ' WHERE mod_id=? AND iss_id=? ', [modelId, body.issueId],
+		 	function(err, result){
+				if(err) {
+					console.log("Error checking for exist model issue");
+					res.status(400).json(err);
+				} else if (result.length && result[0].count > 0) {
+					console.log("Issue for this model already exists");
+					res.end();
+				} else {
+					cnn.query(' INSERT INTO ModelsIssues (mod_id, iss_id) ' +
+								 ' VALUES (?,?) ', [modelId, body.issueId],
+					function(err, result) {
+						if(err) {
+							console.log("Err assign issue into model");
+							res.status(400).json(err);
+						} else {
+							console.log("Assign issue to model successful");
+							res.end();
+						}
+					});
+				}
+			});
+			cnn.release();
+		});
+	}
 });
 
 module.exports = router;

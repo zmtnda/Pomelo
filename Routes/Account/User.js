@@ -277,52 +277,52 @@ router.get('/:id/Serv', function(req, res) {
    }
 });*/
 
-// Creates a new Serv for this User, on the specified User.
+// // Creates a new Serv for this User, on the specified User.
+// //
+// // Requires technician status for AU or Admin
+// //
+// // Fail if  the person in question has more than 5 services.
+// // Services must have unique names.
+// router.post('/:id/Serv', function(req, res) {
+//    var vld = req.validator;
+//    var admin = req.session && req.session.isAdmin();
+//    var body = req.body;
+//    var qry;
+//    var qryParams;
 //
-// Requires technician status for AU or Admin
-//
-// Fail if  the person in question has more than 5 services.
-// Services must have unique names.
-router.post('/:id/Serv', function(req, res) {
-   var vld = req.validator;
-   var admin = req.session && req.session.isAdmin();
-   var body = req.body;
-   var qry;
-   var qryParams;
-
-   if(vld.checkPrsOK(req.params.id)
-      && vld.check(req.session.role === 1 || admin, Tags.noPermission)
-      && vld.hasFields(body, ['serviceId', 'amount'])) {
-         // first check if poster has surpased their 5 service limit
-         qry = " SELECT * FROM ServicesOffer WHERE technicianId = ? ";
-         qryParams = req.params.id;
-         connections.getConnection(res, function(cnn) {
-            cnn.query(qry, qryParams, function(err, results) {
-               if(err) {
-                  res.status(400).json(err); // closes reponse
-               } else if(vld.check(results.length < 100, Tags.maxServiceLimitReached)) {
-                  // confirmed that user has not hit their service limit
-                  // Now we can post their new service
-                  body.status = 0;
-                  body.technicianId = parseInt(req.params.id);
-                  body.timestamp = new Date();
-                  // making post request
-                  qry = "INSERT INTO ServicesOffer SET ? ";
-                  qryParams = body;
-						console.log("post service in Json: " + JSON.stringify(body));
-                  cnn.query(qry, qryParams, function(err) {
-                     if(err) {
-                        res.status(400).json(err); // closes response
-                     } else {
-								res.location(router.baseURL + '/' + results.insertId).end();
-                     }
-                  });
-               }
-            });
-            cnn.release();
-         });
-      }
-});
+//    if(vld.checkPrsOK(req.params.id)
+//       && vld.check(req.session.role === 1 || admin, Tags.noPermission)
+//       && vld.hasFields(body, ['serviceId', 'amount'])) {
+//          // first check if poster has surpased their 5 service limit
+//          qry = " SELECT * FROM ServicesOffer WHERE technicianId = ? ";
+//          qryParams = req.params.id;
+//          connections.getConnection(res, function(cnn) {
+//             cnn.query(qry, qryParams, function(err, results) {
+//                if(err) {
+//                   res.status(400).json(err); // closes reponse
+//                } else if(vld.check(results.length < 100, Tags.maxServiceLimitReached)) {
+//                   // confirmed that user has not hit their service limit
+//                   // Now we can post their new service
+//                   body.status = 0;
+//                   body.technicianId = parseInt(req.params.id);
+//                   body.timestamp = new Date();
+//                   // making post request
+//                   qry = "INSERT INTO ServicesOffer SET ? ";
+//                   qryParams = body;
+// 						console.log("post service in Json: " + JSON.stringify(body));
+//                   cnn.query(qry, qryParams, function(err) {
+//                      if(err) {
+//                         res.status(400).json(err); // closes response
+//                      } else {
+// 								res.location(router.baseURL + '/' + results.insertId).end();
+//                      }
+//                   });
+//                }
+//             });
+//             cnn.release();
+//          });
+//       }
+// });
 
   // Allow user, |id|, to retrieve the name of another user in the database using their id, |otherId|.
   router.get('/:id/:otherId/Name', function(req, res) {
