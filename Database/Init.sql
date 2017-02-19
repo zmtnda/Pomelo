@@ -204,6 +204,7 @@ CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
   id_serTec INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL ,
   modIss_id INT(11) UNSIGNED NOT NULL,
+  catMan_id INT(11) UNSIGNED NOT NULL,
   servType TINYINT UNSIGNED NOT NULL,
   estAmount NUMERIC(6,2) UNSIGNED NOT NULL,
   status INT(11) NOT NULL,
@@ -212,6 +213,11 @@ CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
+    CONSTRAINT fkServicesOfferedByTechCategoriesManufacture
+      FOREIGN KEY (catMan_id)
+      REFERENCES CategoriesManufacturers (id_catMan)
+      ON DELETE CASCADE
+      ON UPDATE NO ACTION,
   CONSTRAINT fkServicesOfferedByTechModelsIssues
     FOREIGN KEY (modIss_id)
     REFERENCES ModelsIssues (id_modIss)

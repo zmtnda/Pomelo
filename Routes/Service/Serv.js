@@ -9,6 +9,60 @@ var formatDate = ', DATE_FORMAT(timestamp, \'\%b \%d \%Y \%h\:\%i \%p\') as form
 
 // Begin '/Serv/' functions
 
+/* Add a new service for the technician
+* Front end will make sure all the required params are attached with JSON
+* Valid only if technician himself
+* Valid only if the serivce is not already offered
+* which mean no duplicate modIss_id
+tec_id = tecId
+mod_id = selected from the guidance page
+cat_id = selected from the guidance page
+iss_id = selected from the guidance page
+servType = (Time-based/hourly)
+Amount = input from selected from the guidance page
+Status = 1 (indicate service is being offered) that will be auto
+
+*/
+
+router.post('/:tecId', function(req, res) {
+   var vld = req.validator;
+   var admin = req.session && req.session.isAdmin();
+   var body = req.body;
+   var qry;
+   var qryParams;
+
+   if(vld.checkTech(req.params.id)) {
+         qry = " SELECT * FROM ServicesOffer WHERE technicianId = ? ";
+         qryParams = req.params.id;
+         connections.getConnection(res, function(cnn) {
+            cnn.query(qry, qryParams, function(err, results) {
+               if(err) {
+                  res.status(400).json(err); // closes reponse
+               } else if(vld.check(results.length < 100, Tags.maxServiceLimitReached)) {
+                  // confirmed that user has not hit their service limit
+                  // Now we can post their new service
+                  body.status = 0;
+                  body.technicianId = parseInt(req.params.id);
+                  body.timestamp = new Date();
+                  // making post request
+                  qry = "INSERT INTO ServicesOffer SET ? ";
+                  qryParams = body;
+						console.log("post service in Json: " + JSON.stringify(body));
+                  cnn.query(qry, qryParams, function(err) {
+                     if(err) {
+                        res.status(400).json(err); // closes response
+                     } else {
+								res.location(router.baseURL + '/' + results.insertId).end();
+                     }
+                  });
+               }
+            });
+            cnn.release();
+         });
+      }
+});
+
+
 // Retrieve all the Services in the database.
 // AU must be admin. (Zin edited can be technician)
 router.get('/', function(req, res) {
