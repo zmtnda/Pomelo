@@ -12,30 +12,18 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     // A set of boolean that indicates which column has been confirmed
-    scope.hasSelectedType = 0
-    scope.hasSelectedManu = 0
-    scope.hasSelectedModel = 0
-    scope.hasSelectedIssue = 0
+    scope.hasConfirmedCate = 0
+    scope.hasConfirmedManu = 0
+    scope.hasConfirmedModel = 0
+    scope.hasConfirmedIssue = 0
 
     // Data fetched from DB:
     scope.user = {};
 
-    // Initializes all types
-    scope.allTypes = cates
-    cates.forEach(function(value, key, map)
-    {
-      console.log(JSON.stringify(cates))
-      // use the cate's id to get all manufacturers based by categories
-    });
+    // Initializes all categories
+    scope.allCates = cates
 
-    scope.allManufacturers = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
-
-    // Data being displayed
-    scope.manufacturers = ["Apple", "Sony", "Samsung", "Google", "Dell", "ASUS"]
-    scope.models = ["iPhone 6"]
-    scope.issues = ["Cracked Screen", "Broken Keyboard"]
-
-    scope.offerings = {}
+    scope.offerrings = { }
     var numOfferings = 0
 
     scope.typeButtonStatesArray = []
@@ -55,7 +43,120 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.progressBarDisplay = {"width": percent};
     }
 
-    var canGoToNext = function(selected, message, percent)
+    scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
+    {
+      scope.offerrings[numOfferings] = {"cate": selectedCategoryName,
+                                        "cateId": selectedCategoryId,
+                                        "offer": {"manus": [],
+                                                  "models": [],
+                                                  "issues": []},
+                                        "display": {"manus": [],
+                                                    "models": [],
+                                                    "issues": []}}
+      numOfferings = numOfferings + 1
+    }
+
+    // A helper that avoids http calls share the same enviroment.
+    var onClickConfirmCategoryHelper = function(offerId)
+    {
+      http.get('Cate/'+ scope.offerrings[offerId]["cateId"] + '/manu')
+      .then(function(response)
+      {
+        return response["data"]
+      })
+      .then(function(prev)
+      {
+        scope.offerrings[offerId]["display"]["manus"] = prev
+        console.log(JSON.stringify(scope.offerrings[offerId]["display"]["manus"]))
+      })
+      .catch(function(err)
+      {
+        noDlg.show(scope, err, "Error")
+      })
+    }
+
+    scope.onClickConfirmCategory = function()
+    {
+      for(var offerId in scope.offerrings)
+      {
+        onClickConfirmCategoryHelper(offerId)
+      }
+      scope.hasConfirmedCate = 1
+    }
+
+    var onClickConfirmManusHelper = function(offerId)
+    {
+      console.log(JSON.stringify(scope.offerrings));
+      http.get('Cate/'+ scope.offerrings[offerId]["cateId"] + '/' +
+       scope.offerrings[offerId]["offer"]["manus"]["manuId"] + '/manu')
+      .then(function(response)
+      {
+        return response["modelId"]
+      })
+      .then(function()
+      {
+        scope.offerrings[offerId]["display"]["models"] = prev
+      })
+      .catch(function(err)
+      {
+        noDlg.show(scope, err, "Error")
+      })
+    }
+
+    scope.onClickConfirmManus = function(offerId)
+    {
+      for(var offerId in scope.offerrings)
+      {
+        onClickConfirmManusHelper(offerId)
+      }
+      scope.hasConfirmedManu = 1
+    }
+
+    var onClickConfirmModelHelper = function(offerId)
+    {
+      http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"]["modelId"] + '/issue')
+      .then(function(response){
+        return response["issueId"]
+      })
+      .then(function(prev){
+        scope.offerrings[offerId]["display"]["issues"].push(prev)
+      })
+      .catch(function(err){
+        noDlg.show(scope, err, "Error")
+      })
+    }
+
+    scope.onClickConfirmModel = function(offerId)
+    {
+      var arrayForIssueInAnOffer = scope.offerrings[offerId]["offer"]["issue"]
+      var correspondingIssue = undefined
+
+      for(var i = 0; i < arrayForIssueInAnOffer.length; i++)
+      {
+        onClickConfirmModelHelper(offerId)
+      }
+    }
+
+    scope.onClickManu = function(offerId, selectedManuId, selectedManuName)
+    {
+      console.log(selectedManuId + " || " + selectedManuName)
+      scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
+                                                        "manuName": selectedManuName})
+    }
+
+    scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
+    {
+      scope.offerrings[offerId]["offer"]["model"].push({"modelId": selectedModelId,
+                                                        "modelName": selectedModelName})
+    }
+
+    scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
+    {
+      scope.offerrings[offerId]["offer"]["issue"].push({"issueId": selectedIssueId,
+                                                        "issueName": selectedIssueName})
+    }
+
+    scope.canGoToNext = function(selected, message, percent)
     {
         if (scope.selectedButtonValues[selected].length != 0)
         {
@@ -65,92 +166,4 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         return 0
     }
 
-    scope.confirm = function(input)
-    {
-      if(input === "type")
-      {
-        if (canGoToNext("selectedType", "Select the Manufacturers", "20%"))
-        {
-          scope.hasSelectedType = true
-        }
-      }
-      else if(input === "manu")
-      {
-        if (canGoToNext("selectedManu", "Select a model", "40%"))
-          scope.hasSelectedManu = true
-      }
-      else if(input === "model")
-      {
-        if (canGoToNext("selectedModel", "Select a model", "60%"))
-          scope.hasSelectedModel = true
-      }
-      else if(input === "issue")
-      {
-        if (canGoToNext("selectedIssue", "Select an issue", "80%"))
-          scope.hasSelectedIssue = true
-      }
-    }
-
-    // find a way to keep track of index
-    scope.selectType = function(selectedType, typeInIndex)
-    {
-      if (scope.typeButtonStatesArray[typeInIndex] === 1)
-      {
-        scope.typeButtonStatesArray[typeInIndex] = 0
-      }
-      else
-      {
-        console.log(JSON.stringify(selectedType))
-        scope.offerings[numOfferings++] = {'type': selectedType.category,
-                                           'typeId': selectedType["id_cat"]}
-      }
-    }
-
-    scope.selectManu = function(selectedManu, offerId)
-    {
-      if (scope.manuButtonStatesJSON[selectedType] === undefined) {
-        scope.manuButtonStatesJSON[selectedType] = []
-      }
-
-      if (scope.manuButtonStatesJSON[selectedType][manuInIndex] === 1)
-      {
-        scope.manuButtonStatesJSON[selectedType][manuInIndex] = 0
-      }
-      else
-      {
-        scope.offerings[offerId]["manu"] = selectedManu
-      }
-    }
-
-    scope.selectModel = function(selectedModel, offerId)
-    {
-      if (scope.modelButtonStatesJSON[selectedManu] === undefined) {
-        scope.modelButtonStatesJSON[selectedManu] = []
-      }
-
-      if (scope.modelButtonStatesJSON[selectedManu][modelInIndex] === 1)
-      {
-        scope.modelButtonStatesJSON[selectedManu][modelInIndex] = 0
-      }
-      else
-      {
-        scope.offerings[offerId]["model"] = selectedModel
-      }
-    }
-
-    scope.selectIssue = function(selectedIssue, offerId)
-    {
-      if (scope.issueButtonStatesJSON[selectedModel] === undefined) {
-        scope.issueButtonStatesJSON[selectedModel] = []
-      }
-
-      if (scope.issueButtonStatesJSON[selectedModel][issueInIndex] === 1)
-      {
-        scope.issueButtonStatesJSON[selectedModel][issueInIndex] = 0
-      }
-      else
-      {
-        scope.offerings[offerId]["issue"] = selectedIssue
-      }
-    }
 }]);
