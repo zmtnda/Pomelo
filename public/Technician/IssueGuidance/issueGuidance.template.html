@@ -43,13 +43,13 @@
      <div class="col-xs-12 col-md-2">
        <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu">
          <h3>Model(s)</h3>
-           <button type="button" class="btn btn-success" ng-click="confirm('model')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Confirm</button>
-           <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">Redo</button>
+           <button type="button" class="btn btn-success" ng-click="onClickConfirmModel()" ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">Redo</button>
            <div ng-repeat="oneOfferring in offerrings track by $index">
              <div class="thumbnail" ng-repeat="oneManu in oneOfferring.offer.manus track by $index">
                <h5>{{ oneOfferring.cate }} > {{ oneManu.manuName }}</h5>
                <h3><span ng-repeat="model in oneOfferring.display.models track by $index"
-                 ng-click="onClickModel(oneOfferring.offerId, modelId, modelName)"
+                 ng-click="onClickModel(oneOfferring.offerId, model.modelId, model.model)"
                  ng-class="modelButtonStatesJSON[selected][$index] | buttonFilter"
                  class="label label-default issue-label">{{ model.model }}</span></h3>
              </div>
@@ -58,7 +58,7 @@
      </div>
 
      <div class="col-xs-12 col-md-2">
-       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
+       <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
            <h3>Issue(s)</h3>
            <button type="button" class="btn btn-success" ng-click="confirm('issue')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Confirm</button>
            <button type="button" class="btn btn-success" ng-click="cancelSelection('issue')" ng-show="hasSelectedType && !hasSelectedManu && hasSelectedModel && hasSelectedIssue">Redo</button>

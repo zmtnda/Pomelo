@@ -52,6 +52,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                     "models": [],
                                                     "issues": []}}
       numOfferings = numOfferings + 1
+
+      /*{
+        "offer":{
+            "tech_id": <technicianId>
+            "manus": [<Listof manId>],
+            "models": [<Listof modelId>],
+            "issues": [<Listof issues>],
+            "serv_type": <type>,
+            "amount": <number>
+          }
+      }*/
     }
 
     /////           categories              //////
@@ -81,7 +92,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         onClickConfirmCategoryHelper(offerId)
       }
-      goToNext("Please select Manufacturer(s)", "20%");
+      goToNext("Please select manufacturer(s)", "20%");
       scope.hasConfirmedCate = 1
     }
 
@@ -96,9 +107,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
       .then(function(prev)
       {
-        console.log("dataONE" + JSON.stringify(prev))
         scope.offerrings[offerId]["display"]["models"] = prev
-        console.log("data" + JSON.stringify(scope.offerrings))
       })
       .catch(function(err)
       {
@@ -114,26 +123,24 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         onClickConfirmManusHelper2(offerId, i)
       }
-      console.log("HI" + JSON.stringify(scope.offerrings), null, "    ")
     }
 
     /// FLow: 1. get all the manus selected in the offerrings
     ///       2. use HTTP calls to get models for a selected manu
     ///       3. put the models from Step 2 in the display of the next column
     ///       Result: Initializes display's field by fetching data from the database
-    scope.onClickConfirmManus = function(offerId)
+    scope.onClickConfirmManus = function()
     {
       for(var offerId in scope.offerrings)
       {
         onClickConfirmManusHelper(offerId)
       }
-      console.log(JSON.stringify(scope.offerrings))
       scope.hasConfirmedManu = 1
+      goToNext("Please select model(s)", "40%");
     }
 
     scope.onClickManu = function(offerId, selectedManuId, selectedManuName)
     {
-      console.log(selectedManuId + " || " + selectedManuName)
       scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
                                                         "manuName": selectedManuName})
     }
@@ -141,12 +148,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           model              //////
     var onClickConfirmModelHelperTwo = function(offerId, indexForLoopingOfferModel)
     {
-      http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"] + '/issue')
+      http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"] + '/issues')
       .then(function(response){
-        return response["issueId"]
+        return response["data"]
       })
       .then(function(prev){
-        scope.offerrings[offerId]["display"]["issues"].push(prev)
+        scope.offerrings[offerId]["display"]["issues"] = prev
       })
       .catch(function(err){
         noDlg.show(scope, err, "Error")
@@ -155,34 +162,40 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     var onClickConfirmModelHelper = function(offerId)
     {
-      var arrayForModelInAnOffer = scope.offerrings[offerId]["offer"]["model"]
+      var arrayForModelInAnOffer = scope.offerrings[offerId]["offer"]["models"]
       for(var i = 0; i < arrayForModelInAnOffer.length; i++)
       {
         onClickConfirmModelHelperTwo(offerId, i)
       }
     }
 
-    scope.onClickConfirmModel = function(offerId)
+    scope.onClickConfirmModel = function()
     {
-      var arrayForIssueInAnOffer = scope.offerrings[offerId]["offer"]["issue"]
-      var correspondingIssue = undefined
-
-      for(var i = 0; i < arrayForIssueInAnOffer.length; i++)
+      for(var offerId in scope.offerrings)
       {
         onClickConfirmModelHelper(offerId)
       }
+
+      scope.hasConfirmedModel = 1
+      goToNext("Please select issue(s)", "40%");
     }
 
     scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
     {
-      scope.offerrings[offerId]["offer"]["model"].push({"modelId": selectedModelId,
+      scope.offerrings[offerId]["offer"]["models"].push({"modelId": selectedModelId,
                                                         "modelName": selectedModelName})
     }
 
     /////           issue              //////
+    scope.onClickConfirmIssue = function()
+    {
+
+
+    }
+
     scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
     {
-      scope.offerrings[offerId]["offer"]["issue"].push({"issueId": selectedIssueId,
+      scope.offerrings[offerId]["offer"]["issues"].push({"issueId": selectedIssueId,
                                                         "issueName": selectedIssueName})
     }
 
