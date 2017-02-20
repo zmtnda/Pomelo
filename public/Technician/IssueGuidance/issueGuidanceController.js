@@ -92,13 +92,13 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
        scope.offerrings[offerId]["offer"]["manus"][indexForLoopingOfferManus]["manuId"] + '/model') //manuId is not accessible. I have to have loop catch each element
       .then(function(response)
       {
-        console.log("data" + JSON.stringify(response))
         return response["data"]
       })
       .then(function(prev)
       {
-        //console.log("HI" + JSON.stringify(prev))
+        console.log("dataONE" + JSON.stringify(prev))
         scope.offerrings[offerId]["display"]["models"] = prev
+        console.log("data" + JSON.stringify(scope.offerrings))
       })
       .catch(function(err)
       {
@@ -109,11 +109,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     var onClickConfirmManusHelper = function(offerId)
     {
       var offeredManuIdsArray = scope.offerrings[offerId]["offer"]["manus"]
-      console.log(JSON.stringify(scope.offerrings[offerId]["offer"]["manus"]));
+      //console.log(JSON.stringify(scope.offerrings[offerId]["offer"]["manus"]));
       for(var i = 0; i < offeredManuIdsArray.length; i++)
       {
         onClickConfirmManusHelper2(offerId, i)
       }
+      console.log("HI" + JSON.stringify(scope.offerrings), null, "    ")
     }
 
     /// FLow: 1. get all the manus selected in the offerrings
