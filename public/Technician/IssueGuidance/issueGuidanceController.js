@@ -92,10 +92,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
        scope.offerrings[offerId]["offer"]["manus"][indexForLoopingOfferManus]["manuId"] + '/model') //manuId is not accessible. I have to have loop catch each element
       .then(function(response)
       {
-        return response["modelId"]
+        console.log("data" + JSON.stringify(response))
+        return response["data"]
       })
       .then(function(prev)
       {
+        //console.log("HI" + JSON.stringify(prev))
         scope.offerrings[offerId]["display"]["models"] = prev
       })
       .catch(function(err)
@@ -106,20 +108,25 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     var onClickConfirmManusHelper = function(offerId)
     {
-      var offeredManuIds =  scope.offerrings[offerId]["offer"]["manus"]
-      //console.log(JSON.stringify(scope.offerrings[offerId]["offer"]));
-      for(var i = 0; i < offeredManuIds.length; i++)
+      var offeredManuIdsArray = scope.offerrings[offerId]["offer"]["manus"]
+      console.log(JSON.stringify(scope.offerrings[offerId]["offer"]["manus"]));
+      for(var i = 0; i < offeredManuIdsArray.length; i++)
       {
         onClickConfirmManusHelper2(offerId, i)
       }
     }
 
+    /// FLow: 1. get all the manus selected in the offerrings
+    ///       2. use HTTP calls to get models for a selected manu
+    ///       3. put the models from Step 2 in the display of the next column
+    ///       Result: Initializes display's field by fetching data from the database
     scope.onClickConfirmManus = function(offerId)
     {
       for(var offerId in scope.offerrings)
       {
         onClickConfirmManusHelper(offerId)
       }
+      console.log(JSON.stringify(scope.offerrings))
       scope.hasConfirmedManu = 1
     }
 
@@ -131,9 +138,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     /////           model              //////
-    var onClickConfirmModelHelper = function(offerId)
+    var onClickConfirmModelHelperTwo = function(offerId, indexForLoopingOfferModel)
     {
-      http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"]["modelId"] + '/issue')
+      http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"] + '/issue')
       .then(function(response){
         return response["issueId"]
       })
@@ -143,6 +150,15 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       .catch(function(err){
         noDlg.show(scope, err, "Error")
       })
+    }
+
+    var onClickConfirmModelHelper = function(offerId)
+    {
+      var arrayForModelInAnOffer = scope.offerrings[offerId]["offer"]["model"]
+      for(var i = 0; i < arrayForModelInAnOffer.length; i++)
+      {
+        onClickConfirmModelHelperTwo(offerId, i)
+      }
     }
 
     scope.onClickConfirmModel = function(offerId)

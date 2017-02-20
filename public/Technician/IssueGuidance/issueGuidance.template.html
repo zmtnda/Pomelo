@@ -45,12 +45,12 @@
          <h3>Model(s)</h3>
            <button type="button" class="btn btn-success" ng-click="confirm('model')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Confirm</button>
            <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">Redo</button>
-           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedManu track by $index">
-             <h5>{{ selected }}</h5>
-             <h3><span ng-click="selectModel(model, selected, $index)"
+           <div class="thumbnail" ng-repeat="oneOfferring in offerrings track by $index">
+             <h5>{{ oneOfferring.cate }} > {{ oneOfferring.offer.manus[$index].manuName }}</h5>
+             <h3><span ng-repeat="model in oneOffering.display.models track by $index"
+               ng-click="onClickModel(oneOfferring.offerId, modelId, modelName)"
                ng-class="modelButtonStatesJSON[selected][$index] | buttonFilter"
-               class="label label-default issue-label"
-               ng-repeat="model in models track by $index" >{{ model }}</span></h3>
+               class="label label-default issue-label">{{ model.model }}</span></h3>
            </div>
        </div>
      </div>
