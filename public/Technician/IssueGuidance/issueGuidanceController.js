@@ -149,11 +149,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     var onClickConfirmModelHelperTwo = function(offerId, indexForLoopingOfferModel)
     {
       http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"] + '/issues')
-      .then(function(response){
+      .then(function(response)
+      {
         return response["data"]
       })
-      .then(function(prev){
+      .then(function(prev)
+      {
+
+        console.log("issue" + JSON.stringify(scope.offerrings[offerId]["display"]["issues"]));
         scope.offerrings[offerId]["display"]["issues"] = prev
+                        console.log("issue" + JSON.stringify(scope.offerrings[offerId]["display"]));
       })
       .catch(function(err){
         noDlg.show(scope, err, "Error")
@@ -177,7 +182,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
 
       scope.hasConfirmedModel = 1
-      goToNext("Please select issue(s)", "40%");
+      goToNext("Please select issue(s)", "60%");
     }
 
     scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
@@ -189,8 +194,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           issue              //////
     scope.onClickConfirmIssue = function()
     {
-
-
+      goToNext("Please finalize your offers(s)", "80%");
     }
 
     scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
