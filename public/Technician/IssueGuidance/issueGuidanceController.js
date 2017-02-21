@@ -52,6 +52,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
 
+    /////           helpers functions shared by some other functions              //////
     var checkWhetherAFieldInJSONEmpty = function(fieldName)
     {
       var isAllEmpty = false
@@ -74,9 +75,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.progressBarDisplay = {"width": progressStages[stage].percent}
     }
 
+    /// FLow: 1. get all the manus selected in the offerrings
+    ///       2. use HTTP calls to get models for a selected manu
+    ///       3. put the models from Step 2 in the display of the next column
+    ///       Result: Initializes display's field by fetching data from the database
+
+    /////           categories              //////
+
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
     {
-      scope.offerrings[numOfferings] = {"offerId": numOfferings,
+      scope.offerrings[numOfferings] = {"amount": undefined,
+                                        "offerId": numOfferings,
                                         "cateButtonStyle": 0,
                                         "cate": selectedCategoryName,
                                         "cateId": selectedCategoryId,
@@ -88,13 +97,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                     "issues": []}}
       numOfferings = numOfferings + 1
     }
-
-    /// FLow: 1. get all the manus selected in the offerrings
-    ///       2. use HTTP calls to get models for a selected manu
-    ///       3. put the models from Step 2 in the display of the next column
-    ///       Result: Initializes display's field by fetching data from the database
-
-    /////           categories              //////
 
     // A helper that avoids http calls share the same enviroment.
     var onClickConfirmCategoryHelper = function(offerId)
@@ -139,7 +141,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         {
           onClickConfirmCategoryHelper(offerId)
         }
-        goToNext("manuStage");
+        updateProgressBar("manuStage");
         scope.hasConfirmedCate = 1
       }
       else
@@ -212,7 +214,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           onClickConfirmManusHelper(offerId)
         }
         scope.hasConfirmedManu = 1
-        goToNext("modelStage");
+        updateProgressBar("modelStage");
       }
       else
       {
@@ -285,7 +287,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           onClickConfirmModelHelper(offerId)
         }
         scope.hasConfirmedModel = 1
-        goToNext("issueStage");
+        updateProgressBar("issueStage");
       }
       else
       {
@@ -304,7 +306,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       if(checkWhetherAFieldInJSONEmpty("issues"))
       {
-        goToNext("finalStage");
+        updateProgressBar("finalStage");
       }
       else
       {
@@ -329,14 +331,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                         "issueName": selectedIssueName})
     }
 
-    var goToNext = function(stage)
+    /////           Amount              //////
+    scope.onConfirmAllOfferrings = function()
     {
-        //if (scope.selectedButtonValues[selected].length != 0)
-        //{
-            updateProgressBar(stage);
-        //    return 1
-        //}
-        //return 0
+
+
     }
 
 }]);
