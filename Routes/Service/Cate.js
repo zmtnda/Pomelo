@@ -275,7 +275,8 @@ router.get('/:modelId/issues', function(req, res) {
 	var modelId = req.params.modelId;
 
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT I.id_iss as issueId, I.issue FROM ModelsIssues MI, Models M ,Issues I ' +
+		cnn.query(' SELECT I.id_iss AS issueId, I.issue, MI.id_modIss AS modIssId, M.catMan_id ' +
+					 ' FROM ModelsIssues MI, Models M ,Issues I ' +
 					 ' WHERE MI.mod_id = ? AND MI.mod_id = M.id_mod AND MI.iss_id = I.id_iss', [modelId],
 		function(err, result) {
 			if(err) {
