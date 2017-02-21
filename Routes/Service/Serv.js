@@ -14,54 +14,98 @@ var formatDate = ', DATE_FORMAT(timestamp, \'\%b \%d \%Y \%h\:\%i \%p\') as form
 * Valid only if technician himself
 * Valid only if the serivce is not already offered
 * which mean no duplicate modIss_id
-tec_id = tecId
-mod_id = selected from the guidance page
-cat_id = selected from the guidance page
-iss_id = selected from the guidance page
-servType = (Time-based/hourly)
-Amount = input from selected from the guidance page
-Status = 1 (indicate service is being offered) that will be auto
-
 */
 
 router.post('/:tecId', function(req, res) {
-   var vld = req.validator;
-   var admin = req.session && req.session.isAdmin();
-   var body = req.body;
-   var qry;
-   var qryParams;
+  var vld = req.validator;
+  var qryParams = [];
+  var modIssids =  req.body.offer.modIss_Id;
+  var catManids =  req.body.offer.catMan_Id;
+  var map = {};
 
-   if(vld.checkTech(req.params.id)) {
-         qry = " SELECT * FROM ServicesOffer WHERE technicianId = ? ";
-         qryParams = req.params.id;
-         connections.getConnection(res, function(cnn) {
-            cnn.query(qry, qryParams, function(err, results) {
-               if(err) {
-                  res.status(400).json(err); // closes reponse
-               } else if(vld.check(results.length < 100, Tags.maxServiceLimitReached)) {
-                  // confirmed that user has not hit their service limit
-                  // Now we can post their new service
-                  body.status = 0;
-                  body.technicianId = parseInt(req.params.id);
-                  body.timestamp = new Date();
-                  // making post request
-                  qry = "INSERT INTO ServicesOffer SET ? ";
-                  qryParams = body;
-						console.log("post service in Json: " + JSON.stringify(body));
-                  cnn.query(qry, qryParams, function(err) {
-                     if(err) {
-                        res.status(400).json(err); // closes response
-                     } else {
-								res.location(router.baseURL + '/' + results.insertId).end();
-                     }
-                  });
-               }
-            });
-            cnn.release();
-         });
+  //saving the initial state
+  for( var i = 0; i < modIssids.length; i++){
+    map[modIssids[i]] = new Array();
+    map[modIssids[i]].push(req.params.tecId);
+    map[modIssids[i]].push(modIssids[i]);
+    map[modIssids[i]].push(catManids[i]);
+    map[modIssids[i]].push(req.body.offer.servType[i]);
+    map[modIssids[i]].push(req.body.offer.amount[i]);
+    map[modIssids[i]].push(1);
+  }
+
+  if(vld.checkTech(req.params.id)){
+  connections.getConnection(res, function(cnn) {
+    var selectParams = [];
+    for( var i = 0; i < modIssids.length; i++){
+      qryParams.push('(?,?)');
+      selectParams.push(req.params.tecId);
+      selectParams.push(modIssids[i]);
+    }
+    var serQuery = ' SELECT modIss_id FROM ServicesOfferedByTech WHERE '
+    							+ ' (tec_Id , modIss_id ) IN (' + qryParams.join(',') + ')'
+                  + ' ORDER BY modIss_id ';
+    console.log("serQuery" + serQuery);
+    console.log("selectParams" + selectParams);
+    cnn.query(serQuery, selectParams, function(err, results) {
+      if(err) {
+        console.log("services offer error");
+        res.status(400).json(err); // closes reponse
       }
-});
-
+      console.log("checking duplicate exist for these services" +
+                    JSON.stringify(results));
+      //if results return 0 no duplicate just insert all
+      //if results are same row as the leignth of modiss it's all duplicate
+      //if < has some duplicate
+      if (results.length == modIssids.length){
+        //res.location(router.baseURL + '/' + results).end();
+        res.json(results);
+      } else {
+        var dupModIssIds = [];
+        var insertParams = [];
+        qryParams = [];
+        for( var i = 0; i < results.length; i++){
+          var index = modIssids.indexOf(results[i].modIss_id);
+          if (index > -1){
+            console.log("dup value found " + modIssids[index]);
+            dupModIssIds.push(results[i]);
+            modIssids.splice(index, 1);
+          }
+        }
+        for( var i = 0; i < modIssids.length; i++){
+          qryParams.push('(?,?,?,?,?,?)');
+          for (var j = 0; j < 6; j++){
+            insertParams.push(map[modIssids[i]][j]);
+          }
+          //insertParams.push(map[modIssids[i]]);
+          // console.log("map[modIssids[i] " + map[modIssids[i]]);
+        }
+        //insertParams.length  must be > 0
+        // bcoz of "if (results.length == modIssids.length)""
+        if (vld.check(insertParams.length > 0 , Tags.dupService)){
+          var insertQuery = ' INSERT INTO ServicesOfferedByTech (tec_id, modIss_id, '
+                          + 'catMan_id, servType, estAmount, status) VALUES '
+                          + qryParams.join(',');
+          console.log("insertQuery" + insertQuery);
+          console.log("insertParams " + insertParams);
+          cnn.query(insertQuery, insertParams, function(err, results) {
+            if(err) {
+            console.log("insert offer error");
+            res.status(400).json(err); // closes reponse
+            }
+            else{
+            //expecting a return of array of services jsut inserted
+            var insertedRows = results.affectedRows;
+            if (dupModIssIds.length > 0)
+              res.json(dupModIssIds);
+            else
+              res.location(router.baseURL + '/' + insertedRows).end();
+            }});
+        }
+      }});
+      cnn.release();
+    });
+  }});
 
 // Retrieve all the Services in the database.
 // AU must be admin. (Zin edited can be technician)
