@@ -1,6 +1,8 @@
 app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates',
   function(scope, state, logSer, http, rscope, noDlg, cates)
   {
+    /*IMPORTANT NOTE:
+     1. The rest API uses manId while the controller uses manuId*/
     scope.progressMessage = "Please select the general type you can fix"
 
     // Store the data of the buttons seletced by the user
@@ -52,18 +54,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                     "models": [],
                                                     "issues": []}}
       numOfferings = numOfferings + 1
-
-      /*{
-        "offer":{
-            "tech_id": <technicianId>
-            "manus": [<Listof manId>],
-            "models": [<Listof modelId>],
-            "issues": [<Listof issues>],
-            "serv_type": <type>,
-            "amount": <number>
-          }
-      }*/
     }
+
+    /// FLow: 1. get all the manus selected in the offerrings
+    ///       2. use HTTP calls to get models for a selected manu
+    ///       3. put the models from Step 2 in the display of the next column
+    ///       Result: Initializes display's field by fetching data from the database
 
     /////           categories              //////
 
@@ -77,8 +73,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
       .then(function(prev)
       {
-        scope.offerrings[offerId]["display"]["manus"] = prev
-        console.log(JSON.stringify(scope.offerrings[offerId]["display"]["manus"]))
+        prev.forEach(function(element)
+        {
+          scope.offerrings[offerId]["display"]["manus"].push(element)
+        })
       })
       .catch(function(err)
       {
@@ -97,17 +95,22 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     /////           Manu              //////
-    var onClickConfirmManusHelper2 = function(offerId, indexForLoopingOfferManus)
+    var onClickConfirmManusHelper3 = function(offerId, manuId)
     {
       http.get('Cate/'+ scope.offerrings[offerId]["cateId"] + '/' +
-       scope.offerrings[offerId]["offer"]["manus"][indexForLoopingOfferManus]["manuId"] + '/model') //manuId is not accessible. I have to have loop catch each element
+        manuId + '/model') //manuId is not accessible. I have to have loop catch each element
       .then(function(response)
       {
         return response["data"]
       })
       .then(function(prev)
       {
-        scope.offerrings[offerId]["display"]["models"] = prev
+        prev.forEach(function(element)
+        {
+          scope.offerrings[offerId]["display"]["models"].push({"model": element["model"],
+                                                               "modelId": element["modelId"],
+                                                               "correspondingManuId": manuId})
+        })
       })
       .catch(function(err)
       {
@@ -115,20 +118,23 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
     }
 
+    var onClickConfirmManusHelper2 = function(offerId, indexForLoopingOfferManus)
+    {
+      var manuId = scope.offerrings[offerId]["offer"]["manus"][indexForLoopingOfferManus]["manuId"]
+      onClickConfirmManusHelper3(offerId, manuId)
+    }
+
     var onClickConfirmManusHelper = function(offerId)
     {
       var offeredManuIdsArray = scope.offerrings[offerId]["offer"]["manus"]
-      //console.log(JSON.stringify(scope.offerrings[offerId]["offer"]["manus"]));
+
       for(var i = 0; i < offeredManuIdsArray.length; i++)
       {
         onClickConfirmManusHelper2(offerId, i)
       }
     }
 
-    /// FLow: 1. get all the manus selected in the offerrings
-    ///       2. use HTTP calls to get models for a selected manu
-    ///       3. put the models from Step 2 in the display of the next column
-    ///       Result: Initializes display's field by fetching data from the database
+
     scope.onClickConfirmManus = function()
     {
       for(var offerId in scope.offerrings)
@@ -146,23 +152,32 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     /////           model              //////
-    var onClickConfirmModelHelperTwo = function(offerId, indexForLoopingOfferModel)
+
+    var onClickConfirmModelHelperThree = function(offerId, modelId)
     {
-      http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"] + '/issues')
+      http.get('Cate/'+ modelId + '/issues')
       .then(function(response)
       {
         return response["data"]
       })
       .then(function(prev)
       {
-
-        console.log("issue" + JSON.stringify(scope.offerrings[offerId]["display"]["issues"]));
-        scope.offerrings[offerId]["display"]["issues"] = prev
-                        console.log("issue" + JSON.stringify(scope.offerrings[offerId]["display"]));
+        prev.forEach(function(element)
+        {
+          scope.offerrings[offerId]["display"]["issues"].push({"issueId" : element["issueId"],
+                                                               "issue" : element["issue"],
+                                                               "correspondingModelId": modelId})
+        })
       })
       .catch(function(err){
         noDlg.show(scope, err, "Error")
       })
+    }
+
+    var onClickConfirmModelHelperTwo = function(offerId, indexForLoopingOfferModel)
+    {
+      var modelId = scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"]
+      onClickConfirmModelHelperThree(offerId, modelId)
     }
 
     var onClickConfirmModelHelper = function(offerId)
