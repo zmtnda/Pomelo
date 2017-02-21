@@ -52,6 +52,21 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
 
+    var checkWhetherAFieldInJSONEmpty = function(fieldName)
+    {
+      var isAllEmpty = false
+
+      for(var offerId in scope.offerrings)
+      {
+        if(!angular.equals(scope.offerrings[offerId]["offer"][fieldName], []))
+        {
+          isAllEmpty = true
+        }
+      }
+
+      return isAllEmpty
+    }
+
     var updateProgressBar = function(stage)
     {
       scope.progressMessage = progressStages[stage].message
@@ -117,12 +132,21 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickConfirmCategory = function()
     {
-      for(var offerId in scope.offerrings)
+      console.log(JSON.stringify(scope.offerrings))
+      if(!angular.equals(scope.offerrings, {}))
       {
-        onClickConfirmCategoryHelper(offerId)
+        for(var offerId in scope.offerrings)
+        {
+          onClickConfirmCategoryHelper(offerId)
+        }
+        goToNext("manuStage");
+        scope.hasConfirmedCate = 1
       }
-      goToNext("manuStage");
-      scope.hasConfirmedCate = 1
+      else
+      {
+        noDlg.show(scope, "You forgot to select a category", "Warning")
+      }
+
     }
 
     /////           Manu              //////
@@ -181,12 +205,19 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickConfirmManus = function()
     {
-      for(var offerId in scope.offerrings)
+      if(checkWhetherAFieldInJSONEmpty("manus"))
       {
-        onClickConfirmManusHelper(offerId)
+        for(var offerId in scope.offerrings)
+        {
+          onClickConfirmManusHelper(offerId)
+        }
+        scope.hasConfirmedManu = 1
+        goToNext("modelStage");
       }
-      scope.hasConfirmedManu = 1
-      goToNext("modelStage");
+      else
+      {
+        noDlg.show(scope, "You forgot to select a manufacturer", "Warning")
+      }
     }
 
     scope.onClickManu = function(offerId, selectedManuId, selectedManuName, manuButtonStyle)
@@ -247,12 +278,19 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickConfirmModel = function()
     {
-      for(var offerId in scope.offerrings)
+      if(checkWhetherAFieldInJSONEmpty("models"))
       {
-        onClickConfirmModelHelper(offerId)
+        for(var offerId in scope.offerrings)
+        {
+          onClickConfirmModelHelper(offerId)
+        }
+        scope.hasConfirmedModel = 1
+        goToNext("issueStage");
       }
-      scope.hasConfirmedModel = 1
-      goToNext("issueStage");
+      else
+      {
+        noDlg.show(scope, "You forgot to select a model", "Warning")
+      }
     }
 
     scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
@@ -264,7 +302,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           issue              //////
     scope.onClickConfirmIssue = function()
     {
-      goToNext("finalStage");
+      if(checkWhetherAFieldInJSONEmpty("issues"))
+      {
+        goToNext("finalStage");
+      }
+      else
+      {
+        noDlg.show(scope, "You forgot to select an issue", "Warning")
+      }
     }
 
     scope.onClickRedoModels = function()
