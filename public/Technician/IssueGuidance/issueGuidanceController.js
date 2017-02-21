@@ -172,7 +172,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.hasConfirmedModel = 0
       scope.hasConfirmedIssue = 0
 
-      for(var i = 0; i < scope.offerrings; i++)
+      for(var i in scope.offerrings)
       {
         scope.offerrings[i]["display"]["manus"] = []
         scope.offerrings[i]["offer"]["manus"] = []
@@ -238,7 +238,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.hasConfirmedModel = 0
       scope.hasConfirmedIssue = 0
 
-      for(var i = 0; i < scope.offerrings; i++)
+      for(var i in scope.offerrings)
       {
         scope.offerrings[i]["display"]["models"] = []
         scope.offerrings[i]["offer"]["models"] = []
@@ -271,7 +271,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       scope.hasConfirmedIssue = 0
 
-      for(var i = 0; i < scope.offerrings; i++)
+      for(var i in scope.offerrings)
       {
         scope.offerrings[i]["display"]["issues"] = []
         scope.offerrings[i]["offer"]["issues"] = []
