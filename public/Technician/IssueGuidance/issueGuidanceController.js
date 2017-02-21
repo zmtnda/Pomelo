@@ -1,6 +1,8 @@
 app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates',
   function(scope, state, logSer, http, rscope, noDlg, cates)
   {
+    /*IMPORTANT NOTE:
+     1. The rest API uses manId while the controller uses manuId*/
     scope.progressMessage = "Please select the general type you can fix"
 
     // Store the data of the buttons seletced by the user
@@ -93,11 +95,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     /////           Manu              //////
-    var onClickConfirmManusHelper2 = function(offerId, indexForLoopingOfferManus)
+    var onClickConfirmManusHelper3 = function(offerId, manuId)
     {
-      console.log("indexForLoopingOfferManus" + indexForLoopingOfferManus)
       http.get('Cate/'+ scope.offerrings[offerId]["cateId"] + '/' +
-       scope.offerrings[offerId]["offer"]["manus"][indexForLoopingOfferManus]["manuId"] + '/model') //manuId is not accessible. I have to have loop catch each element
+        manuId + '/model') //manuId is not accessible. I have to have loop catch each element
       .then(function(response)
       {
         return response["data"]
@@ -106,8 +107,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         prev.forEach(function(element)
         {
-          console.log(JSON.stringify(element))
-          scope.offerrings[offerId]["display"]["models"].push(element)
+          scope.offerrings[offerId]["display"]["models"].push({"model": element["model"],
+                                                               "modelId": element["modelId"],
+                                                               "correspondingManuId": manuId})
         })
       })
       .catch(function(err)
@@ -116,10 +118,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
     }
 
+    var onClickConfirmManusHelper2 = function(offerId, indexForLoopingOfferManus)
+    {
+      var manuId = scope.offerrings[offerId]["offer"]["manus"][indexForLoopingOfferManus]["manuId"]
+      onClickConfirmManusHelper3(offerId, manuId)
+    }
+
     var onClickConfirmManusHelper = function(offerId)
     {
       var offeredManuIdsArray = scope.offerrings[offerId]["offer"]["manus"]
-      console.log("Manus Array: " + JSON.stringify(offeredManuIdsArray));
+
       for(var i = 0; i < offeredManuIdsArray.length; i++)
       {
         onClickConfirmManusHelper2(offerId, i)
@@ -144,9 +152,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     /////           model              //////
-    var onClickConfirmModelHelperTwo = function(offerId, indexForLoopingOfferModel)
+
+    var onClickConfirmModelHelperThree = function(offerId, modelId)
     {
-      http.get('Cate/'+ scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"] + '/issues')
+      http.get('Cate/'+ modelId + '/issues')
       .then(function(response)
       {
         return response["data"]
@@ -155,12 +164,20 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         prev.forEach(function(element)
         {
-          scope.offerrings[offerId]["display"]["issues"].push(element)
+          scope.offerrings[offerId]["display"]["issues"].push({"issueId" : element["issueId"],
+                                                               "issue" : element["issue"],
+                                                               "correspondingModelId": modelId})
         })
       })
       .catch(function(err){
         noDlg.show(scope, err, "Error")
       })
+    }
+
+    var onClickConfirmModelHelperTwo = function(offerId, indexForLoopingOfferModel)
+    {
+      var modelId = scope.offerrings[offerId]["offer"]["models"][indexForLoopingOfferModel]["modelId"]
+      onClickConfirmModelHelperThree(offerId, modelId)
     }
 
     var onClickConfirmModelHelper = function(offerId)
