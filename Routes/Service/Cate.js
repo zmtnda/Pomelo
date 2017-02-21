@@ -10,12 +10,13 @@ router.baseURL = '/Cate';
 router.get('/', function(req, res) {
 	console.log("Get all catergoies");
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT id_cat, category from Categories ',
+		cnn.query('SELECT id_cat, category from Categories ',
 		function(err, result){
 			if(err){
+				console.log(JSON.stringify(err))
 				console.log("error get cats from database");
 				res.status(404).end();
-			} else{
+			} else {
 				console.log("get all cats successful");
 				res.json(result);
 			}
@@ -34,24 +35,24 @@ router.post('/', function(req, res) {
    var body = req.body;
 	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newCategory'])) {
 		connections.getConnection(res, function(cnn) {
-         cnn.query(' SELECT count(*) AS count FROM Categories WHERE category = ?', [body.newCategory],
-      	function(err, result) {
-            if(result[0].count == 0) {
-               cnn.query(' INSERT INTO Categories (category) values (?) ', [body.newCategory],
-      			function(err, result){
-      				if(err) {
-      					console.log("error create new category");
-      					res.status(400).json(err);
-      				} else {
-      					console.log("create new category successful");
-                     res.end();
-      				}
-      			});
-            } else {
-               console.log("Error check for existing cate, or cate already exist");
-					res.status(400).json(err);
-            }
-         });
+       cnn.query(' SELECT count(*) AS count FROM Categories WHERE category = ?', [body.newCategory],
+    	function(err, result) {
+          if(result[0].count == 0) {
+             cnn.query(' INSERT INTO Categories (category) values (?) ', [body.newCategory],
+    			function(err, result){
+    				if(err) {
+    					console.log("error create new category");
+    					res.status(400).json(err);
+    				} else {
+    					console.log("create new category successful");
+                   res.end();
+    				}
+    			});
+          } else {
+             console.log("Error check for existing cate, or cate already exist");
+				res.status(400).json(err);
+          }
+       });
 			cnn.release();
 		});
 	}
@@ -274,7 +275,8 @@ router.get('/:modelId/issues', function(req, res) {
 	var modelId = req.params.modelId;
 
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT I.id_iss as issueId, I.issue FROM ModelsIssues MI, Models M ,Issues I ' +
+		cnn.query(' SELECT I.id_iss AS issueId, I.issue, MI.id_modIss AS modIssId, M.catMan_id ' +
+					 ' FROM ModelsIssues MI, Models M ,Issues I ' +
 					 ' WHERE MI.mod_id = ? AND MI.mod_id = M.id_mod AND MI.iss_id = I.id_iss', [modelId],
 		function(err, result) {
 			if(err) {

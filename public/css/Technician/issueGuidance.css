@@ -1,5 +1,5 @@
 .btn {
-  width: 100%;
+
 }
 
 .container {
@@ -13,4 +13,13 @@
 
 .thumbnail{
   overflow:auto;
+}
+
+.issue-label:active{
+  background-color: grey
+}
+
+.issue-label{
+    width: 100%;
+
 }

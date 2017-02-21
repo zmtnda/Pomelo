@@ -1,4 +1,3 @@
-
 <body class="container">
    <h3 ng-bind = "progressMessage">Start from types</h3>
    <div class="progress">
@@ -10,15 +9,15 @@
    <div class="row">
      <div class="col-xs-12 col-md-2">
        <div class="thumbnail">
-         <h3>Type(s)</h3>
-           <button type="button" class="btn btn-success"  ng-show="hasSelectedType" ng-click="cancelSelection('type')">Redo</button>
-           <button type="button" class="btn btn-success" ng-show="!hasSelectedType" ng-click="confirm('type')">Confirm</button>
+         <h3>Category(s)</h3>
+           <button type="buton" class="btn btn-success"  ng-show="hasConfirmedCate" ng-click="cancelSelection('type')">Redo</button>
+           <button type="button" class="btn btn-success" ng-show="!hasConfirmedCate" ng-click="onClickConfirmCategory()">Confirm</button>
          <div class = "table-responsive">
            <table class = "table">
              <tbody>
-               <tr ng-repeat = "type in allTypes track by $index" data-index="{{$index}}">
-                  <td><button type="button" class="btn btn-default" ng-class="typeButtonStatesArray[$index] | buttonFilter"
-                     ng-click="selectType(type, $index)"> {{ type }} </button></td>
+               <tr ng-repeat = "cate in allCates track by $index" data-index="{{$index}}">
+                  <td><button type="button" class="btn btn-default issue-label" ng-class="typeButtonStatesArray[$index] | buttonFilter"
+                     ng-click="onClickCategory(cate.id_cat, cate.category)"> {{ cate.category }} </button></td>
                </tr>
              </tbody>
            </table>
@@ -27,79 +26,111 @@
      </div>
 
      <div class="col-xs-12 col-md-2">
-       <div class="thumbnail" ng-show="hasSelectedType">
+       <div class="thumbnail" ng-show="hasConfirmedCate">
          <h3>Manufacturer(s)</h3>
-           <button type="button" class="btn btn-success" ng-show="!hasSelectedType || !hasSelectedManu" ng-click="confirm('manu')">Confirm</button>
-           <button type="button" class="btn btn-success" ng-show="hasSelectedType && hasSelectedManu" ng-click="cancelSelection('manu')">Redo</button>
-           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedType track by $index">
-             <h5>{{ selected }}</h5>
-             <h3><div ng-style="buttonStyle(manu)" ng-click="selectManu(manu, selected, $index)" ng-class="manuButtonStatesJSON[selected][$index] | buttonFilter"
-                ng-repeat="manu in manufacturers track by $index"
-                class="label label-default"> {{ manu }}</div></h3>
+           <button type="button" class="btn btn-success" ng-show="!hasConfirmedCate || !hasConfirmedManu" ng-click="onClickConfirmManus()">Confirm</button>
+           <button type="button" class="btn btn-success" ng-show="hasConfirmedCate && hasConfirmedManu" ng-click="cancelSelection('manu')">Redo</button>
+           <div class="thumbnail" ng-repeat="oneOfferring in offerrings track by $index">
+             <h5>{{ oneOfferring.cate }}</h5>
+             <div ng-repeat="manu in oneOfferring.display.manus track by $index"
+                ng-class="manuButtonStatesJSON[selected][$index] | buttonFilter"
+                ng-click="onClickManu(oneOfferring.offerId, manu.manId, manu.manufacturer)"
+                class="label label-default issue-label"> {{ manu.manufacturer }}</div>
            </div>
        </div>
      </div>
 
      <div class="col-xs-12 col-md-2">
-       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu">
+       <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu">
          <h3>Model(s)</h3>
-           <button type="button" class="btn btn-success" ng-click="confirm('model')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel">Confirm</button>
-           <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">Redo</button>
-           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedManu track by $index">
-             <h5>{{ selected }}</h5>
-             <h3><span ng-style="buttonStyle(model)" ng-click="selectModel(model, selected, $index)" ng-class="modelButtonStatesJSON[selected][$index] | buttonFilter" class="label label-default"
-               ng-repeat="model in models track by $index" >{{ model }}</span></h3>
+           <button type="button" class="btn btn-success" ng-click="onClickConfirmModel()" ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">Redo</button>
+           <div ng-repeat="oneOfferring in offerrings track by $index">
+             <div class="thumbnail" ng-repeat="oneManu in oneOfferring.offer.manus track by $index">
+               <h5>{{ oneOfferring.cate }} > {{ oneManu.manuName }}  <!--{{oneOfferring.display}} >> {{ oneManu}} --></h5>
+
+               <div ng-repeat="model in oneOfferring.display.models track by $index"
+                 ng-click="onClickModel(oneOfferring.offerId, model.modelId, model.model)"
+                 ng-class="modelButtonStatesJSON[selected][$index] | buttonFilter"
+                 ng-if="model.correspondingManuId === oneManu.manuId"
+                 class="label label-default issue-label">{{ model.model }}</div>
+             </div>
            </div>
        </div>
      </div>
 
      <div class="col-xs-12 col-md-2">
-       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel">
+       <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
            <h3>Issue(s)</h3>
-           <button type="button" class="btn btn-success" ng-click="confirm('issue')" ng-show="!hasSelectedType || !hasSelectedManu || !hasSelectedModel || !hasSelectedIssue">Confirm</button>
-           <button type="button" class="btn btn-success" ng-click="cancelSelection('issue')" ng-show="hasSelectedType && !hasSelectedManu && hasSelectedModel && hasSelectedIssue">Redo</button>
-           <div class="thumbnail" ng-repeat="selected in selectedButtonValues.selectedModel track by $index">
-             <h5>{{ selected }}</h5>
-             <h3><span ng-style="buttonStyle(issue)" ng-click="selectIssue(issue, selected, $index)" ng-class="issueButtonStatesJSON[selected][$index] | buttonFilter" class="label label-default"
-               ng-repeat = "issue in issues track by $index" >{{ issue }}</span></h3>
+           <button type="button" class="btn btn-success" ng-click="onClickConfirmIssue()" ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel || !hasConfirmedIssue">Confirm</button>
+           <button type="button" class="btn btn-success" ng-click="cancelSelection('issue')" ng-show="hasConfirmedCate && !hasConfirmedManu && hasConfirmedModel && hasConfirmedIssue">Redo</button>
+           <div ng-repeat="oneOfferring in offerrings track by $index">
+             <div ng-repeat="oneManu in oneOfferring.display.manus track by $index">
+               <div  ng-repeat="oneModel in oneOfferring.display.models track by $index">
+                 <div class="thumbnail" ng-if="oneModel.correspondingManuId === oneManu.manId">
+                   <h5>{{ oneOfferring.cate }} > {{ oneManu.manufacturer }} > {{ oneModel.model }}</h5>
+                   <div ng-repeat="issue in oneOfferring.display.issues track by $index">
+                    <div ng-if="issue.correspondingModelId === oneModel.modelId">
+                      <div ng-click="onClickIssue(oneOfferring.offerId, issue.issueId, issue.issue)"
+                        ng-class="issueButtonStatesJSON[selected][$index] | buttonFilter"
+                        class="label label-default issue-label">{{ issue.issue }}
+                      </div>
+                    </div>
+                  </div>
+                 </div>
+               </div>
+             </div>
            </div>
+         </div>
        </div>
-     </div>
-    <!--
-     <div class="col-xs-12 col-md-1">
-       <div class="thumbnail" ng-show="hasSelectedType && hasSelectedManu && hasSelectedModel && hasSelectedIssue">
-         <h3>Amount</h3>
-           <button type="button" class="btn btn-success">Per Service</button>
-           </br>
-           <button type="button" class="btn btn-success">Hourly Rate</button>
-           <input type="text" name="price" ng-model="priceModel">
-       </div>
-     </div> -->
+       <!-- Implementation for model column by only using display
+       <div class="col-xs-12 col-md-2">
+         <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu">
+           <h3>Model(s)</h3>
+          <button type="button" class="btn btn-success" ng-click="onClickConfirmModel()" ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel">Confirm</button>
+          <button type="button" class="btn btn-success" ng-click="cancelSelection('model')" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">Redo</button>
+          <div ng-repeat="oneOfferring in offerrings track by $index">
+            <div class="thumbnail" ng-repeat="oneManu in oneOfferring.display.manus track by $index">
+              <h5>{{ oneOfferring.cate }} > {{ oneManu.manufacturer }} </h5>
+              <div ng-repeat = "model in oneOfferring.display.models track by $index">
+                <div ng-if="model.correspondingManuId === oneManu.manId">
+                  <div ng-click="onClickModel(oneOfferring.offerId, model.modelId, model.model)"
+                   ng-class="modelButtonStatesJSON[selected][$index] | buttonFilter"
+                   class="label label-default issue-label">{{ model.model }}</div>
+                </div>
+               </div>
+              </div>
+            </div>
+          </div>
+        </div>-->
 
      <div class="col-xs-12 col-md-4">
       <div class="thumbnail">
         <h3>You're offering:</h3>
-         <button type="button" class="btn btn-success">Confirm</button>
+         <button type="button" class="btn btn-success">Confirm All Offerrings</button>
          <div class = "table-responsive">
            <table class = "table">
              <thead>
                <th>Categories</th>
                <th>Manufacturer(s)</th>
                <th>Model(s)</th>
-               <th>Issue</th>
+               <th>Issue(s)</th>
+               <th>Amount(s)</th>
              </thead>
              <tbody>
-               <tr ng-repeat = "offer in selectedButtonValues.selectedType track by $index">
-                 <td>{{ selectedButtonValues.selectedType[$index] }}</td>
-                 <td>{{ selectedButtonValues.selectedManu[$index] }}</td>
-                 <td>{{ selectedButtonValues.selectedModel[$index] }}</td>
-                 <td>{{ selectedButtonValues.selectedIssue[$index] }}</td>
+               <tr ng-repeat = "oneOffer in offerrings track by $index">
+                 <td><div class="label label-default issue-label">{{ oneOffer.cate }}</div></td>
+                 <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus">{{ manu.manuName }}</div></td>
+                 <td><div class="label label-default issue-label" ng-repeat="model in oneOffer.offer.models">{{ model.modelName }}</div></td>
+                 <td><div class="label label-default issue-label" ng-repeat="issue in oneOffer.offer.issues">{{ issue.issueName }}</div></td>
+                 <td>
+                   <input class="form-control" type="search" value="Enter" id="example-search-input">
+                 </td>
                </tr>
              </tbody>
            </table>
          </div>
        </div>
      </div>
-
    </div>
 </body>
