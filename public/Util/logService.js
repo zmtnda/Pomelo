@@ -7,7 +7,7 @@ function(rscope, http, state, nDlg, route, persisService) {
 
 		this.addUser = function(emailP, passwordP, roleP, fNameP, lNameP, hRateP, cityP, zipP)
 		{
-			return http.post("User", {email: emailP, passwordHash: passwordP, role: roleP,
+			return http.post("User/", {email: emailP, passwordHash: passwordP, role: roleP,
         firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP});
 		}
     this.logout = function(){

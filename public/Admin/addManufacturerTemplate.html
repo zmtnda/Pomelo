@@ -1,0 +1,21 @@
+
+<center ng-controller = 'addServiceController'>
+    <div id="login-form">
+        <form method="post">
+            <table align="center" width="90%" border="0">
+                <tr><br>
+                    <td>
+                        <h3>Add Manufacturer</h3>
+                        <td><input type="text" name="category" ng-model="newManufacturer" placeholder="Manufacturer Name*" required /></td>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td><button class="btn btn-lg" type="submit" name="btn-signup" ng-click="postManufacturer()">Add Manufacturer</button>
+                        <button class="btn btn-lg" type="submit" name="btn-signup" ng-click="$close()">Cancel</button></td>
+                </tr>
+            </table>
+            <br>
+        </form>
+    </div>
+</center>
