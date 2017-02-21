@@ -5,6 +5,23 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
      1. The rest API uses manId while the controller uses manuId*/
     scope.progressMessage = "Please select the general type you can fix"
 
+    var progressStages = {
+      "cateStage": {"message": "Please select the general catergoies you can fix",
+                    "percent": "0%"
+                   },
+      "manuStage": {"message": "Please select manufacturer(s)",
+                    "percent": "20%"
+                   },
+      "modelStage": {"message": "Please select model(s)",
+                    "percent": "40%"
+                   },
+      "issueStage": {"message": "Please select issue(s)",
+                    "percent": "60%"
+                   },
+      "finalStage": {"message": "Please finalize your offers(s)",
+                    "percent": "80%"
+      }
+    }
     // Store the data of the buttons seletced by the user
     scope.selectedButtonValues = {
       "selectedType": [],
@@ -35,16 +52,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
 
-    var updateProgressBar = function(message, percent)
+    var updateProgressBar = function(stage)
     {
-      scope.progressMessage = message
-      scope.progressPercentage = percent
-      scope.progressBarDisplay = {"width": percent};
+      scope.progressMessage = progressStages[stage].message
+      scope.progressPercentage = progressStages[stage].percent
+      scope.progressBarDisplay = {"width": progressStages[stage].percent}
     }
 
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
     {
       scope.offerrings[numOfferings] = {"offerId": numOfferings,
+                                        "cateButtonStyle": 0,
                                         "cate": selectedCategoryName,
                                         "cateId": selectedCategoryId,
                                         "offer": {"manus": [],
@@ -75,7 +93,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         prev.forEach(function(element)
         {
-          scope.offerrings[offerId]["display"]["manus"].push(element)
+          scope.offerrings[offerId]["display"]["manus"].push({"manId": element["manId"],
+                                                              "manufacturer": element["manufacturer"],
+                                                              "manuButtonStyle": 0})
         })
       })
       .catch(function(err)
@@ -84,13 +104,24 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
     }
 
+    scope.onClickRedoCategory = function()
+    {
+      numOfferings = 0;
+      scope.hasConfirmedCate = 0
+      scope.hasConfirmedManu = 0
+      scope.hasConfirmedModel = 0
+      scope.hasConfirmedIssue = 0
+      updateProgressBar("cateStage");
+      scope.offerrings = {}
+    }
+
     scope.onClickConfirmCategory = function()
     {
       for(var offerId in scope.offerrings)
       {
         onClickConfirmCategoryHelper(offerId)
       }
-      goToNext("Please select manufacturer(s)", "20%");
+      goToNext("manuStage");
       scope.hasConfirmedCate = 1
     }
 
@@ -108,6 +139,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         prev.forEach(function(element)
         {
           scope.offerrings[offerId]["display"]["models"].push({"model": element["model"],
+                                                               "modelButtonStyle": 0,
                                                                "modelId": element["modelId"],
                                                                "correspondingManuId": manuId})
         })
@@ -134,6 +166,18 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
+    scope.onClickRedoManus = function()
+    {
+      scope.hasConfirmedManu = 0
+      scope.hasConfirmedModel = 0
+      scope.hasConfirmedIssue = 0
+
+      for(var i = 0; i < scope.offerrings; i++)
+      {
+        scope.offerrings[i]["display"]["manus"] = []
+        scope.offerrings[i]["offer"]["manus"] = []
+      }
+    }
 
     scope.onClickConfirmManus = function()
     {
@@ -142,17 +186,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         onClickConfirmManusHelper(offerId)
       }
       scope.hasConfirmedManu = 1
-      goToNext("Please select model(s)", "40%");
+      goToNext("modelStage");
     }
 
-    scope.onClickManu = function(offerId, selectedManuId, selectedManuName)
+    scope.onClickManu = function(offerId, selectedManuId, selectedManuName, manuButtonStyle)
     {
-      scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
-                                                        "manuName": selectedManuName})
+        scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
+                                                          "manuName": selectedManuName})
     }
 
     /////           model              //////
-
     var onClickConfirmModelHelperThree = function(offerId, modelId)
     {
       http.get('Cate/'+ modelId + '/issues')
@@ -165,6 +208,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         prev.forEach(function(element)
         {
           scope.offerrings[offerId]["display"]["issues"].push({"issueId" : element["issueId"],
+                                                               "issueButtonStyle": 0,
                                                                "issue" : element["issue"],
                                                                "correspondingModelId": modelId})
         })
@@ -189,15 +233,26 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
+    scope.onClickRedoModels = function()
+    {
+      scope.hasConfirmedModel = 0
+      scope.hasConfirmedIssue = 0
+
+      for(var i = 0; i < scope.offerrings; i++)
+      {
+        scope.offerrings[i]["display"]["models"] = []
+        scope.offerrings[i]["offer"]["models"] = []
+      }
+    }
+
     scope.onClickConfirmModel = function()
     {
       for(var offerId in scope.offerrings)
       {
         onClickConfirmModelHelper(offerId)
       }
-
       scope.hasConfirmedModel = 1
-      goToNext("Please select issue(s)", "60%");
+      goToNext("issueStage");
     }
 
     scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
@@ -209,7 +264,18 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           issue              //////
     scope.onClickConfirmIssue = function()
     {
-      goToNext("Please finalize your offers(s)", "80%");
+      goToNext("finalStage");
+    }
+
+    scope.onClickRedoModels = function()
+    {
+      scope.hasConfirmedIssue = 0
+
+      for(var i = 0; i < scope.offerrings; i++)
+      {
+        scope.offerrings[i]["display"]["issues"] = []
+        scope.offerrings[i]["offer"]["issues"] = []
+      }
     }
 
     scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
@@ -218,11 +284,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                         "issueName": selectedIssueName})
     }
 
-    var goToNext = function(message, percent)
+    var goToNext = function(stage)
     {
         //if (scope.selectedButtonValues[selected].length != 0)
         //{
-            updateProgressBar(message, percent);
+            updateProgressBar(stage);
         //    return 1
         //}
         //return 0
