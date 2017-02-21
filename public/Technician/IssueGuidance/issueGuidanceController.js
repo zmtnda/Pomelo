@@ -20,7 +20,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                    },
       "finalStage": {"message": "Please finalize your offers(s)",
                     "percent": "80%"
-      }
+                  },
+      "confirmAllOfferingsStage": {
+                     "message": "Congrats!",
+                     "percent": "100%"
+                  }
     }
     // Store the data of the buttons seletced by the user
     scope.selectedButtonValues = {
@@ -59,7 +63,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
       for(var offerId in scope.offerrings)
       {
-        if(!angular.equals(scope.offerrings[offerId]["offer"][fieldName], []))
+        if(!angular.equals(scope.offerrings[offerId]["offer"][fieldName], []) ||
+         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], undefined) ||
+         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], null) ||
+         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], {}))
         {
           isAllEmpty = true
         }
@@ -200,7 +207,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
       for(var i in scope.offerrings)
       {
-        scope.offerrings[i]["display"]["manus"] = []
         scope.offerrings[i]["offer"]["manus"] = []
       }
     }
@@ -270,10 +276,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       scope.hasConfirmedModel = 0
       scope.hasConfirmedIssue = 0
-
+      console.log(scope.hasConfirmedModel)// it doesn't go here???
       for(var i in scope.offerrings)
       {
-        scope.offerrings[i]["display"]["models"] = []
+        //scope.offerrings[i]["display"]["models"] = []
         scope.offerrings[i]["offer"]["models"] = []
       }
     }
@@ -306,6 +312,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       if(checkWhetherAFieldInJSONEmpty("issues"))
       {
+        scope.hasConfirmedIssue= 1
         updateProgressBar("finalStage");
       }
       else
@@ -334,8 +341,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           Amount              //////
     scope.onConfirmAllOfferrings = function()
     {
-
-
+      if(checkWhetherAFieldInJSONEmpty("amount"))
+      {
+        updateProgressBar("confirmAllOfferingsStage");
+      }
+      else
+      {
+        noDlg.show(scope, "You forgot to enter prices", "Warning")
+      }
     }
 
 }]);

@@ -23,7 +23,12 @@
   width: 100%
 }
 
+.input-sm{
+  width: 10%;
+}
+
 .issue-label{
     width: 100%;
-
+    font-size: 20px;
+    display: inline-block;
 }
