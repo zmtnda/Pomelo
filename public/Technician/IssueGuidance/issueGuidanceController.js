@@ -5,6 +5,27 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
      1. The rest API uses manId while the controller uses manuId*/
     scope.progressMessage = "Please select the general type you can fix"
 
+    var progressStages = {
+      "cateStage": {"message": "Please select the general catergoies you can fix",
+                    "percent": "0%"
+                   },
+      "manuStage": {"message": "Please select manufacturer(s)",
+                    "percent": "20%"
+                   },
+      "modelStage": {"message": "Please select model(s)",
+                    "percent": "40%"
+                   },
+      "issueStage": {"message": "Please select issue(s)",
+                    "percent": "60%"
+                   },
+      "finalStage": {"message": "Please finalize your offers(s)",
+                    "percent": "80%"
+                  },
+      "confirmAllOfferingsStage": {
+                     "message": "Congrats!",
+                     "percent": "100%"
+                  }
+    }
     // Store the data of the buttons seletced by the user
     scope.selectedButtonValues = {
       "selectedType": [],
@@ -35,16 +56,44 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
 
-    var updateProgressBar = function(message, percent)
+    /////           helpers functions shared by some other functions              //////
+    var checkWhetherAFieldInJSONEmpty = function(fieldName)
     {
-      scope.progressMessage = message
-      scope.progressPercentage = percent
-      scope.progressBarDisplay = {"width": percent};
+      var isAllEmpty = false
+
+      for(var offerId in scope.offerrings)
+      {
+        if(!angular.equals(scope.offerrings[offerId]["offer"][fieldName], []) ||
+         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], undefined) ||
+         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], null) ||
+         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], {}))
+        {
+          isAllEmpty = true
+        }
+      }
+
+      return isAllEmpty
     }
+
+    var updateProgressBar = function(stage)
+    {
+      scope.progressMessage = progressStages[stage].message
+      scope.progressPercentage = progressStages[stage].percent
+      scope.progressBarDisplay = {"width": progressStages[stage].percent}
+    }
+
+    /// FLow: 1. get all the manus selected in the offerrings
+    ///       2. use HTTP calls to get models for a selected manu
+    ///       3. put the models from Step 2 in the display of the next column
+    ///       Result: Initializes display's field by fetching data from the database
+
+    /////           categories              //////
 
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
     {
-      scope.offerrings[numOfferings] = {"offerId": numOfferings,
+      scope.offerrings[numOfferings] = {"amount": undefined,
+                                        "offerId": numOfferings,
+                                        "cateButtonStyle": 0,
                                         "cate": selectedCategoryName,
                                         "cateId": selectedCategoryId,
                                         "offer": {"manus": [],
@@ -55,13 +104,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                     "issues": []}}
       numOfferings = numOfferings + 1
     }
-
-    /// FLow: 1. get all the manus selected in the offerrings
-    ///       2. use HTTP calls to get models for a selected manu
-    ///       3. put the models from Step 2 in the display of the next column
-    ///       Result: Initializes display's field by fetching data from the database
-
-    /////           categories              //////
 
     // A helper that avoids http calls share the same enviroment.
     var onClickConfirmCategoryHelper = function(offerId)
@@ -75,7 +117,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         prev.forEach(function(element)
         {
-          scope.offerrings[offerId]["display"]["manus"].push(element)
+          scope.offerrings[offerId]["display"]["manus"].push({"manId": element["manId"],
+                                                              "manufacturer": element["manufacturer"],
+                                                              "manuButtonStyle": 0})
         })
       })
       .catch(function(err)
@@ -84,14 +128,34 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
     }
 
+    scope.onClickRedoCategory = function()
+    {
+      numOfferings = 0;
+      scope.hasConfirmedCate = 0
+      scope.hasConfirmedManu = 0
+      scope.hasConfirmedModel = 0
+      scope.hasConfirmedIssue = 0
+      updateProgressBar("cateStage");
+      scope.offerrings = {}
+    }
+
     scope.onClickConfirmCategory = function()
     {
-      for(var offerId in scope.offerrings)
+      console.log(JSON.stringify(scope.offerrings))
+      if(!angular.equals(scope.offerrings, {}))
       {
-        onClickConfirmCategoryHelper(offerId)
+        for(var offerId in scope.offerrings)
+        {
+          onClickConfirmCategoryHelper(offerId)
+        }
+        updateProgressBar("manuStage");
+        scope.hasConfirmedCate = 1
       }
-      goToNext("Please select manufacturer(s)", "20%");
-      scope.hasConfirmedCate = 1
+      else
+      {
+        noDlg.show(scope, "You forgot to select a category", "Warning")
+      }
+
     }
 
     /////           Manu              //////
@@ -108,6 +172,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         prev.forEach(function(element)
         {
           scope.offerrings[offerId]["display"]["models"].push({"model": element["model"],
+                                                               "modelButtonStyle": 0,
                                                                "modelId": element["modelId"],
                                                                "correspondingManuId": manuId})
         })
@@ -134,25 +199,42 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
+    scope.onClickRedoManus = function()
+    {
+      scope.hasConfirmedManu = 0
+      scope.hasConfirmedModel = 0
+      scope.hasConfirmedIssue = 0
+
+      for(var i in scope.offerrings)
+      {
+        scope.offerrings[i]["offer"]["manus"] = []
+      }
+    }
 
     scope.onClickConfirmManus = function()
     {
-      for(var offerId in scope.offerrings)
+      if(checkWhetherAFieldInJSONEmpty("manus"))
       {
-        onClickConfirmManusHelper(offerId)
+        for(var offerId in scope.offerrings)
+        {
+          onClickConfirmManusHelper(offerId)
+        }
+        scope.hasConfirmedManu = 1
+        updateProgressBar("modelStage");
       }
-      scope.hasConfirmedManu = 1
-      goToNext("Please select model(s)", "40%");
+      else
+      {
+        noDlg.show(scope, "You forgot to select a manufacturer", "Warning")
+      }
     }
 
-    scope.onClickManu = function(offerId, selectedManuId, selectedManuName)
+    scope.onClickManu = function(offerId, selectedManuId, selectedManuName, manuButtonStyle)
     {
-      scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
-                                                        "manuName": selectedManuName})
+        scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
+                                                          "manuName": selectedManuName})
     }
 
     /////           model              //////
-
     var onClickConfirmModelHelperThree = function(offerId, modelId)
     {
       http.get('Cate/'+ modelId + '/issues')
@@ -165,6 +247,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         prev.forEach(function(element)
         {
           scope.offerrings[offerId]["display"]["issues"].push({"issueId" : element["issueId"],
+                                                               "issueButtonStyle": 0,
                                                                "issue" : element["issue"],
                                                                "correspondingModelId": modelId})
         })
@@ -189,15 +272,33 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
+    scope.onClickRedoModels = function()
+    {
+      scope.hasConfirmedModel = 0
+      scope.hasConfirmedIssue = 0
+      console.log(scope.hasConfirmedModel)// it doesn't go here???
+      for(var i in scope.offerrings)
+      {
+        //scope.offerrings[i]["display"]["models"] = []
+        scope.offerrings[i]["offer"]["models"] = []
+      }
+    }
+
     scope.onClickConfirmModel = function()
     {
-      for(var offerId in scope.offerrings)
+      if(checkWhetherAFieldInJSONEmpty("models"))
       {
-        onClickConfirmModelHelper(offerId)
+        for(var offerId in scope.offerrings)
+        {
+          onClickConfirmModelHelper(offerId)
+        }
+        scope.hasConfirmedModel = 1
+        updateProgressBar("issueStage");
       }
-
-      scope.hasConfirmedModel = 1
-      goToNext("Please select issue(s)", "60%");
+      else
+      {
+        noDlg.show(scope, "You forgot to select a model", "Warning")
+      }
     }
 
     scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
@@ -209,7 +310,26 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           issue              //////
     scope.onClickConfirmIssue = function()
     {
-      goToNext("Please finalize your offers(s)", "80%");
+      if(checkWhetherAFieldInJSONEmpty("issues"))
+      {
+        scope.hasConfirmedIssue= 1
+        updateProgressBar("finalStage");
+      }
+      else
+      {
+        noDlg.show(scope, "You forgot to select an issue", "Warning")
+      }
+    }
+
+    scope.onClickRedoModels = function()
+    {
+      scope.hasConfirmedIssue = 0
+
+      for(var i in scope.offerrings)
+      {
+        scope.offerrings[i]["display"]["issues"] = []
+        scope.offerrings[i]["offer"]["issues"] = []
+      }
     }
 
     scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
@@ -218,14 +338,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                         "issueName": selectedIssueName})
     }
 
-    var goToNext = function(message, percent)
+    /////           Amount              //////
+    scope.onConfirmAllOfferrings = function()
     {
-        //if (scope.selectedButtonValues[selected].length != 0)
-        //{
-            updateProgressBar(message, percent);
-        //    return 1
-        //}
-        //return 0
+      if(checkWhetherAFieldInJSONEmpty("amount"))
+      {
+        updateProgressBar("confirmAllOfferingsStage");
+      }
+      else
+      {
+        noDlg.show(scope, "You forgot to enter prices", "Warning")
+      }
     }
 
 }]);
