@@ -25,12 +25,12 @@ var Session = function Session(user) {
 	console.log("new session");
    this.firstName = user.firstName;
    this.lastName = user.lastName;
-   this.id = user.id;
+   this.id = user.id_log;
+	 this.tec_id = user.id_tec;
    this.email = user.email;
    this.loginTime = new Date().getTime();
    this.lastUsed = new Date().getTime();
    this.role = user.role;
-	this.phone = user.phone;
 };
 
 Session.prototype.isAdmin = function() {

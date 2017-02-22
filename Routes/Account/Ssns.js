@@ -47,6 +47,7 @@ router.post('/', function(req, res) {
               'Technicians t ON l.id_log = t.log_id', req.body.email, function(err, result) {
       if (req.validator.check(result.length && bcrypt.compare(req.body.passwordHash, result[0].passwordHash), Tags.badLogin)) {
         console.log("same pass");
+        console.log(result[0]);
          cookie = ssnUtil.makeSession(result[0], res);
          res.location(router.baseURL + '/'  + cookie).send(result);
       }
