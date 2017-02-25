@@ -82,6 +82,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.progressBarDisplay = {"width": progressStages[stage].percent}
     }
 
+    var checkDuplicate = function(arr, obj, inputField, expectedDupVal)
+    {
+      var bool = false
+      arr.forEach(function(ea){
+        if(ea[inputField] === expectedDupVal)
+          bool = true
+      });
+      return bool
+    }
+
     /// FLow: 1. get all the manus selected in the offerrings
     ///       2. use HTTP calls to get models for a selected manu
     ///       3. put the models from Step 2 in the display of the next column
@@ -91,18 +101,34 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
     {
-      scope.offerrings[numOfferings] = {"amount": undefined,
-                                        "offerId": numOfferings,
-                                        "cateButtonStyle": 0,
-                                        "cate": selectedCategoryName,
-                                        "cateId": selectedCategoryId,
-                                        "offer": {"manus": [],
-                                                  "models": [],
-                                                  "issues": []},
-                                        "display": {"manus": [],
-                                                    "models": [],
-                                                    "issues": []}}
-      numOfferings = numOfferings + 1
+      var dup = false;
+      var newOffer =  {"amount": undefined,
+                        "offerId": numOfferings,
+                        "cateButtonStyle": 0,
+                        "cate": selectedCategoryName,
+                        "cateId": selectedCategoryId,
+                        "offer": {"manus": [],
+                                  "models": [],
+                                  "issues": []},
+                        "display": {"manus": [],
+                                    "models": [],
+                                    "issues": []}}
+
+      for(var i = 0; i < Object.keys(scope.offerrings).length; i++)
+      {
+        if(scope.offerrings[i]["cate"] === selectedCategoryName)
+          dup = true;
+      }
+
+      if(!dup)
+      {
+        scope.offerrings[numOfferings] = newOffer
+        numOfferings = numOfferings + 1
+      }
+      else
+      {
+        noDlg.show(scope, "You have selected " + selectedCategoryName + " before", "Warning")
+      }
     }
 
     // A helper that avoids http calls share the same enviroment.
@@ -141,7 +167,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickConfirmCategory = function()
     {
-      console.log(JSON.stringify(scope.offerrings))
       if(!angular.equals(scope.offerrings, {}))
       {
         for(var offerId in scope.offerrings)
@@ -155,7 +180,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         noDlg.show(scope, "You forgot to select a category", "Warning")
       }
-
     }
 
     /////           Manu              //////
@@ -230,8 +254,19 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickManu = function(offerId, selectedManuId, selectedManuName, manuButtonStyle)
     {
-        scope.offerrings[offerId]["offer"]["manus"].push({"manuId": selectedManuId,
-                                                          "manuName": selectedManuName})
+      var newManu = {"manuId": selectedManuId,
+                     "manuName": selectedManuName}
+      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["manus"], newManu,  "manuName", selectedManuName) &&
+         scope.offerrings[offerId]["display"]["manus"]["manuButtonStyle"] === 0)
+      {
+        scope.offerrings[offerId]["offer"]["manus"].push(newManu)
+        scope.offerrings[offerId]["display"]["manus"]["manuButtonStyle"] = 1// ["manus"] should be a list
+      }
+      else
+      {
+        noDlg.show(scope, "You have selected " + selectedManuName + " before", "Warning")
+        scope.offerrings[offerId]["display"]["manus"]["manuButtonStyle"] = 0
+      }
     }
 
     /////           model              //////
@@ -276,7 +311,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       scope.hasConfirmedModel = 0
       scope.hasConfirmedIssue = 0
-      console.log(scope.hasConfirmedModel)// it doesn't go here???
+
       for(var i in scope.offerrings)
       {
         //scope.offerrings[i]["display"]["models"] = []
@@ -303,8 +338,20 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
     {
-      scope.offerrings[offerId]["offer"]["models"].push({"modelId": selectedModelId,
-                                                        "modelName": selectedModelName})
+      var newModel = {"modelId": selectedModelId,
+                      "modelName": selectedModelName}
+
+      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["models"], newModel,  "modelName", selectedModelName) &&
+         scope.offerrings[offerId]["display"]["models"]["modelButtonStyle"] === 0)
+      {
+        scope.offerrings[offerId]["offer"]["models"].push(newModel)
+        scope.offerrings[offerId]["display"]["models"]["modelButtonStyle"] = 1
+      }
+      else
+      {
+        noDlg.show(scope, "You have selected " + selectedModelName + " before", "Warning")
+        scope.offerrings[offerId]["display"]["models"]["modelButtonStyle"] = 0
+      }
     }
 
     /////           issue              //////
@@ -334,8 +381,19 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
     {
-      scope.offerrings[offerId]["offer"]["issues"].push({"issueId": selectedIssueId,
-                                                        "issueName": selectedIssueName})
+      var newIssue = {"issueId": selectedIssueId,
+                      "issueName": selectedIssueName}
+      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["issues"], newIssue,  "issueName", selectedIssueName) &&
+          scope.offerrings[offerId]["display"]["issues"]["issueButtonStyle"] === 0)
+      {
+        scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
+        scope.offerrings[offerId]["display"]["issues"]["issueButtonStyle"] === 1
+      }
+      else
+      {
+        noDlg.show(scope, "You have selected "+ selectedIssueName +" issue before", "Denied")
+        scope.offerrings[offerId]["offer"]["issues"]["issueButtonStyle"] === 0
+      }
     }
 
     /////           Amount              //////

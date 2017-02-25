@@ -128,7 +128,7 @@
                  <td>
                    <div class="label label-default issue-label row" ng-repeat="issue in oneOffer.offer.issues">
                      <span class"col-md-9"> {{ issue.issueName }} </span>
-                     <input class"col-md-3" value="Price" name="amountInput" class="form-control .input-sm" type="text" ng-pattern="mustBeNumberRegex"
+                     <input class"col-md-3" value="Price" name="amountInput" placeholder="Price" class="form-control .input-sm" type="text" ng-pattern="mustBeNumberRegex"
                      ng-model="scope.offerrings[oneOffer.offerId]['amount']"/>
                    </div>
                  </td>
