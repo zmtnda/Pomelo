@@ -361,7 +361,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       var newModel = {"modelId": selectedModelId,
                       "modelName": selectedModelName}
 
-      changeButtonStyle("model", offerId, "model", selectedModelName, "modelButtonStyle")
+      changeButtonStyle("models", offerId, "model", selectedModelName, "modelButtonStyle")
       if(!checkDuplicate(scope.offerrings[offerId]["offer"]["models"], newModel,  "modelName", selectedModelName))
       {
         scope.offerrings[offerId]["offer"]["models"].push(newModel)
