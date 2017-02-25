@@ -256,13 +256,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       var newManu = {"manuId": selectedManuId,
                      "manuName": selectedManuName}
-      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["manus"], newManu,  "manuName", selectedManuName))
+      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["manus"], newManu,  "manuName", selectedManuName) &&
+         scope.offerrings[offerId]["display"]["manus"]["manuButtonStyle"] === 0)
       {
         scope.offerrings[offerId]["offer"]["manus"].push(newManu)
+        scope.offerrings[offerId]["display"]["manus"]["manuButtonStyle"] = 1// ["manus"] should be a list
       }
       else
       {
         noDlg.show(scope, "You have selected " + selectedManuName + " before", "Warning")
+        scope.offerrings[offerId]["display"]["manus"]["manuButtonStyle"] = 0
       }
     }
 
@@ -338,13 +341,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       var newModel = {"modelId": selectedModelId,
                       "modelName": selectedModelName}
 
-      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["models"], newModel,  "modelName", selectedModelName))
+      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["models"], newModel,  "modelName", selectedModelName) &&
+         scope.offerrings[offerId]["display"]["models"]["modelButtonStyle"] === 0)
       {
         scope.offerrings[offerId]["offer"]["models"].push(newModel)
+        scope.offerrings[offerId]["display"]["models"]["modelButtonStyle"] = 1
       }
       else
       {
         noDlg.show(scope, "You have selected " + selectedModelName + " before", "Warning")
+        scope.offerrings[offerId]["display"]["models"]["modelButtonStyle"] = 0
       }
     }
 
@@ -377,13 +383,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       var newIssue = {"issueId": selectedIssueId,
                       "issueName": selectedIssueName}
-      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["issues"], newIssue,  "issueName", selectedIssueName))
+      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["issues"], newIssue,  "issueName", selectedIssueName) &&
+          scope.offerrings[offerId]["display"]["issues"]["issueButtonStyle"] === 0)
       {
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
+        scope.offerrings[offerId]["display"]["issues"]["issueButtonStyle"] === 1
       }
       else
       {
         noDlg.show(scope, "You have selected "+ selectedIssueName +" issue before", "Denied")
+        scope.offerrings[offerId]["offer"]["issues"]["issueButtonStyle"] === 0
       }
     }
 
