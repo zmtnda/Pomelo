@@ -1,4 +1,3 @@
-
 var Express = require('express');
 var connections = require('../Connections.js');
 var Tags = require('../Validator.js').Tags;
@@ -34,26 +33,21 @@ router.post('/:tecId', function(req, res) {
     map[modIssids[i]].push(1);
   }
 
-  if(vld.checkTech(req.params.id)){
-  connections.getConnection(res, function(cnn) {
-    var selectParams = [];
-    for( var i = 0; i < modIssids.length; i++){
-      qryParams.push('(?,?)');
-      selectParams.push(req.params.tecId);
-      selectParams.push(modIssids[i]);
-    }
-    var serQuery = ' SELECT modIss_id FROM ServicesOfferedByTech WHERE '
-    							+ ' (tec_Id , modIss_id ) IN (' + qryParams.join(',') + ')'
-                  + ' ORDER BY modIss_id ';
-    console.log("serQuery" + serQuery);
-    console.log("selectParams" + selectParams);
-    cnn.query(serQuery, selectParams, function(err, results) {
+  if(vld.checkTech()){
+    connections.getConnection(res, function(cnn) {
+      var selectParams = [];
+      for( var i = 0; i < modIssids.length; i++){
+        qryParams.push('(?,?)');
+        selectParams.push(req.params.tecId);
+        selectParams.push(modIssids[i]);
+      }
+      var serQuery = ' SELECT modIss_id FROM ServicesOfferedByTech WHERE '
+      							+ ' (tec_Id , modIss_id ) IN (' + qryParams.join(',') + ')'
+                    + ' ORDER BY modIss_id ';
+      cnn.query(serQuery, selectParams, function(err, results) {
       if(err) {
-        console.log("services offer error");
         res.status(400).json(err); // closes reponse
       }
-      console.log("checking duplicate exist for these services" +
-                    JSON.stringify(results));
       //if results return 0 no duplicate just insert all
       //if results are same row as the leignth of modiss it's all duplicate
       //if < has some duplicate
@@ -67,7 +61,6 @@ router.post('/:tecId', function(req, res) {
         for( var i = 0; i < results.length; i++){
           var index = modIssids.indexOf(results[i].modIss_id);
           if (index > -1){
-            console.log("dup value found " + modIssids[index]);
             dupModIssIds.push(results[i]);
             modIssids.splice(index, 1);
           }
@@ -86,55 +79,75 @@ router.post('/:tecId', function(req, res) {
           var insertQuery = ' INSERT INTO ServicesOfferedByTech (tec_id, modIss_id, '
                           + 'catMan_id, servType, estAmount, status) VALUES '
                           + qryParams.join(',');
-          console.log("insertQuery" + insertQuery);
-          console.log("insertParams " + insertParams);
           cnn.query(insertQuery, insertParams, function(err, results) {
             if(err) {
-            console.log("insert offer error");
             res.status(400).json(err); // closes reponse
-            }
-            else{
+            } else{
             //expecting a return of array of services jsut inserted
-            var insertedRows = results.affectedRows;
-            if (dupModIssIds.length > 0)
-              res.json(dupModIssIds);
-            else
-              res.location(router.baseURL + '/' + insertedRows).end();
+            if (dupModIssIds.length > 0){
+              res.json(dupModIssIds);}
+            else{
+              res.location(router.baseURL + '/' + results.affectedRows).end();}
             }});
-        }
-      }});
+      }}});
       cnn.release();
     });
   }});
 
 // Retrieve all the Services in the database.
 // AU must be admin. (Zin edited can be technician)
-router.get('/', function(req, res) {
+router.get('/:tecId/all', function(req, res) {
 	var vld = req.validator;
-	var user = req.session;
+	var LogUser = req.params.tecId;
 
-	if(vld.check(user, Tags.noPermission)){
+  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
+                + ' FROM ServicesOfferedByTech T1 '
+                + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
+                + ' FROM CategoriesManufacturers T1 '
+                + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
+                + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
+                + ' ) T2 ON T1.catMan_id = T2.id_catMan '
+                + ' INNER JOIN (SELECT id_modIss, model, issue '
+                + ' FROM ModelsIssues T1 '
+                + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
+                + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
+                + ' ) T3 ON T1.modIss_id = T3.id_modIss '
+                + ' WHERE tec_id = ? '
+                + ' ORDER BY tec_id ';
+	if(vld.checkPrsOK(LogUser)){
 		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT * FROM ServicesOfferedByTech ',
-			function(err, result){
-				if(!err){
-					res.json(result);
-					cnn.release();
+			cnn.query(selectQry, LogUser, function(err, result){
+				if(err){
+					res.status(400).end();
 				}
 				else{
-					res.status(404).end();
-					cnn.release();
+					res.json(result);
 				}
 			});
+      cnn.release();
 		});
-	}
-});
+}});
 // Retrieve all the technician and associated services
 // based on the service chosen
 router.get('/:servId/Services', function(req, res) {
 	var vld = req.validator;
 	var user = req.session;
 	var servId = req.params.servId;
+  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
+                + ' FROM ServicesOfferedByTech T1 '
+                + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
+                + ' FROM CategoriesManufacturers T1 '
+                + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
+                + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
+                + ' ) T2 ON T1.catMan_id = T2.id_catMan '
+                + ' INNER JOIN (SELECT id_modIss, model, issue '
+                + ' FROM ModelsIssues T1 '
+                + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
+                + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
+                + ' ) T3 ON T1.modIss_id = T3.id_modIss '
+                + ' WHERE (catMan_id , modIss_id ) '
+                + ' IN (' + qryParams.join(',') + ')'
+                + ' ORDER BY modIss_id ';
 	console.log("get from ServicesOffer");
 	if(vld.check(user, Tags.noPermission)){
 		connections.getConnection(res, function(cnn) {
