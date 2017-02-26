@@ -307,7 +307,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                                "correspondingModelId": modelId})
         })
       })
-      .catch(function(err){
+      .catch(function(err)
+      {
         noDlg.show(scope, err, "Error")
       })
     }
@@ -334,7 +335,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
       for(var i in scope.offerrings)
       {
-        //scope.offerrings[i]["display"]["models"] = []
         scope.offerrings[i]["offer"]["models"] = []
       }
     }
@@ -403,7 +403,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       var newIssue = {"issueId": selectedIssueId,
                       "issueName": selectedIssueName}
 
-      changeButtonStyle("issue", offerId, "issue", selectedIssueName, "issueButtonStyle")
+      changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle")
       if(!checkDuplicate(scope.offerrings[offerId]["offer"]["issues"], newIssue,  "issueName", selectedIssueName))
       {
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
