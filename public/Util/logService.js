@@ -23,16 +23,19 @@ function(rscope, http, state, nDlg, route, persisService) {
     }
     this.login = function(emailParam, passwordParam)
       {
-        this.logout();
+        //this.logout();
         http.post("Ssns", {email: emailParam, passwordHash: passwordParam})
         .then(function(response){
            console.log("Logged In");
           var location;
           location = response.headers().location.split('/');
           rscope.cookie = location[location.length - 1];
+          console.log("hi" + rscope.cookie);
+
           return http.get("Ssns/" + location[location.length - 1]);
         })
         .then(function(response){
+           console.log("user email In");
           return http.get('/User?email=' + emailParam + '&all=true');
         })
         .then(function(response){

@@ -49,7 +49,7 @@ router.post('/', function(req, res) {
         console.log("same pass");
         console.log(result[0]);
          cookie = ssnUtil.makeSession(result[0], res);
-         res.location(router.baseURL + '/'  + cookie).send(result);
+         res.location(router.baseURL + '/'  + cookie).send(result[0]);
       }
       cnn.release();
     });

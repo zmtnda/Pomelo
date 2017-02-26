@@ -43,7 +43,7 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
     // Toggle view for viewing provided services
     scope.showProvide = function(){
       if (scope.isShowProvide == 0) {
-			 http.get("Serv")
+			 http.get("Serv/" + rscope.loggedUser.id + "/all")
 			 .then(function(response){
           console.log("response.data: " + JSON.stringify(response));
           scope.listServices = response.data;
@@ -70,7 +70,7 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
       if (scope.isShowOrderHistory == 1) {
         scope.switchView(scope.viewEnum.NONE);
       } else {
-        http.get("Serv/" + rscope.loggedUser.id)
+        http.get("Serv/" + rscope.loggedUser.id + "/all")
         .then(function(response){
           console.log("response.data: " + JSON.stringify(response));
           scope.listServices = response.data;
@@ -80,7 +80,7 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
       }
     }
 
-    scope.postModify = function()
+  scope.postModify = function()
     {
         scope.switchView(scope.viewEnum.NONE);
         http.put("User/"+rscope.loggedUser.id, scope.user)
@@ -91,9 +91,7 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
         .catch(function(err){noDlg.show(scope, err, "Error")});
     }
 
-
-
-    scope.completeService = function(id, amount, techId){
+  scope.completeService = function(id, amount, techId){
       if(window.confirm("Ok to confirm service completed."))
       {
         http.delete('Serv/' + id + "/" + techId + '/Order')
