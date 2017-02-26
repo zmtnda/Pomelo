@@ -51,6 +51,9 @@ app.config(['$stateProvider', '$urlRouterProvider',
                return http.get('Serv/')
                .then(function(response) {
                   return $q.resolve(response.data)//Note resolve() will put all the data in $scope
+               })
+               .catch(function(err){
+                 console.log("i'm error");
                });
             }],//need one to get all users
             users: ['$q', '$http', '$stateParams', function($q, http, prms){
