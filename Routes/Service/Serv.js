@@ -8,6 +8,8 @@ var formatDate = ', DATE_FORMAT(timestamp, \'\%b \%d \%Y \%h\:\%i \%p\') as form
 
 // Begin '/Serv/' functions
 
+
+
 /* Add a new service for the technician
 * Front end will make sure all the required params are attached with JSON
 * Valid only if technician himself
@@ -93,7 +95,39 @@ router.post('/:tecId', function(req, res) {
       cnn.release();
     });
   }});
+  // Retrieve all the Services in the database.
+  // AU must be admin.
+  router.get('/all', function(req, res) {
+  var vld = req.validator;
+  var LogUser = req.session.id;
 
+  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
+                + ' FROM ServicesOfferedByTech T1 '
+                + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
+                + ' FROM CategoriesManufacturers T1 '
+                + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
+                + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
+                + ' ) T2 ON T1.catMan_id = T2.id_catMan '
+                + ' INNER JOIN (SELECT id_modIss, model, issue '
+                + ' FROM ModelsIssues T1 '
+                + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
+                + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
+                + ' ) T3 ON T1.modIss_id = T3.id_modIss '
+                + ' ORDER BY tec_id ';
+
+  if(vld.checkPrsOK(LogUser)){
+  	connections.getConnection(res, function(cnn) {
+  		cnn.query(selectQry, LogUser, function(err, result){
+  			if(err){
+  				res.status(400).end();
+  			}
+  			else{
+  				res.json(result);
+  			}
+  		});
+      cnn.release();
+  	});
+  }});
 // Retrieve all the Services in the database.
 // AU must be admin. (Zin edited can be technician)
 router.get('/:tecId/all', function(req, res) {
