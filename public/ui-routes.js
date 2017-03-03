@@ -48,9 +48,12 @@ app.config(['$stateProvider', '$urlRouterProvider',
          controller: 'adminController',
          resolve: { // It makes sure everthing inside this block is ready before the website is loaded.
             servs: ['$q', '$http', '$stateParams', function($q, http, prms) {
-               return http.get('Serv/')
+               return http.get('Serv/all')
                .then(function(response) {
                   return $q.resolve(response.data)//Note resolve() will put all the data in $scope
+               })
+               .catch(function(err){
+                 console.log("i'm error");
                });
             }],//need one to get all users
             users: ['$q', '$http', '$stateParams', function($q, http, prms){

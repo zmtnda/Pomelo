@@ -75,7 +75,7 @@ Validator.prototype.checkTech = function() {
 Validator.prototype.checkPrsOK = function(usrId) {
 
    return this.check(this.session &&
-   (this.session.isAdmin() || this.session.tec_id == usrId),
+   (this.session.isAdmin() || this.session.id == usrId),
     Validator.Tags.noPermission);
 }
 
