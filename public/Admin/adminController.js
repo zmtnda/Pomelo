@@ -1,4 +1,4 @@
-app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http', 'notifyDlg', 'registerPopService', function(scope, state, users, servs, http, noDlg, regPopSer) {
+app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http', 'notifyDlg', 'registerPopService', 'addServicePop', function(scope, state, users, servs, http, noDlg, regPopSer, addSerPop) {
 
     scope.users = users;
     scope.servs = servs;
@@ -8,6 +8,21 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
 
     scope.addUser = function(){
       regPopSer = regPopSer.show(scope, "Add an User")
+      .then(function(){state.reload()});
+    }
+
+    scope.addCategory = function(){
+      addSerPop = addSerPop.showAddCategory(scope, "Add a Category")
+      .then(function(){state.reload()});
+    }
+
+    scope.addManufacturer = function(){
+      addSerPop = addSerPop.showAddManufacturer(scope, "Add a Manufacturer")
+      .then(function(){state.reload()});
+    }
+
+    scope.addModel = function(){
+      addSerPop = addSerPop.showAddModel(scope, "Add a Model")
       .then(function(){state.reload()});
     }
 
