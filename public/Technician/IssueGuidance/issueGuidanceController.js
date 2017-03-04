@@ -43,6 +43,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     // Initializes all categories
     scope.allCates = cates
 
+
     scope.offerrings = { }
     var numOfferings = 0
 
@@ -101,6 +102,21 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           }
         }
       }
+    }
+
+    scope.checkIfDisplayIssue = true
+    var checkIfDisplayIssue = function(i, m){
+      console.log(i + "  " + m + "  " + JSON.stringify(scope.offerrings[i]['offer']['models']))
+      scope.offerrings[i]['offer']['models'].forEach(function(ea){
+
+        if(ea["modelName"] == m)
+        {
+          console.log(ea["modelName"] + " " + m)
+          return true
+        }
+      })
+                      checkIfDisplayIssue(oneOfferring.offerId, oneModel.model)
+      return false
     }
 
     var checkDuplicate = function(arr, obj, inputField, expectedDupVal)
