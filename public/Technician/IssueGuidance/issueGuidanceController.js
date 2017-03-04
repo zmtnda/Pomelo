@@ -79,7 +79,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
 
-    var changeButtonStyle = function(type, offerId, checkingField, findingName, buttonStyleName)
+    var changeButtonStyle = function(type, offerId, checkingField, findingName, buttonStyleName, correspondingModelId)
     {
       var loopingArray = scope.offerrings[offerId]["display"][type]
       var counter = 0;
@@ -87,25 +87,43 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         if(scope.offerrings[offerId]["display"][type][i][checkingField] === findingName)
         {
-          if(scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
-          {
-            scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
-          }
-          else
-          {
-            scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
-          }
+           if(type === "issues")
+           {
+             if(correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"] &&
+                scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
+                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
+           }
+           else {
+             if(scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
+             {
+               scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
+             }
+             else
+             {
+               scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
+             }
+           }
         }
       }
     }
 
-    var checkDuplicate = function(arr, obj, inputField, expectedDupVal)
+    var checkDuplicate = function(arr, obj, inputField, expectedDupVal, correspondingModelId)
     {
       var bool = false
-      arr.forEach(function(ea){
-        if(ea[inputField] === expectedDupVal)
-          bool = true
-      });
+      if(correspondingModelId)
+      {
+        arr.forEach(function(ea){
+          if(ea[inputField] === expectedDupVal && ea[inputField].correspondingModelId ===correspondingModelId)
+            bool = true
+        });
+      }
+      else {
+        arr.forEach(function(ea){
+          if(ea[inputField] === expectedDupVal)
+            bool = true
+        });
+      }
+
       return bool
     }
 
@@ -395,13 +413,13 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
 
-    scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName)
+    scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName, correspondingModelId)
     {
       var newIssue = {"issueId": selectedIssueId,
                       "issueName": selectedIssueName}
 
-      changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle")
-      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["issues"], newIssue,  "issueName", selectedIssueName))
+      changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId)
+      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["issues"], newIssue, "issueName", selectedIssueName, correspondingModelId))
       {
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
       }

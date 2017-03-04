@@ -74,7 +74,7 @@
                    <h5>{{ oneOfferring.cate }} > {{ oneManu.manuName }} > {{ oneModel.modelName }}</h5>
                    <div ng-repeat="issue in oneOfferring.display.issues track by $index">
                     <div ng-if="issue.correspondingModelId === oneModel.modelId">
-                      <div ng-click="onClickIssue(oneOfferring.offerId, issue.issueId, issue.issue)"
+                      <div ng-click="onClickIssue(oneOfferring.offerId, issue.issueId, issue.issue, oneModel.modelId)"
                         ng-class="issue.issueButtonStyle | buttonFilter"
                         class="label label-default issue-label">{{ issue.issue }}
                       </div>
