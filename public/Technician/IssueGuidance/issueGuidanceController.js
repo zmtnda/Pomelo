@@ -58,22 +58,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressBarDisplay = {"width": "0%"};
 
     /////           helpers functions shared by some other functions              //////
-    var checkWhetherAFieldInJSONEmpty = function(fieldName)
+    var checkWhetherHasAFieldInJSON = function(fieldName)
     {
-      var isAllEmpty = false
-
       for(var offerId in scope.offerrings)
       {
-        if(!angular.equals(scope.offerrings[offerId]["offer"][fieldName], []) ||
-         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], undefined) ||
-         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], null) ||
-         !angular.equals(scope.offerrings[offerId]["offer"][fieldName], {}))
+        if(!scope.offerrings[offerId]["offer"][fieldName] ||
+         scope.offerrings[offerId]["offer"][fieldName].length === 0)
         {
-          isAllEmpty = true
+          return false;
         }
       }
-
-      return isAllEmpty
+      return true
     }
 
     var updateProgressBar = function(stage)
@@ -102,21 +97,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           }
         }
       }
-    }
-
-    scope.checkIfDisplayIssue = true
-    var checkIfDisplayIssue = function(i, m){
-      console.log(i + "  " + m + "  " + JSON.stringify(scope.offerrings[i]['offer']['models']))
-      scope.offerrings[i]['offer']['models'].forEach(function(ea){
-
-        if(ea["modelName"] == m)
-        {
-          console.log(ea["modelName"] + " " + m)
-          return true
-        }
-      })
-                      checkIfDisplayIssue(oneOfferring.offerId, oneModel.model)
-      return false
     }
 
     var checkDuplicate = function(arr, obj, inputField, expectedDupVal)
@@ -274,8 +254,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickConfirmManus = function()
     {
-      if(checkWhetherAFieldInJSONEmpty("manus"))
+      if(checkWhetherHasAFieldInJSON("manus"))
       {
+        console.log(JSON.stringify(scope.offerrings[0]["offer"]["manus"]))
         for(var offerId in scope.offerrings)
         {
           onClickConfirmManusHelper(offerId)
@@ -357,7 +338,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickConfirmModel = function()
     {
-      if(checkWhetherAFieldInJSONEmpty("models"))
+      if(checkWhetherHasAFieldInJSON("models"))
       {
         for(var offerId in scope.offerrings)
         {
@@ -391,7 +372,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           issue              //////
     scope.onClickConfirmIssue = function()
     {
-      if(checkWhetherAFieldInJSONEmpty("issues"))
+      if(checkWhetherHasAFieldInJSON("issues"))
       {
         scope.hasConfirmedIssue= 1
         updateProgressBar("finalStage");
@@ -433,7 +414,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           Amount              //////
     scope.onConfirmAllOfferrings = function()
     {
-      if(checkWhetherAFieldInJSONEmpty("amount"))
+      if(checkWhetherHasAFieldInJSON("amount"))
       {
         updateProgressBar("confirmAllOfferingsStage");
       }
