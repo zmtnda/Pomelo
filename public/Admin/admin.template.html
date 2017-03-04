@@ -3,14 +3,17 @@
     <h3>All the Users in the System</h3>
     <button class="btn btn-warning" type-"button" ng-click="addUser()">ADD A USER</button>
     <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
-            id: {{user.id}}<br/>
-            email: {{user.email}}<br/>
-            password: {{user.password}}<br/>
-            role: {{user.role}}<br/>
-            firstName: {{user.id}}<br/>
-            lastName: {{user.lastName}}<br/>
-            phone: {{user.phone}}<br/>
-            whenRegistered: {{user.formatDate}}<br/>
+            <!-- id: {{user.id}}<br/> -->
+            Email: {{user.email}}<br/>
+            Role: <span ng-switch="{{user.role}}">
+                          <span ng-switch-when="1">Technician</span>
+                          <span ng-switch-when="2">Admin</span>
+                        </span><br/>
+            First Name: {{user.firstName}}<br/>
+            Last Name: {{user.lastName}}<br/>
+            Hourly Rate: {{user.hourlyRate}}<br/>
+            City: {{user.city}}<br/>
+            Zip Code: {{user.zip}}<br/>
             <br/>
             <button class="btn btn-warning" type-"button" ng-click="deleteUser(user.id)">Delete User</button>
             <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyUser()">MODIFY</button> -->
@@ -23,12 +26,15 @@
     <button class="btn btn-warning" type-"button" ng-click="addManufacturer()">Add a Manufacturer</button>
     <button class="btn btn-warning" type-"button" ng-click="addModel()">Add a Model</button>
     <div class="thumbnail" ng-repeat="serv in servs">
-            id: {{serv.id}}<br/>
-            serviceName: {{serv.serviceName}}<br/>
-            amount: {{serv.amount}}<br/>
-            status: {{serv.status}}<br/>
-            userId: {{serv.userId}}<br/>
-            technicianId {{serv.technicianId}}<br/>
+            Category: {{serv.category}}<br/>
+            Manufacturer: {{serv.manufacturer}}<br/>
+            Model: {{serv.model}}<br/>
+            Issue: {{serv.issue}}<br/>
+            Service Type: <span ng-switch="{{serv.servType}}">
+                          <span ng-switch-when="0">Item based</span>
+                          <span ng-switch-when="1">Service based</span>
+                        </span><br/>
+            Estimated Amount: {{serv.estAmount}}<br/>
             <br/>
             <button class="btn btn-warning" type-"button" ng-click="deleteService(serv.id)">Delete Service</button>
             <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyService()">MODIFY</button> -->
