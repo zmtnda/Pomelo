@@ -27,7 +27,7 @@
        </div>
      </div>
 
-     <div class="col-xs-12 col-md-2">
+     <div class="col-xs-12 col-md-2 content-area sample-show-hide">
        <div class="thumbnail" ng-show="hasConfirmedCate">
          <h3>Manufacturer(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-show="!hasConfirmedCate || !hasConfirmedManu" ng-click="onClickConfirmManus()">Confirm</button>
@@ -42,7 +42,7 @@
        </div>
      </div>
 
-     <div class="col-xs-12 col-md-2">
+     <div class="col-xs-12 col-md-2 content-area sample-show-hide">
        <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu">
          <h3>Model(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmModel()" ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel">Confirm</button>
@@ -60,7 +60,7 @@
        </div>
      </div>
 
-     <div class="col-xs-12 col-md-2">
+     <div class="col-xs-12 col-md-2 content-area sample-show-hide">
        <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
            <h3>Issue(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()"
@@ -107,7 +107,7 @@
           </div>
         </div>-->
 
-     <div class="col-xs-12 col-md-4">
+     <div class="col-xs-12 col-md-4 content-area sample-show-hide">
       <div class="thumbnail">
         <h3>You're offering:</h3>
          <button type="button" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && hasConfirmedIssue"
