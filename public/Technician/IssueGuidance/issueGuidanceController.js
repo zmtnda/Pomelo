@@ -78,7 +78,33 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.progressBarDisplay = {"width": progressStages[stage].percent}
     }
 
+    var popAnElement = function(offerId, type, checkingField, findingName, correspondingModelId)
+    {
+      var loopingArray = scope.offerrings[offerId]["offer"][type]
+      if(type === "issues")
+      {
+        for(var i = 0; i < loopingArray.length; i++)
+        {
+          if(correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"] &&
+           scope.offerrings[offerId]["offer"][type][i][checkingField] === findingName)
+          {
+            scope.offerrings[offerId]["offer"][type].splice(i, 1);
+          }
+        }
+      }
+      else
+      {
+        for(var i = 0; i < loopingArray.length; i++)
+        {
+          if(scope.offerrings[offerId]["offer"][type][i][checkingField] === findingName)
+          {
+             scope.offerrings[offerId]["offer"][type].splice(i, 1);
+          }
+        }
+      }
+    }
 
+    // return true if the button turn from white to grey; otherwise, false
     var changeButtonStyle = function(type, offerId, checkingField, findingName, buttonStyleName, correspondingModelId)
     {
       var loopingArray = scope.offerrings[offerId]["display"][type]
@@ -91,16 +117,27 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
            {
              if(correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"] &&
                 scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
-                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
+              {
+                  scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
+                  return true
+              }
+              else
+              {
+                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
+                return false;
+              }
            }
            else {
              if(scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
              {
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
+               return true;
              }
              else
              {
+               console.log("hi")
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
+               return false;
              }
            }
         }
@@ -117,7 +154,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
             bool = true
         });
       }
-      else {
+      else
+      {
         arr.forEach(function(ea){
           if(ea[inputField] === expectedDupVal)
             bool = true
@@ -274,7 +312,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       if(checkWhetherHasAFieldInJSON("manus"))
       {
-        console.log(JSON.stringify(scope.offerrings[0]["offer"]["manus"]))
         for(var offerId in scope.offerrings)
         {
           onClickConfirmManusHelper(offerId)
@@ -293,15 +330,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       var newManu = {"manuId": selectedManuId,
                      "manuName": selectedManuName}
 
-      changeButtonStyle("manus", offerId, "manufacturer", selectedManuName, "manuButtonStyle")
-      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["manus"], newManu,  "manuName", selectedManuName))
-      {
-        scope.offerrings[offerId]["offer"]["manus"].push(newManu)
-      }
-      else
-      {
-        noDlg.show(scope, "You have selected " + selectedManuName + " before", "Warning")
-      }
+       if(changeButtonStyle("manus", offerId, "manufacturer", selectedManuName, "manuButtonStyle"))
+       {
+         scope.offerrings[offerId]["offer"]["manus"].push(newManu)
+       }
+       else
+       {
+         popAnElement(offerId, "manus", "manuName", selectedManuName)
+       }
     }
 
     /////           model              //////
@@ -376,14 +412,13 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       var newModel = {"modelId": selectedModelId,
                       "modelName": selectedModelName}
 
-      changeButtonStyle("models", offerId, "model", selectedModelName, "modelButtonStyle")
-      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["models"], newModel,  "modelName", selectedModelName))
+      if(changeButtonStyle("models", offerId, "model", selectedModelName, "modelButtonStyle"))
       {
         scope.offerrings[offerId]["offer"]["models"].push(newModel)
       }
       else
       {
-        noDlg.show(scope, "You have selected " + selectedModelName + " before", "Warning")
+        popAnElement(offerId, "models", "modelName", selectedModelName)
       }
     }
 
@@ -418,14 +453,15 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       var newIssue = {"issueId": selectedIssueId,
                       "issueName": selectedIssueName}
 
-      changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId)
-      if(!checkDuplicate(scope.offerrings[offerId]["offer"]["issues"], newIssue, "issueName", selectedIssueName, correspondingModelId))
+      if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
       {
+
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
+                console.log(JSON.stringify(scope.offerrings[offerId]["offer"]["issues"]));
       }
       else
       {
-        noDlg.show(scope, "You have selected "+ selectedIssueName +" issue before", "Denied")
+        popAnElement(offerId, "issues", "issueName", selectedIssueName, correspondingModelId)
       }
     }
 
