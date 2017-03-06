@@ -8,17 +8,17 @@ app.controller('addServiceController', ['$rootScope','$scope', '$state','logServ
 
    this.addCategory = function(newCategory)
    {
-     return http.post("cate/", {newCategory: newCategory});
+     return http.post("Cate/", {newCategory: newCategory});
    }
 
    this.addManufacturer = function(newManufacturer)
    {
-     return http.post("cate/", {newManufacturer: newManufacturer});
+     return http.post("Cate/", {newManufacturer: newManufacturer});
    }
 
    this.addModel = function(newCategory)
    {
-     return http.post("cate/", {newCategory: newCategory});
+     return http.post("Cate/", {newCategory: newCategory});
    }
 
    scope.postCategory = function(){

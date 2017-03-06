@@ -70,7 +70,8 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
       if (scope.isShowOrderHistory == 1) {
         scope.switchView(scope.viewEnum.NONE);
       } else {
-        http.get("Serv/" + rscope.loggedUser.id + "/all")
+          console.log("rscope.loggedUser.tec_id: " + rscope.loggedUser.tec_id);
+        http.get("Serv/" + rscope.loggedUser.tec_id + "/all")
         .then(function(response){
           console.log("response.data: " + JSON.stringify(response));
           scope.listServices = response.data;

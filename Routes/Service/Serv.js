@@ -133,6 +133,7 @@ router.post('/:tecId', function(req, res) {
 router.get('/:tecId/all', function(req, res) {
 	var vld = req.validator;
 	var LogUser = req.params.tecId;
+  var userId = req.session.id;
 
   var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
                 + ' FROM ServicesOfferedByTech T1 '
@@ -148,7 +149,7 @@ router.get('/:tecId/all', function(req, res) {
                 + ' ) T3 ON T1.modIss_id = T3.id_modIss '
                 + ' WHERE tec_id = ? '
                 + ' ORDER BY tec_id ';
-	if(vld.checkPrsOK(LogUser)){
+	if(vld.checkPrsOK(userId)){
 		connections.getConnection(res, function(cnn) {
 			cnn.query(selectQry, LogUser, function(err, result){
 				if(err){
