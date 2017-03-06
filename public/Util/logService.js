@@ -24,7 +24,7 @@ function(rscope, http, state, nDlg, route, persisService) {
     this.login = function(emailParam, passwordParam)
       {
         //this.logout();
-        http.post("Ssns", {email: emailParam, passwordHash: passwordParam})
+        http.post("Ssns", {email: emailParam, password: passwordParam})
         .then(function(response){
            console.log("Logged In");
           var location;
@@ -44,6 +44,7 @@ function(rscope, http, state, nDlg, route, persisService) {
           rscope.loggedUser.email = emailParam;
           rscope.loggedUser.password = passwordParam;
           rscope.loggedUser.role = response.data[0].role;
+          rscope.loggedUser.tec_id = response.data[0].id_tec;
           rscope.loggedUser.firstName = response.data[0].firstName || response.data.firstName;
           rscope.loggedUser.lastName = response.data[0].lastName || response.data.lastName;
           rscope.inSession = true;
