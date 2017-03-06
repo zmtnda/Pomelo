@@ -241,6 +241,8 @@ CREATE  TABLE IF NOT EXISTS ServicesHistory (
   status INT(11) NOT NULL,
   orderedDate DATETIME NOT NULL,
   completedDate DATETIME NOT NULL,
+  serHisHash VARCHAR(128) NOT NULL,
+  isReview TINYINT(1) DEFAULT 0,
   CONSTRAINT fkServicesHistoryServicesOfferedByTech
     FOREIGN KEY (serTec_id)
     REFERENCES ServicesOfferedByTech (id_serTec)
