@@ -3,6 +3,7 @@ var connections = require('../Connections.js');
 var Tags = require('../Validator.js').Tags;
 var router = Express.Router({caseSensitive: true});
 var async = require('async');
+var crypto = require('crypto');
 router.baseURL = '/Receipt';
 
 
@@ -18,7 +19,7 @@ router.get('/:serHisId', function(req, res) {
       ' SH.id_serHis AS serHis, SH.serTec_id AS serTecID, cus_id AS cusId,' +
       ' SO.catMan_id AS catManId ,Manu.manufacturer, C.category, M.model,' +
       ' I.issue,SH.description, SH.amount AS finalAmount,' +
-      ' SH.status AS SHStatus, SH.orderedDate, SH.completedDate' +
+      ' SH.status AS SHStatus, SH.orderedDate, SH.completedDate, SH.isReview' +
       ' FROM' +
       ' ServicesHistory SH, ServicesOfferedByTech SO, ModelsIssues MI, Issues I,' +
 		' Models M, CategoriesManufacturers CM, Categories C, Manufacturers Manu ' +
@@ -33,9 +34,13 @@ router.get('/:serHisId', function(req, res) {
          if(err) {
             console.log("Error geting serHis: " + serHisId);
             res.status(400).json(err);
+         } else if (result.length == 0) {
+            console.log("No row for given serHis_id");
+            res.json({sucess:0});
          } else {
             console.log("Get info serHis successful");
-            res.json(result);
+            result[0].success = 1;
+            res.json(result[0]);
          }
       });
       cnn.release();
@@ -52,23 +57,24 @@ router.post('/', function(req, res) {
    console.log('Create transaction - service history');
    var vld = req.validator;
    var body = req.body;
+   var hash = crypto.randomBytes(20).toString('hex');;
 
    var insertSerHisSql =
       ' INSERT INTO ServicesHistory (serTec_id, cus_id, description, amount, ' +
-      ' status, orderedDate, completedDate) VALUES ' +
-      ' (?, ?, ?, ?, 0, NOW(), NOW())';
+      ' status, orderedDate, completedDate, serHisHash) VALUES ' +
+      ' (?, ?, ?, ?, 0, NOW(), NOW(), ?)';
 
    if(vld.hasFields(body, ['serTecId', 'cusId',  'description', 'amount'])) {
       connections.getConnection(res, function(cnn) {
          cnn.query(insertSerHisSql, [body.serTecId, body.cusId,
-            body.description, body.amount],
+            body.description, body.amount, hash],
          function(err, result) {
             if(err) {
                console.log("Error insert service history");
                res.status(400).json(err);
             } else {
                console.log("Insert new service history successful");
-               res.end();
+               res.json({success: 1});
             }
          });
          cnn.release();

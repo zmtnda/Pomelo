@@ -131,15 +131,14 @@
 
 	-- insert data into ServiceHistory --
 	insert into `ServicesHistory` (`serTec_id`, `cus_id`, `description`, `amount`, `status`,
-		`orderedDate`, `completedDate`) values
-		(1, 1, 'My Dell Desktop deosn\'t turn on, please help!', 200.50, 3, '2016-02-22', now()),
-		(2, 1, 'Upgrade Ram PLS', 149.99, 4, '2017-01-10', '2017-01-12'),
-		(20, 2, 'ipad mini 2 can\'t connect to WIFI', 69.99, 3, '2016-04-21', '2016-04-25'),
-		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15');
+		`orderedDate`, `completedDate`, `serHisHash`, `isReview`) values
+		(1, 1, 'My Dell Desktop deosn\'t turn on, please help!', 200.50, 3, '2016-02-22', now(), '9b50007c4fb72813ae40dbd446aa17989fdc1911', 1),
+		(2, 1, 'Upgrade Ram PLS', 149.99, 4, '2017-01-10', '2017-01-12', '1f69f524067a0f65df5773835b00ccaa9cffd7fe', 1),
+		(20, 2, 'ipad mini 2 can\'t connect to WIFI', 69.99, 3, '2016-04-21', '2016-04-25', 'a93f837da44071e18903c9725dd8bcf1e72b8e38', 1),
+		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15', '3c2be8bfcf047747bb07372f36e9bec76a9a47e9', 0);
 
 	-- insert data into review --
 	insert into `reviews` (`serHis_id`, `cus_id`, `tec_id`, `stars`, `comment`) values
 		(1, 1, 1, 5.0, 'Good Service, Fast'),
 		(2, 1, 1, 1.0, 'Bad Service'),
-		(3, 2, 1, 4.5, 'Okay but slow'),
-		(4, 2, 2, 3.5, 'worked for 2 weeks happen again');
+		(3, 2, 1, 4.5, 'Okay but slow');
