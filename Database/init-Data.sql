@@ -85,7 +85,7 @@
 	insert into `Issues` (`issue`) values
 		('Can\'t turn on'), -- 1
 		('Upgrade RAM'), -- 2
-		('Can\'t turn on'), -- 3
+		('Webcame doesn\'t work'), -- 3
 		('Can\'t connect to WiFi'), -- 4
 		('Keyboard doesn\'t work'), -- 5
 		('Broken Screen'), -- 6
@@ -132,10 +132,10 @@
 	-- insert data into ServiceHistory --
 	insert into `ServicesHistory` (`serTec_id`, `cus_id`, `description`, `amount`, `status`,
 		`orderedDate`, `completedDate`, `serHisHash`, `isReview`) values
-		(1, 1, 'My Dell Desktop deosn\'t turn on, please help!', 200.50, 3, '2016-02-22', now(), '9b50007c4fb72813ae40dbd446aa17989fdc1911', 1),
-		(2, 1, 'Upgrade Ram PLS', 149.99, 4, '2017-01-10', '2017-01-12', '1f69f524067a0f65df5773835b00ccaa9cffd7fe', 1),
-		(20, 2, 'ipad mini 2 can\'t connect to WIFI', 69.99, 3, '2016-04-21', '2016-04-25', 'a93f837da44071e18903c9725dd8bcf1e72b8e38', 1),
-		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15', '3c2be8bfcf047747bb07372f36e9bec76a9a47e9', 0);
+		(1, 1, 'My Dell Desktop deosn\'t turn on, please help!', 200.50, 3, '2016-02-22', now(), '2141d3fdd6f99137fb38519024297026a7013172f0d354e0e15ab51d8e435b9c82062fc0a94c5392', 1),
+		(2, 1, 'Upgrade Ram PLS', 149.99, 4, '2017-01-10', '2017-01-12', '3339ad85b5f07f2b1812a4cd8d462765b95e126692788ccafa41ca1c8255e88265291c6fc2198039', 1),
+		(20, 2, 'ipad mini 2 can\'t connect to WIFI', 69.99, 3, '2016-04-21', '2016-04-25', 'be91a97c78af5b2867c8e9085c5d92091713290744e9f63e2330a229ebe83868c4030bc494e26430', 1),
+		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15', '67a9cf34830567ca2955279cf0aa63840f61c26841d9f5addefb443b87599426ab5aedec94ccd341', 0);
 
 	-- insert data into review --
 	insert into `reviews` (`serHis_id`, `cus_id`, `tec_id`, `stars`, `comment`) values
