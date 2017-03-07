@@ -57,7 +57,7 @@ router.post('/', function(req, res) {
    console.log('Create transaction - service history');
    var vld = req.validator;
    var body = req.body;
-   var hash = crypto.randomBytes(20).toString('hex');;
+   var hash = crypto.randomBytes(40).toString('hex');
 
    var insertSerHisSql =
       ' INSERT INTO ServicesHistory (serTec_id, cus_id, description, amount, ' +
