@@ -49,7 +49,7 @@ app.use('/Serv', require('./Routes/Service/Serv'));
 app.use('/Cate', require('./Routes/Service/Cate'));
 app.use('/Receipt', require('./Routes/Transaction/Receipt'));
 app.use('/Verify', require('./Routes/Mail/Verify'));
-app.use('/Send', require('./Routes/Mail/Send'));
+// app.use('/Send', require('./Routes/Mail/Send'));
 
 // Clear all content from the database,
 // reset all autoincrement IDs to 1,
