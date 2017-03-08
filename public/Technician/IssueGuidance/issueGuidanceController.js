@@ -150,7 +150,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       if(correspondingModelId)
       {
         arr.forEach(function(ea){
-          if(ea[inputField] === expectedDupVal && ea[inputField].correspondingModelId ===correspondingModelId)
+          if(ea[inputField] === expectedDupVal && ea[inputField].correspondingModelId === correspondingModelId)
             bool = true
         });
       }
@@ -407,10 +407,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
-    scope.onClickModel = function(offerId, selectedModelId, selectedModelName)
+    scope.onClickModel = function(offerId, selectedModelId, selectedModelName, correspondingManuId)
     {
       var newModel = {"modelId": selectedModelId,
-                      "modelName": selectedModelName}
+                      "modelName": selectedModelName,
+                      "correspondingManuId": correspondingManuId}// I added correspondingManuId in order to fix issue #123
 
       if(changeButtonStyle("models", offerId, "model", selectedModelName, "modelButtonStyle"))
       {
@@ -455,9 +456,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
       if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
       {
-
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
-                console.log(JSON.stringify(scope.offerrings[offerId]["offer"]["issues"]));
       }
       else
       {
