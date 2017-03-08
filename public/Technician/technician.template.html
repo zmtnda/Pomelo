@@ -42,17 +42,31 @@
                <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
                  <thead>
                    <tr>
-                     <th>Service Name</th>
-                     <th>Amount</th>
-                     <th>Status</th>
-                     <th>Time Stamp</th>
-                     <th></th>
+                     <th>Category</th>
+                     <th>Manufacturer</th>
+                     <th>Model</th>
+                     <th>Issue</th>
+                     <th>Service Type</th>
+                     <th>Estimated Amount</th>
                    </tr>
                  </thead>
                  <tbody>
+                    <tr ng-repeat="ser in listServices">
+                      <td>{{ser.category}}</td>
+                      <td>{{ser.manufacturer}}</td>
+                      <td>{{ser.model}}</td>
+                      <td>{{ser.issue}}</td>
+                      <td ng-if="ser.servType === 0">Item Based</td>
+                      <td ng-if="ser.servType === 1">Time Based</td>
+                      <td>{{ser.estAmount}}</td>
+                    </tr>
+                  </tbody>
+                 <!--<tbody>
                    <tr ng-repeat="ser in listServices">
-                     <td>{{ser.serviceName}}</td>
-                     <td>{{ser.amount}}</td>
+                     <td>{{ser.category}}</td>
+                     <td>{{ser.manufacturer}}</td>
+                     <td>{{ser.model}}</td>
+                     <td>{{ser.issue}}</td>
                      <td ng-if="ser.status === 0">Open</td>
                      <td ng-if="ser.status === 1">Pending</td>
                      <td ng-if="ser.status === 2">Closed</td>
@@ -69,7 +83,7 @@
                        <button type="button" class="btn btn-primary" style="width:75%;" ng-click="deleteService(ser.id, ser.technicianId)">Delete</button>
                      </td>
                    </tr>
-                 </tbody>
+                 </tbody> -->
              </table>
           </div>
         </div>
