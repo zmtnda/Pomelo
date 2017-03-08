@@ -455,9 +455,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
       if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
       {
-
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
-                console.log(JSON.stringify(scope.offerrings[offerId]["offer"]["issues"]));
       }
       else
       {
