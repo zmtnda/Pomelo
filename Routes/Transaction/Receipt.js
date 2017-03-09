@@ -47,6 +47,49 @@ router.get('/:serHisId', function(req, res) {
    });
 });
 
+// get all the transactions for the tecId
+// AU must be technician or Admin
+router.get('/:tecId/technician', function(req, res) {
+   var vld = req.validator;
+   var tec_id = req.params.tecId;
+   var formatDate = ', DATE_FORMAT(orderedDate, \'\%b \%d \%Y \%h\:\%i \%p\') as orderedDate '
+                 + ', DATE_FORMAT(completedDate, \'\%b \%d \%Y \%h\:\%i \%p\') as completedDate ';
+   //   qry = 'SELECT x.*, y.*, z.serviceName, v.status, v.amount ' + formatDate +
+   var selectQry = ' SELECT email, category, manufacturer, model, issue, '
+                 + ' description, amount, T4.status ' + formatDate
+                 + ' FROM ServicesOfferedByTech T1 '
+                 + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
+                 + ' FROM CategoriesManufacturers T1 '
+                 + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
+                 + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
+                 + ' ) T2 ON T1.catMan_id = T2.id_catMan AND T1.tec_id = ? '
+                 + ' INNER JOIN (SELECT id_modIss, model, issue '
+                 + ' FROM ModelsIssues T1 '
+                 + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
+                 + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
+                 + ' ) T3 ON T1.modIss_id = T3.id_modIss AND T1.tec_id = ? '
+                 + ' INNER JOIN (SELECT serTec_id, email, description, amount, '
+                 + ' status, orderedDate, completedDate '
+                 + ' FROM ServicesHistory T1 '
+                 + ' INNER JOIN Customers T2 ON T1.cus_id = T2.id_cus '
+                 + ' ) T4 ON T1.id_serTec = T4. serTec_id AND T1.tec_id = ? '
+                 + ' AND T4.status <> 4 '
+                 + ' ORDER BY orderedDate ';
+
+   connections.getConnection(res, function(cnn) {
+      cnn.query(selectQry, [tec_id,tec_id,tec_id],
+      function(err, result) {
+         if(err) {
+            console.log("Error geting serHis: " + tec_id);
+            res.status(400).json(err);
+         }else {
+            console.log("Get info serHis successful");
+            res.json(result);
+         }
+      });
+      cnn.release();
+   });
+});
 // Add new service history
 // Requre:  - serTecID
 //          - cusId

@@ -128,8 +128,9 @@ router.post('/:tecId', function(req, res) {
       cnn.release();
   	});
   }});
+
 // Retrieve all the Services in the database.
-// AU must be admin. (Zin edited can be technician)
+// AU must be technician himself.
 router.get('/:tecId/all', function(req, res) {
 	var vld = req.validator;
 	var LogUser = req.params.tecId;
@@ -162,8 +163,10 @@ router.get('/:tecId/all', function(req, res) {
       cnn.release();
 		});
 }});
+
 // Retrieve all the technician and associated services
 // based on the service chosen
+// AU must be admin
 router.get('/:servId/Services', function(req, res) {
 	var vld = req.validator;
 	var user = req.session;
