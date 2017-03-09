@@ -73,8 +73,9 @@ router.get('/:catId/manu', function(req, res) {
 	var body = req.body;
    var catId = req.params.catId;
 	var query =
-		' SELECT m.id_man AS manId, m.manufacturer FROM manufacturers m, ' +
-		' categoriesmanufacturers c WHERE c.man_id = m.id_man AND c.cat_id = ?'
+		' SELECT c.id_catMan AS catMan_id, m.id_man AS manId, m.manufacturer '+
+		' FROM manufacturers m, categoriesmanufacturers c ' +
+		' WHERE c.man_id = m.id_man AND c.cat_id = ?'
 
 	connections.getConnection(res, function(cnn) {
 		cnn.query(query, [catId],
