@@ -5,11 +5,13 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
       NONE: 0,
       PROVIDE: 1,
       SERVICES: 2,
-      PERSONAL: 3
+      PERSONAL: 3,
+      ORDERS: 4
     };
 
     scope.isShowProvide = 0;
     scope.isShowListServices = 0;
+    scope.isShowListOrders = 0;
     scope.isShowPersonalField = 0;
     scope.listServices = [];
     scope.field = {};
@@ -20,20 +22,30 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
         case scope.viewEnum.NONE:
           scope.isShowPersonalField = 0;
           scope.isShowListServices = 0;
+          scope.isShowListOrders = 0;
           scope.isShowProvide = 0;
           break;
         case scope.viewEnum.PERSONAL:
           scope.isShowPersonalField = 1;
           scope.isShowListServices = 0;
           scope.isShowProvide = 0;
+          scope.isShowListOrders = 0;
           break;
         case scope.viewEnum.SERVICES:
           scope.isShowListServices = 1;
           scope.isShowPersonalField = 0;
           scope.isShowProvide = 0;
+          scope.isShowListOrders = 0;
           break;
         case scope.viewEnum.PROVIDE:
           scope.isShowProvide = 1;
+          scope.isShowListServices = 0;
+          scope.isShowPersonalField = 0;
+          scope.isShowListOrders = 0;
+          break;
+        case scope.viewEnum.ORDERS:
+          scope.isShowListOrders = 1;
+          scope.isShowProvide = 0;
           scope.isShowListServices = 0;
           scope.isShowPersonalField = 0;
           break;
@@ -63,7 +75,22 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
         scope.switchView(scope.viewEnum.NONE);
       }
     }
-
+    //Toggle a list of orders by a http call
+    scope.showListOrders = function()
+    {
+      if (scope.isShowOrderHistory == 1) {
+        scope.switchView(scope.viewEnum.NONE);
+      } else {
+          console.log("rscope.loggedUser.tec_id: " + rscope.loggedUser.tec_id);
+        http.get("Receipt/" + rscope.loggedUser.tec_id + "/technician")
+        .then(function(response){
+          console.log("response.data: " + JSON.stringify(response));
+          scope.listOrders = response.data;
+          scope.switchView(scope.viewEnum.ORDERS);
+        }).
+        catch(function(err){noDlg.show(scope, err, "Error")});
+      }
+    }
     //Toggle a list of services by a http call
     scope.showListServices = function()
     {
