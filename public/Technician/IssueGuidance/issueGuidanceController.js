@@ -59,6 +59,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
 
+
+    scope.disableTagButton = {'visibility': 'hidden'}; // then button will hidden.
+    scope.disableTagButton = {'visibility': 'visible'}; // then button will visible.
+
     /////           helpers functions shared by some other functions              //////
     var checkWhetherHasAFieldInJSON = function(fieldName)
     {
@@ -521,7 +525,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
         scope.postoffers["offer"] = offer;
         console.log("THIS IS MY JSON!!!!" + JSON.stringify(scope.postoffers));
-        http.post("serv/" + 1, scope.postoffers)
+        http.post("serv/" + rscope.loggedUser.tec_id, scope.postoffers)
           .then(function(response)
           {
             return response["data"]
