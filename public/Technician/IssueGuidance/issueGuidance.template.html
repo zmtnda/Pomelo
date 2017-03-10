@@ -5,10 +5,10 @@
               {{ progressPercentage }} Complete
      </div>
    </div>
-
+<!-- ng-if="!hasConfirmedCate" -->
    <div class="row">
-     <div class="col-xs-12 col-md-2" ng-if="!hasConfirmedCate">
-       <div class="thumbnail">
+     <div class="col-xs-12 col-md-2" ng-style="{'visibility': !hasConfirmedCate ? 'visible' : 'hidden'}">
+       <div class="thumbnail sample-show-hide">
          <h3>Category(s)</h3>
            <button type="buton" class="btn btn-success issueGuidanceBtn"  ng-show="hasConfirmedCate" ng-click="onClickRedoCategory()">Redo</button>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-show="!hasConfirmedCate" ng-click="onClickConfirmCategory()">Confirm</button>
@@ -27,8 +27,8 @@
        </div>
      </div>
 
-     <div class="col-xs-12 col-md-2 content-area sample-show-hide" ng-if="!hasConfirmedManu">
-       <div class="thumbnail" ng-show="hasConfirmedCate">
+     <div class="col-xs-12 col-md-2 content-area" ng-style="{'visibility': !hasConfirmedManu ? 'visible' : 'hidden'}">
+       <div class="thumbnail sample-show-hide" ng-show="hasConfirmedCate">
          <h3>Manufacturer(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-show="!hasConfirmedCate || !hasConfirmedManu" ng-click="onClickConfirmManus()">Confirm</button>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-show="hasConfirmedCate && hasConfirmedManu" ng-click="onClickRedoManus()">Redo</button>
@@ -42,8 +42,8 @@
        </div>
      </div>
 
-     <div class="col-xs-12 col-md-2 content-area sample-show-hide" ng-if="!hasConfirmedModel">
-       <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu">
+     <div class="col-xs-12 col-md-2 content-area" ng-style="{'visibility': !hasConfirmedModel ? 'visible' : 'hidden'}">
+       <div class="thumbnail sample-show-hide" ng-show="hasConfirmedCate && hasConfirmedManu">
          <h3>Model(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmModel()" ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel">Confirm</button>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickRedoModels()" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">Redo</button>
@@ -60,8 +60,8 @@
        </div>
      </div>
 
-     <div class="col-xs-12 col-md-2 content-area sample-show-hide">
-       <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
+     <div class="col-xs-12 col-md-2 content-area">
+       <div class="thumbnail sample-show-hide" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
            <h3>Issue(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()"
             ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel || !hasConfirmedIssue">Confirm</button>
