@@ -19,27 +19,32 @@
                 <ul class="nav nav-sidebar">
                   <li>
                     <h4>Help Other Students</h4>
-                    <button type="button" class="btn" ng-class="isShowProvide | btnState" ng-click="showProvide()">Provide A Service</button><br/></li>
+                    <button type="button" class="btn" style="width: 100%" ng-class="isShowProvide | btnState" ng-click="showProvide()">Provide A Service</button><br/></li>
+                  <li></br></li>
+                  <li>
+                    <h4>See All Awaiting Offers</h4>
+                    <!--  This button has been linked-->
+                    <button type="button" class="btn" style="width: 100%" ng-class="isShowPersonaField | btnState" ng-click="modifyTechnician()">Awaiting Offers</button></li>
                   <li></br></li>
                   <li>
                     <h4>View Your Orders</h4>
-                    <button type="button" class="btn" ng-class="isShowListServices | btnState" ng-click="showListOrders()">My Orders</button></li>
+                    <button type="button" class="btn" style="width: 100%" ng-class="isShowListServices | btnState" ng-click="showListOrders()">My Orders</button></li>
                   <li></br></li>
                   <li>
                     <h4>View Your Services</h4>
-                    <button type="button" class="btn" ng-class="isShowListServices | btnState" ng-click="showListServices()">My Services</button></li>
+                    <button type="button" class="btn" style="width: 100%" ng-class="isShowListServices | btnState" ng-click="showListServices()">My Services</button></li>
                   <li></br></li>
                   <li>
                     <h4>Update Personal Info</h4>
-                    <button type="button" class="btn" ng-class="isShowPersonalField | btnState" ng-click="modifyTechnician()">Update Account</button></li>
+                    <button type="button" class="btn" style="width: 100%" ng-class="isShowPersonalField | btnState" ng-click="modifyTechnician()">Update Account</button></li>
                   <li></br></li>
                   <li>
                     <h4>BYE</h4>
-                    <button type="button" class="btn btn-warning" ng-click="deleteTechnician()">Delete this Account</button></li>
+                    <button type="button" class="btn btn-warning" style="width: 100%"  ng-click="deleteTechnician()">Delete this Account</button></li>
                 </ul>
               </div>
 
-              <div class="col-md-8" style="color:black">
+              <div class="col-md-7" style="color:black">
                 <div class="thumbnail" ng-if="isShowProvide">
                     <fieldset class="form-group">
                        <label>Service Name</label>
@@ -251,6 +256,13 @@
         </div>
     </section>
 
+    <section data-brackets-id="4060" class="success" id="about">
+            <div data-brackets-id="4061" class="container">
+                <div data-brackets-id="4062" class="row">
+
+                </div>
+          </div>
+    </section>
     <!-- Contact Section -->
     <section id="contact">
         <div class="container">
