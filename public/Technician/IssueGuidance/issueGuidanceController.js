@@ -44,7 +44,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.allCates = cates
 
 
-    scope.offerrings = { }
+    scope.offerrings = []
+    scope.postoffers = {}
+
     var numOfferings = 0
 
     scope.typeButtonStatesArray = []
@@ -175,7 +177,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
     {
       var dup = false;
-      var newOffer =  {"amount": undefined,
+      var newOffer =  {"amount": [],
                         "offerId": numOfferings,
                         "cateButtonStyle": 0,
                         "cate": selectedCategoryName,
@@ -217,8 +219,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         prev.forEach(function(element)
         {
           scope.offerrings[offerId]["display"]["manus"].push({"manId": element["manId"],
+                                                              "catMan_id": element["catMan_id"],
                                                               "manufacturer": element["manufacturer"],
                                                               "manuButtonStyle": 0})
+
         })
       })
       .catch(function(err)
@@ -325,11 +329,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
-    scope.onClickManu = function(offerId, selectedManuId, selectedManuName, manuButtonStyle)
+    scope.onClickManu = function(offerId, selectedManuId, selectedCatMan_id, selectedManuName, manuButtonStyle)
     {
       var newManu = {"manuId": selectedManuId,
+                     "catMan_id": selectedCatMan_id,
                      "manuName": selectedManuName}
-
        if(changeButtonStyle("manus", offerId, "manufacturer", selectedManuName, "manuButtonStyle"))
        {
          scope.offerrings[offerId]["offer"]["manus"].push(newManu)
@@ -355,6 +359,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           scope.offerrings[offerId]["display"]["issues"].push({"issueId" : element["issueId"],
                                                                "issueButtonStyle": 0,
                                                                "issue" : element["issue"],
+                                                               "modIss_Id": element["modIssId"],
                                                                "correspondingModelId": modelId})
         })
       })
@@ -448,12 +453,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
-
-    scope.onClickIssue = function(offerId, selectedIssueId, selectedIssueName, correspondingModelId)
+    scope.onClickIssue = function(offerId, selectedIssueId, selectedModIss_Id, selectedIssueName, correspondingModelId)
     {
       var newIssue = {"issueId": selectedIssueId,
+                      "modIss_Id": selectedModIss_Id,
                       "issueName": selectedIssueName}
-
+      console.log("MODISS IS: " + selectedModIss_Id);
       if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
       {
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
@@ -463,18 +468,66 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         popAnElement(offerId, "issues", "issueName", selectedIssueName, correspondingModelId)
       }
     }
+    // Input (Arrays of JSON):
+    // {
+    // 	"offer":{
+    //     "tec_Id" : 1,
+    //     "catMan_Id" : [3, 3],
+    //     "modIss_Id" : [2, 3],
+    //     "servType" : [0, 1],
+    //     "amount" : [59, 50]
+    // 	}
+    // }
 
-    /////           Amount              //////
+    // var newIssue = {"issueId": selectedIssueId,
+    //                 "modIss_Id": selectedModIss_Id,
+    //                 "issueName": selectedIssueName}
+    //
+    // if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
+    // {
+    //   scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
+    // }
+
+
     scope.onConfirmAllOfferrings = function()
     {
-      if(checkWhetherHasAFieldInJSON("amount"))
-      {
+
         updateProgressBar("confirmAllOfferingsStage");
-      }
-      else
-      {
-        noDlg.show(scope, "You forgot to enter prices", "Warning")
-      }
+        console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
+        var offer = {};
+        offer["tec_Id"] = rscope.loggedUser.tec_id;
+        console.log("TECHNICIAN ID IS: " + offer["tec_Id"]);
+        var catman = [];
+        var modIss = [];
+        var serviceType = [];
+        var amount = [];
+
+        for(var i = 0; i < scope.offerrings.length; i++)
+        {
+          console.log("GOING THROUGH " + i);
+          for(var j = 0; j < scope.offerrings[i]["offer"]["manus"].length; j++){
+            catman.push(scope.offerrings[i]["offer"]["manus"][j]["catMan_id"]);
+          }
+          for(var j = 0; j < scope.offerrings[i]["offer"]["issues"].length; j++){
+            modIss.push(scope.offerrings[i]["offer"]["issues"][j]["modIss_Id"]);
+            serviceType.push(0);
+            amount.push(999);
+          }
+        }
+        offer["catMan_Id"] = catman;
+        offer["modIss_Id"] = modIss;
+        offer["servType"] = serviceType;
+        offer["amount"] = amount;
+
+        scope.postoffers["offer"] = offer;
+        console.log("THIS IS MY JSON!!!!" + JSON.stringify(scope.postoffers));
+        http.post("serv/" + 1, scope.postoffers)
+          .then(function(response)
+          {
+            return response["data"]
+          });
+
+
     }
 
 }]);
