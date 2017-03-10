@@ -22,7 +22,7 @@ router.get('/:serHisId', function(req, res) {
       ' SH.status AS SHStatus, SH.orderedDate, SH.completedDate, SH.isReview' +
       ' FROM' +
       ' ServicesHistory SH, ServicesOfferedByTech SO, ModelsIssues MI, Issues I,' +
-		  ' Models M, CategoriesManufacturers CM, Categories C, Manufacturers Manu ' +
+		' Models M, CategoriesManufacturers CM, Categories C, Manufacturers Manu ' +
       ' WHERE' +
       ' SH.id_serHis=? AND SH.serTec_id = SO.id_serTec AND SO.modIss_id = MI.id_modIss' +
       ' AND MI.iss_id = I.id_iss AND MI.mod_id = M.id_mod AND M.catMan_id = CM.id_catMan' +
