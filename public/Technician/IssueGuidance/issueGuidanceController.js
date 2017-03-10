@@ -141,7 +141,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
              }
              else
              {
-               console.log("hi")
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
                return false;
              }
@@ -176,14 +175,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     ///       3. put the models from Step 2 in the display of the next column
     ///       Result: Initializes display's field by fetching data from the database
 
+    console.log("scope.cates: ",   JSON.stringify(scope.allCates))
     /////           categories              //////
-
-    scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
+    scope.onClickCategory = function(selectedCategoryId, selectedCategoryName, selectedCategoryIndex)
     {
       var dup = false;
       var newOffer =  {"amount": [],
                         "offerId": numOfferings,
-                        "cateButtonStyle": 0,
+                        "cateButtonStyle": 1,
                         "cate": selectedCategoryName,
                         "cateId": selectedCategoryId,
                         "offer": {"manus": [],
@@ -193,20 +192,25 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                     "models": [],
                                     "issues": []}}
 
+      var selected = false
+      // Reason for creating extra logic: changeButtonStyle() only handles display array
       for(var i = 0; i < Object.keys(scope.offerrings).length; i++)
       {
-        if(scope.offerrings[i]["cate"] === selectedCategoryName)
-          dup = true;
+        if(scope.offerrings[i]["cate"] === selectedCategoryName &&
+           scope.allCates[selectedCategoryIndex]["cateButtonStyle"] === 1)
+        {
+          scope.offerrings.splice(i, 1);
+          scope.allCates[selectedCategoryIndex]["cateButtonStyle"] = 0
+
+          selected = true
+        }
       }
 
-      if(!dup)
+      if(!selected)
       {
         scope.offerrings[numOfferings] = newOffer
         numOfferings = numOfferings + 1
-      }
-      else
-      {
-        noDlg.show(scope, "You have selected " + selectedCategoryName + " before", "Warning")
+        scope.allCates[selectedCategoryIndex]["cateButtonStyle"] = 1
       }
     }
 
