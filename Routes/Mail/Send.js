@@ -19,12 +19,15 @@ router.post("/account", function(req, res) {
    var vld = req.validator;
    var body = req.body;
    var check_query =
-      ' SELECT L.email, L.passwordHash, T.status'+
-      ' FROM Logins L, Technicians T' +
-      ' WHERE L.id_log = T.log_id AND email=? AND passwordHash=?';
+      ' SELECT * ' +
+      ' FROM (SELECT email, passwordHash, id_log ' +
+	   '       FROM Logins ' +
+	   '       WHERE email=? AND passwordHash=?) L ' +
+      ' INNER JOIN Technicians T ' +
+      ' ON L.id_log = T.log_id';
 
    var link = 'http://'+ req.get('host')+ '/Verify/account/';
-   let title = '[Pomelo] Please verify your email address.';
+   var title = '[Pomelo] Please verify your email address.';
 
    if(vld.hasFields(body, ['email', 'passwordHash'])) {
       connections.getConnection(res, function(cnn) {
@@ -59,9 +62,12 @@ router.post("/review", function(req, res) {
    var vld = req.validator;
    var body = req.body;
    var check_query =
-      ' SELECT SH.id_serHis, SH.serHisHash, SH.isReview, C.email' +
-      ' FROM ServicesHistory SH, Customers C' +
-      ' WHERE SH.id_serHis=? AND SH.serHisHash=? AND C.id_cus = SH.cus_id';
+      ' SELECT SH.id_serHis, SH.serHisHash, SH.isReview, C.email ' +
+      ' FROM (SELECT id_serHis, serHisHash, isReview, cus_id ' +
+      '       FROM ServicesHistory ' +
+      '       WHERE id_serHis=? AND serHisHash=? ) SH' +
+      ' INNER JOIN Customers C'
+      ' ON SH.cus_id=C.id_cus ';
 
    var link = 'http://'+ req.get('host')+ '/Verify/review/';
    var title = '[Pomelo] Please review your service.';
@@ -97,7 +103,7 @@ router.post("/review", function(req, res) {
 // Need to set mail to noreply@pomelo.com later
 function mail(res, receiver, title, body) {
    // create reusable transporter object using the default SMTP transport
-   let transporter = nodemailer.createTransport({
+   var transporter = nodemailer.createTransport({
        service: 'Gmail',
        auth: {
            user: 'noreply.nnguy101@gmail.com',
@@ -106,7 +112,7 @@ function mail(res, receiver, title, body) {
    });
 
    // setup email data with unicode symbols
-   let mailOptions = {
+   var mailOptions = {
       from: '"Pomelo 👻" <noreply.nnguy101@gmail.com>', // sender address
       to: 'nnguy101@gmail.com', // change to reciever later
       subject: title, // Subject line
