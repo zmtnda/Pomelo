@@ -177,7 +177,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     /////           categories              //////
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName, selectedCategoryIndex)
     {
-      var dup = false;
+      var selected = false;
       var newOffer =  {"offerId": numOfferings,
                         "cateButtonStyle": 0,
                         "cate": selectedCategoryName,
