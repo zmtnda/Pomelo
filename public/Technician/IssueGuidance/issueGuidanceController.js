@@ -26,6 +26,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                      "percent": "100%"
                   }
     }
+
     // Store the data of the buttons seletced by the user
     scope.selectedButtonValues = {
       "selectedType": [],
@@ -43,7 +44,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     // Initializes all categories
     scope.allCates = cates
 
-
     scope.offerrings = []
     scope.postoffers = {}
 
@@ -58,7 +58,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressBarDisplay = {'background-color':'blue'}
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
-
 
     scope.disableTagButton = {'visibility': 'hidden'}; // then button will hidden.
     scope.disableTagButton = {'visibility': 'visible'}; // then button will visible.
@@ -141,7 +140,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
              }
              else
              {
-               console.log("hi")
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
                return false;
              }
@@ -177,13 +175,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     ///       Result: Initializes display's field by fetching data from the database
 
     /////           categories              //////
-
-    scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
+    scope.onClickCategory = function(selectedCategoryId, selectedCategoryName, selectedCategoryIndex)
     {
-      var dup = false;
-      var newOffer =  {"amount": [],
-                        "offerId": numOfferings,
-                        "cateButtonStyle": 0,
+      var selected = false
+      var newOffer =  { "offerId": numOfferings,
                         "cate": selectedCategoryName,
                         "cateId": selectedCategoryId,
                         "offer": {"manus": [],
@@ -193,20 +188,24 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                     "models": [],
                                     "issues": []}}
 
+      // Reason for creating extra logic: changeButtonStyle() only handles display array
       for(var i = 0; i < Object.keys(scope.offerrings).length; i++)
       {
-        if(scope.offerrings[i]["cate"] === selectedCategoryName)
-          dup = true;
+        if(scope.offerrings[i]["cate"] === selectedCategoryName &&
+           scope.allCates[selectedCategoryIndex]["cateButtonStyle"] === 1)
+        {
+          scope.offerrings.splice(i, 1);
+          scope.allCates[selectedCategoryIndex]["cateButtonStyle"] = 0
+          numOfferings = numOfferings - 1
+          selected = true
+        }
       }
 
-      if(!dup)
+      if(!selected)
       {
         scope.offerrings[numOfferings] = newOffer
         numOfferings = numOfferings + 1
-      }
-      else
-      {
-        noDlg.show(scope, "You have selected " + selectedCategoryName + " before", "Warning")
+        scope.allCates[selectedCategoryIndex]["cateButtonStyle"] = 1
       }
     }
 
@@ -226,7 +225,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                               "catMan_id": element["catMan_id"],
                                                               "manufacturer": element["manufacturer"],
                                                               "manuButtonStyle": 0})
-
         })
       })
       .catch(function(err)
@@ -335,7 +333,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickManu = function(offerId, selectedManuId, selectedCatMan_id, selectedManuName, manuButtonStyle)
     {
-      var newManu = {"manuId": selectedManuId,
+       var newManu = {"manuId": selectedManuId,
                      "catMan_id": selectedCatMan_id,
                      "manuName": selectedManuName}
        if(changeButtonStyle("manus", offerId, "manufacturer", selectedManuName, "manuButtonStyle"))
