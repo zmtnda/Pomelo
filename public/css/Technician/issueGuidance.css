@@ -40,12 +40,8 @@
 
 .sample-show-hide {
   animation: 0.5s appear_animation;
-  transition: all linear 1.0s;
 }
-.sample-show-hide.ng-hide {
-  animation: 0.5s disappear_animation;
-  transition: all linear 1.0s;
-}
+
 
 @keyframes appear_animation {
   from { opacity:0; }
