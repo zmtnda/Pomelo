@@ -26,6 +26,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                      "percent": "100%"
                   }
     }
+
     // Store the data of the buttons seletced by the user
     scope.selectedButtonValues = {
       "selectedType": [],
@@ -43,7 +44,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     // Initializes all categories
     scope.allCates = cates
 
-
     scope.offerrings = []
     scope.postoffers = {}
 
@@ -58,7 +58,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.progressBarDisplay = {'background-color':'blue'}
     scope.progressPercentage = "0%"
     scope.progressBarDisplay = {"width": "0%"};
-
 
     scope.disableTagButton = {'visibility': 'hidden'}; // then button will hidden.
     scope.disableTagButton = {'visibility': 'visible'}; // then button will visible.
@@ -175,14 +174,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     ///       3. put the models from Step 2 in the display of the next column
     ///       Result: Initializes display's field by fetching data from the database
 
-    console.log("scope.cates: ",   JSON.stringify(scope.allCates))
     /////           categories              //////
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName, selectedCategoryIndex)
     {
-      var dup = false;
-      var newOffer =  {"amount": [],
-                        "offerId": numOfferings,
-                        "cateButtonStyle": 1,
+      var selected = false
+      var newOffer =  { "offerId": numOfferings,
                         "cate": selectedCategoryName,
                         "cateId": selectedCategoryId,
                         "offer": {"manus": [],
@@ -192,7 +188,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                     "models": [],
                                     "issues": []}}
 
-      var selected = false
       // Reason for creating extra logic: changeButtonStyle() only handles display array
       for(var i = 0; i < Object.keys(scope.offerrings).length; i++)
       {
@@ -201,7 +196,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         {
           scope.offerrings.splice(i, 1);
           scope.allCates[selectedCategoryIndex]["cateButtonStyle"] = 0
-
+          numOfferings = numOfferings - 1
           selected = true
         }
       }
