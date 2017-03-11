@@ -1,7 +1,5 @@
 <link href="css/Technician/freelancer.min.css" rel="stylesheet" type="text/css">
-<link href="css/Technician/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
 
 <body id="page-top" class="index">
   <!-- Header -->
@@ -19,32 +17,32 @@
               <ul class="nav nav-sidebar">
                 <li>
                   <h4>Help Other Students</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-class="isShowProvide | btnState" ng-click="showProvide()">Provide A Service</button><br/></li>
+                  <button type="button" class="btn" style="width: 100%" ng-click="showProvide()">Provide A Service</button><br/></li>
                 <li></br></li>
                 <li>
                   <h4>See All Awaiting Offers</h4>
                   <!--  This button has been linked-->
-                  <button type="button" class="btn" style="width: 100%" ng-class="isShowPersonaField | btnState" ng-click="modifyTechnician()">Awaiting Offers</button></li>
+                  <button type="button" class="btn" style="width: 100%" ng-click="modifyTechnician()">Awaiting Offers</button></li>
                 <li></br></li>
                 <li>
                   <h4>View Your Orders</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-class="isShowListServices | btnState" ng-click="showListOrders()">My Orders</button></li>
+                  <button type="button" class="btn" style="width: 100%" ng-click="showListOrders()">My Orders</button></li>
                 <li></br></li>
                 <li>
                   <h4>View Your Services</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-class="isShowListServices | btnState" ng-click="showListServices()">My Services</button></li>
+                  <button type="button" class="btn" style="width: 100%" ng-click="showListServices()">My Services</button></li>
                 <li></br></li>
                 <li>
                   <h4>Update Personal Info</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-class="isShowPersonalField | btnState" ng-click="modifyTechnician()">Update Account</button></li>
+                  <button type="button" class="btn" style="width: 100%" ng-click="modifyTechnician()">Update Account</button></li>
                 <li></br></li>
                 <li>
                   <h4>BYE</h4>
-                  <button type="button" class="btn btn-warning" style="width: 100%"  ng-click="deleteTechnician()">Delete this Account</button></li>
+                  <button type="button" class="btn btn-warning" style="width: 100%" ng-click="deleteTechnician()">Delete this Account</button></li>
               </ul>
             </div>
 
-            <div class="col-md-7" style="color:black">
+            <div class="col-md-8" style="color:black">
               <div class="thumbnail" ng-if="isShowProvide">
                   <fieldset class="form-group">
                      <label>Service Name</label>
@@ -306,13 +304,6 @@
                               <p class="help-block text-danger"></p>
                           </div>
                       </div>
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Introduce Myself</label>
-                              <textarea rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message."></textarea>
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
                       <br>
                       <div id="success"></div>
                       <div class="row">
@@ -325,54 +316,6 @@
           </div>
       </div>
   </section>
-
-  <!-- Footer -->
-  <footer class="text-center">
-      <div class="footer-above">
-          <div class="container">
-              <div class="row">
-                  <div class="footer-col col-md-4">
-                      <h3>Location</h3>
-                      <p>3481 Melrose Place
-                          <br>Beverly Hills, CA 90210</p>
-                  </div>
-                  <div class="footer-col col-md-4">
-                      <h3>Around the Web</h3>
-                      <ul class="list-inline">
-                          <li>
-                              <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
-                          </li>
-                          <li>
-                              <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
-                          </li>
-                          <li>
-                              <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
-                          </li>
-                          <li>
-                              <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
-                          </li>
-                          <li>
-                              <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-dribbble"></i></a>
-                          </li>
-                      </ul>
-                  </div>
-                  <div class="footer-col col-md-4">
-                      <h3>About Freelancer</h3>
-                      <p>Freelance is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.</p>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="footer-below">
-          <div class="container">
-              <div class="row">
-                  <div class="col-lg-12">
-                      Copyright &copy; Your Website 2016
-                  </div>
-              </div>
-          </div>
-      </div>
-  </footer>
 
   <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
   <div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
