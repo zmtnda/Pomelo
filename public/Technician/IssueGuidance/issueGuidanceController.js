@@ -225,7 +225,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                                                               "catMan_id": element["catMan_id"],
                                                               "manufacturer": element["manufacturer"],
                                                               "manuButtonStyle": 0})
-
         })
       })
       .catch(function(err)
@@ -334,7 +333,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickManu = function(offerId, selectedManuId, selectedCatMan_id, selectedManuName, manuButtonStyle)
     {
-      var newManu = {"manuId": selectedManuId,
+       var newManu = {"manuId": selectedManuId,
                      "catMan_id": selectedCatMan_id,
                      "manuName": selectedManuName}
        if(changeButtonStyle("manus", offerId, "manufacturer", selectedManuName, "manuButtonStyle"))
