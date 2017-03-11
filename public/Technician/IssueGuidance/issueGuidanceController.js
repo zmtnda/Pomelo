@@ -181,14 +181,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.onClickCategory = function(selectedCategoryId, selectedCategoryName)
     {
       var dup = false;
-      var newOffer =  {"amount": [],
-                        "offerId": numOfferings,
+      var newOffer =  {"offerId": numOfferings,
                         "cateButtonStyle": 0,
                         "cate": selectedCategoryName,
                         "cateId": selectedCategoryId,
                         "offer": {"manus": [],
                                   "models": [],
-                                  "issues": []},
+                                  "issues": [],
+                                  "amount": []},
                         "display": {"manus": [],
                                     "models": [],
                                     "issues": []}}
@@ -515,7 +515,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           for(var j = 0; j < scope.offerrings[i]["offer"]["issues"].length; j++){
             modIss.push(scope.offerrings[i]["offer"]["issues"][j]["modIss_Id"]);
             serviceType.push(0);
-            amount.push(999);
+            amount.push(scope.offerrings[i]["offer"]["issues"][j]["amount"]);
           }
         }
         offer["catMan_Id"] = catman;
