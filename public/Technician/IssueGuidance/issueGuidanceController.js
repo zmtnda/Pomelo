@@ -248,8 +248,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickConfirmCategory = function()
     {
-      if(!angular.equals(scope.offerrings, {}))
+      if(!angular.equals(scope.offerrings, []))
       {
+        console.log("scope.offerrings  ", JSON.stringify(scope.offerrings))
         for(var offerId in scope.offerrings)
         {
           onClickConfirmCategoryHelper(offerId)

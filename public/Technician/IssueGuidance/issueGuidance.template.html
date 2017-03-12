@@ -7,7 +7,7 @@
    </div>
  <!-- ng-style="{'visibility': !hasConfirmedCate ? 'visible' : 'hidden'}" -->
    <div class="row">
-     <div class="col-xs-12 col-md-6 content-area" ng-if="!hasConfirmedCate">
+     <div class="col-xs-12 col-md-6 content-area" ng-hide="hasConfirmedCate">
        <div class="thumbnail sample-show-hide">
          <h3>Category(s)</h3>
            <button type="buton" class="btn btn-success issueGuidanceBtn"  ng-show="hasConfirmedCate" ng-click="onClickRedoCategory()">Redo</button>
