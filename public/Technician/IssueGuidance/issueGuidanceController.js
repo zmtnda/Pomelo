@@ -36,10 +36,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     // A set of boolean that indicates which column has been confirmed
-    scope.hasConfirmedCate = 0
-    scope.hasConfirmedManu = 0
-    scope.hasConfirmedModel = 0
-    scope.hasConfirmedIssue = 0
+    scope.hasConfirmedCate = false
+    scope.hasConfirmedManu = false
+    scope.hasConfirmedModel = false
+    scope.hasConfirmedIssue = false
 
     // Initializes all categories
     scope.allCates = cates
@@ -234,27 +234,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
     }
 
-    scope.onClickRedoCategory = function()
-    {
-      numOfferings = 0;
-      scope.hasConfirmedCate = 0
-      scope.hasConfirmedManu = 0
-      scope.hasConfirmedModel = 0
-      scope.hasConfirmedIssue = 0
-      updateProgressBar("cateStage");
-      scope.offerrings = {}
-    }
-
     scope.onClickConfirmCategory = function()
     {
-      if(!angular.equals(scope.offerrings, {}))
+      if(!angular.equals(scope.offerrings, []))
       {
+        console.log("scope.offerrings  ", JSON.stringify(scope.offerrings))
         for(var offerId in scope.offerrings)
         {
           onClickConfirmCategoryHelper(offerId)
         }
         updateProgressBar("manuStage");
-        scope.hasConfirmedCate = 1
+        scope.hasConfirmedCate = true
       }
       else
       {
@@ -305,13 +295,15 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickRedoManus = function()
     {
-      scope.hasConfirmedManu = 0
-      scope.hasConfirmedModel = 0
-      scope.hasConfirmedIssue = 0
+      scope.hasConfirmedCate = false
+      scope.hasConfirmedManu = false
+      scope.hasConfirmedModel = false
+      scope.hasConfirmedIssue = false
 
       for(var i in scope.offerrings)
       {
         scope.offerrings[i]["offer"]["manus"] = []
+        scope.offerrings[i]["display"]["manus"] = []
       }
     }
 
@@ -323,7 +315,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         {
           onClickConfirmManusHelper(offerId)
         }
-        scope.hasConfirmedManu = 1
+        scope.hasConfirmedManu = true
         updateProgressBar("modelStage");
       }
       else
@@ -389,12 +381,13 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickRedoModels = function()
     {
-      scope.hasConfirmedModel = 0
-      scope.hasConfirmedIssue = 0
-
+      scope.hasConfirmedManu = false
+      scope.hasConfirmedModel = false
+      scope.hasConfirmedIssue = false
       for(var i in scope.offerrings)
       {
         scope.offerrings[i]["offer"]["models"] = []
+        scope.offerrings[i]["display"]["models"] = []
       }
     }
 
@@ -406,7 +399,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         {
           onClickConfirmModelHelper(offerId)
         }
-        scope.hasConfirmedModel = 1
+        scope.hasConfirmedModel = true
         updateProgressBar("issueStage");
       }
       else
@@ -436,23 +429,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       if(checkWhetherHasAFieldInJSON("issues"))
       {
-        scope.hasConfirmedIssue= 1
+        scope.hasConfirmedIssue= true
         updateProgressBar("finalStage");
       }
       else
       {
         noDlg.show(scope, "You forgot to select an issue", "Warning")
-      }
-    }
-
-    scope.onClickRedoModels = function()
-    {
-      scope.hasConfirmedIssue = 0
-
-      for(var i in scope.offerrings)
-      {
-        scope.offerrings[i]["display"]["issues"] = []
-        scope.offerrings[i]["offer"]["issues"] = []
       }
     }
 
@@ -468,6 +450,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       else
       {
         popAnElement(offerId, "issues", "issueName", selectedIssueName, correspondingModelId)
+      }
+    }
+
+    scope.onClickRedoIssues = function()
+    {
+      scope.hasConfirmedModel = false
+      scope.hasConfirmedIssue = false
+      for(var i in scope.offerrings)
+      {
+        scope.offerrings[i]["offer"]["issues"] = []
+        scope.offerrings[i]["display"]["issues"] = []
       }
     }
     // Input (Arrays of JSON):

@@ -16,17 +16,17 @@ router.get('/:serHisId', function(req, res) {
 
    var getSerHisSql =
       ' SELECT' +
-      ' SH.id_serHis AS serHis, SH.serTec_id AS serTecID, cus_id AS cusId,' +
+      ' SH.id_serHis AS serHis, SH.serTec_id AS serTecID, SH.cus_id AS cusId, Cus.email AS customer' +
       ' SO.catMan_id AS catManId ,Manu.manufacturer, C.category, M.model,' +
       ' I.issue,SH.description, SH.amount AS finalAmount,' +
       ' SH.status AS SHStatus, SH.orderedDate, SH.completedDate, SH.isReview' +
       ' FROM' +
       ' ServicesHistory SH, ServicesOfferedByTech SO, ModelsIssues MI, Issues I,' +
-		' Models M, CategoriesManufacturers CM, Categories C, Manufacturers Manu ' +
+		' Models M, CategoriesManufacturers CM, Categories C, Manufacturers Manu, Customer Cus ' +
       ' WHERE' +
       ' SH.id_serHis=? AND SH.serTec_id = SO.id_serTec AND SO.modIss_id = MI.id_modIss' +
       ' AND MI.iss_id = I.id_iss AND MI.mod_id = M.id_mod AND M.catMan_id = CM.id_catMan' +
-      ' AND CM.cat_id = C.id_cat AND CM.man_id = Manu.id_man'
+      ' AND CM.cat_id = C.id_cat AND CM.man_id = Manu.id_man AND SH.cus_id = Cus.id_cus';
 
    connections.getConnection(res, function(cnn) {
       cnn.query(getSerHisSql, serHis_id,
