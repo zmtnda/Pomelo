@@ -184,8 +184,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                         "cateId": selectedCategoryId,
                         "offer": {"manus": [],
                                   "models": [],
-                                  "issues": [],
-                                  "amount": []},
+                                  "issues": []},
                         "display": {"manus": [],
                                     "models": [],
                                     "issues": []}}
@@ -444,7 +443,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       var newIssue = {"issueId": selectedIssueId,
                       "modIss_Id": selectedModIss_Id,
                       "issueName": selectedIssueName}
-
       if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
       {
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
@@ -490,10 +488,9 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
 
         updateProgressBar("confirmAllOfferingsStage");
-        console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
+        // console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
         var offer = {};
         offer["tec_Id"] = rscope.loggedUser.tec_id;
-        console.log("TECHNICIAN ID IS: " + offer["tec_Id"]);
         var catman = [];
         var modIss = [];
         var serviceType = [];
@@ -501,7 +498,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
         for(var i = 0; i < scope.offerrings.length; i++)
         {
-          console.log("GOING THROUGH " + i);
           for(var j = 0; j < scope.offerrings[i]["offer"]["manus"].length; j++){
             catman.push(scope.offerrings[i]["offer"]["manus"][j]["catMan_id"]);
           }
@@ -517,7 +513,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         offer["amount"] = amount;
 
         scope.postoffers["offer"] = offer;
-        console.log("THIS IS MY JSON!!!!" + JSON.stringify(scope.postoffers));
+        // console.log("THIS IS MY JSON!!!!" + JSON.stringify(scope.postoffers));
         http.post("serv/" + rscope.loggedUser.tec_id, scope.postoffers)
           .then(function(response)
           {
