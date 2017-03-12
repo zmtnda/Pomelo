@@ -111,7 +111,10 @@
             </div>
           </div>
         </div>-->
+<!-- ng-model="scope.offerrings[oneOffer.offerId]['offer']['issues'][oneOffer.offer.issues.issueId]['amount']" -->
 
+<!-- ng-model="scope.offerrings[oneOffer.offerId]['offer']['issues'][$index]['amount']" -->
+<!-- ng-model="scope.amounts.price" -->
      <div class="col-xs-12 col-md-6 content-area sample-show-hide">
       <div class="thumbnail">
         <h3>You're offering:</h3>
@@ -133,8 +136,9 @@
                  <td>
                    <div class="label label-default issue-label row" ng-repeat="issue in oneOffer.offer.issues">
                      <span class"col-md-9"> {{ issue.issueName }} </span>
-                       <input class"col-md-3" value="Price" name="amountInput" placeholder="Price" class="form-control .input-sm" type="number"
-                       ng-model="scope.offerrings[oneOffer.offerId]['offer']['issues'][issueId]['amount']"/>
+                       <input class"col-md-3" value="amount" name="amountInput" placeholder="Price" class="form-control .input-sm" type="number"
+                       ng-model="issue.amount"
+                       />
                    </div>
                  </td>
                </tr>
