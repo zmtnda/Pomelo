@@ -90,8 +90,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         for(var i = 0; i < loopingArray.length; i++)
         {
-          if(correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"] &&
-           scope.offerrings[offerId]["offer"][type][i][checkingField] === findingName)
+          if(correspondingModelId === scope.offerrings[offerId]["offer"][type][i]["correspondingModelId"] &&
+             scope.offerrings[offerId]["offer"][type][i][checkingField] === findingName)
           {
             scope.offerrings[offerId]["offer"][type].splice(i, 1);
           }
@@ -114,25 +114,33 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       var loopingArray = scope.offerrings[offerId]["display"][type]
       var counter = 0;
-      for(var i = 0; i < loopingArray.length; i++)
+      var checkingTheRightElementInTheArray
+
+      if(type === "issues")
       {
-        if(scope.offerrings[offerId]["display"][type][i][checkingField] === findingName)
+        for(var i = 0; i < loopingArray.length; i++)
         {
-           if(type === "issues")
+          checkingTheRightElementInTheArray = (scope.offerrings[offerId]["display"][type][i][checkingField] === findingName &&
+                                              correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"])
+
+          if(checkingTheRightElementInTheArray && scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
            {
-             if(correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"] &&
-                scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
-              {
-                  scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
-                  return true
-              }
-              else
-              {
-                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
-                return false;
-              }
+             scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
+             return true
            }
-           else {
+           else if (checkingTheRightElementInTheArray && scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 1)
+           {
+             scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
+             return false
+           }
+         }
+      }
+      else
+      {
+        for(var i = 0; i < loopingArray.length; i++)
+        {
+          if(scope.offerrings[offerId]["display"][type][i][checkingField] === findingName)
+          {
              if(scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
              {
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
@@ -143,9 +151,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
                return false;
              }
-           }
+          }
         }
       }
+
+      return false
     }
 
     var checkDuplicate = function(arr, obj, inputField, expectedDupVal, correspondingModelId)
@@ -238,7 +248,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       if(!angular.equals(scope.offerrings, []))
       {
-        console.log("scope.offerrings  ", JSON.stringify(scope.offerrings))
         for(var offerId in scope.offerrings)
         {
           onClickConfirmCategoryHelper(offerId)
@@ -441,8 +450,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.onClickIssue = function(offerId, selectedIssueId, selectedModIss_Id, selectedIssueName, correspondingModelId)
     {
       var newIssue = {"issueId": selectedIssueId,
+                      "correspondingModelId": correspondingModelId, // added correspondingModelId in order to make popAnElement() works
                       "modIss_Id": selectedModIss_Id,
                       "issueName": selectedIssueName}
+
       if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
       {
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
@@ -513,14 +524,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         offer["amount"] = amount;
 
         scope.postoffers["offer"] = offer;
-        // console.log("THIS IS MY JSON!!!!" + JSON.stringify(scope.postoffers));
+
         http.post("serv/" + rscope.loggedUser.tec_id, scope.postoffers)
           .then(function(response)
           {
             return response["data"]
           });
-
-
     }
-
 }]);
