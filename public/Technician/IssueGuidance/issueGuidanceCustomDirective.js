@@ -1,3 +1,5 @@
+<!-- starter -->
+
 app.directive("ngNoOverflowSpan", function() {
   return {
     restrict : 'EAC',

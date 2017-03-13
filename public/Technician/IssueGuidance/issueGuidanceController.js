@@ -314,6 +314,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         scope.offerrings[i]["offer"]["manus"] = []
         scope.offerrings[i]["display"]["manus"] = []
       }
+
+      updateProgressBar("cateStage")
     }
 
     scope.onClickConfirmManus = function()
@@ -393,11 +395,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       scope.hasConfirmedManu = false
       scope.hasConfirmedModel = false
       scope.hasConfirmedIssue = false
+
       for(var i in scope.offerrings)
       {
         scope.offerrings[i]["offer"]["models"] = []
         scope.offerrings[i]["display"]["models"] = []
       }
+
+      updateProgressBar("manuStage")
     }
 
     scope.onClickConfirmModel = function()
@@ -447,10 +452,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
-    scope.onClickIssue = function(offerId, selectedIssueId, selectedModIss_Id, selectedIssueName, correspondingModelId)
+    scope.onClickIssue = function(offerId, selectedIssueId, selectedModIss_Id, selectedIssueName, correspondingModelId, correspondingModelName)
     {
       var newIssue = {"issueId": selectedIssueId,
                       "correspondingModelId": correspondingModelId, // added correspondingModelId in order to make popAnElement() works
+                      "correspondingModelName": correspondingModelName,
                       "modIss_Id": selectedModIss_Id,
                       "issueName": selectedIssueName}
 
@@ -468,11 +474,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       scope.hasConfirmedModel = false
       scope.hasConfirmedIssue = false
+
       for(var i in scope.offerrings)
       {
         scope.offerrings[i]["offer"]["issues"] = []
         scope.offerrings[i]["display"]["issues"] = []
       }
+
+      updateProgressBar("modelStage")
     }
     // Input (Arrays of JSON):
     // {
@@ -497,7 +506,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onConfirmAllOfferrings = function()
     {
-
         updateProgressBar("confirmAllOfferingsStage");
         // console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
         var offer = {};
@@ -529,6 +537,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           .then(function(response)
           {
             return response["data"]
-          });
+          })
     }
 }]);
