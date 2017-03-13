@@ -126,7 +126,7 @@
                  <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus">{{ manu.manuName }}</div></td>
                  <td><div class="label label-default issue-label" ng-repeat="model in oneOffer.offer.models">{{ model.modelName }}</div></td>
                  <td>
-                   <div class="label label-default issue-label row" ng-repeat="issue in oneOffer.offer.issues">
+                   <div class="label label-default issue-label row" ng-repeat="issue in oneOffer.offer.issues | orderBy : 'correspondingModelName'">
                      <span class"col-md-9"> {{issue.correspondingModelName}} > {{ issue.issueName }} </span>
                        <input class"col-md-3" value="amount" name="amountInput" placeholder="Price" class="form-control .input-sm" type="number"
                        ng-model="issue.amount"

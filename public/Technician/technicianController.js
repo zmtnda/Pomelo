@@ -67,6 +67,11 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
       }
     }
 
+    scope.goToAwaitingPage = function()
+    {
+      state.go("awaitingListing")
+    }
+
     // Toggle view for modifying personal info
     scope.modifyTechnician = function(){
       if (scope.isShowPersonalField == 0) {
