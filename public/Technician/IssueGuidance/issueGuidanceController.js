@@ -483,25 +483,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
       updateProgressBar("modelStage")
     }
-    // Input (Arrays of JSON):
-    // {
-    // 	"offer":{
-    //     "tec_Id" : 1,
-    //     "catMan_Id" : [3, 3],
-    //     "modIss_Id" : [2, 3],
-    //     "servType" : [0, 1],
-    //     "amount" : [59, 50]
-    // 	}
-    // }
-
-    // var newIssue = {"issueId": selectedIssueId,
-    //                 "modIss_Id": selectedModIss_Id,
-    //                 "issueName": selectedIssueName}
-    //
-    // if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
-    // {
-    //   scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
-    // }
 
 
     scope.onConfirmAllOfferrings = function()

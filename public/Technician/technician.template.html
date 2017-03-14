@@ -16,7 +16,7 @@
               <ul class="nav nav-sidebar">
                 <li>
                   <h4>Help Other Students</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-click="showProvide()">Provide A Service</button><br/></li>
+                  <button type="button" class="btn" style="width: 100%" ng-click="goToissueGudiance()">Provide A Service</button><br/></li>
                 <li></br></li>
                 <li>
                   <h4>See All Awaiting Offers</h4>
@@ -33,7 +33,7 @@
                 <li></br></li>
                 <li>
                   <h4>Update Personal Info</h4>
-                  <button type="button" class="btn" style="width: 100%"><a href="#contact">Update Account</a></button></li>
+                  <button type="button" class="btn" style="width: 100%" href="#userUpdate" ng-click="modifyTechnician()">Update Account</button></li>
                 <li></br></li>
                 <li>
                   <h4>BYE</h4>
@@ -232,7 +232,7 @@
   </section>
 
   <!-- SHOW PROMPTING USER'S NEW INFO-->
-  <section id="contact">
+  <section ng-if="isShowPersonalField" id="userUpdate">
       <div class="container">
           <div class="row">
               <div class="col-lg-12 text-center">
