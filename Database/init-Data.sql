@@ -28,7 +28,7 @@
 		`City`, `Zip`, `ratings`, `bad_id`, `status`) values
 		(2, 'Tech_1', 'Byakugan', 46.5, 'SLO', 93405, 3.5, 2, 1),
 		(3, 'Tech_2', 'Uhara', 30.0, 'Santa Clara', 95050, 4.2, 3, 1),
-		(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 0);
+		(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 1);
 
 	-- insert into certification --
 	insert into `Certifications` (`tec_id`, `certificationName`, `institution`, `yearObtained`) values

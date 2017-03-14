@@ -221,13 +221,14 @@ router.put('/:id', function(req, res) {
 //(Not deleting it but modifying the services and order)
 // services status set to
 // Requires admin AU/User in question. (Zin)
+
 router.delete('/:id', function(req, res) {
    var vld = req.validator;
 	var usrId = req.params.id;
-
+console.log ("delete user get called and id = " + usrId);
    if(vld.checkPrsOK(usrId)) {
       connections.getConnection(res, function(cnn) {
-         cnn.query(' DELETE FROM Users WHERE id = ? ', usrId,
+         cnn.query(' UPDATE Technicians SET status = 0 WHERE log_id = ? ', usrId,
 			function(err) {
 					if(err) {
 						res.status(400).json(err); // closes response
