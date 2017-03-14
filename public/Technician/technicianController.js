@@ -1,5 +1,5 @@
-app.controller('technicianController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg',
-  function(scope, state, logSer, http, rscope, noDlg) {
+app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices',
+  function(scope, location, state, logSer, http, rscope, noDlg, goto) {
     scope.user = {};
     scope.viewEnum = {
       NONE: 0,
@@ -54,17 +54,17 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
 
     // Toggle view for viewing provided services
     scope.showProvide = function(){
-      if (scope.isShowProvide == 0) {
-			 http.get("Serv/" + rscope.loggedUser.id + "/all")
-			 .then(function(response){
-          console.log("response.data: " + JSON.stringify(response));
-          scope.listServices = response.data;
-        scope.switchView(scope.viewEnum.PROVIDE);
-			 }).
-        catch(function(err){noDlg.show(scope, err, "Error")});
-      } else {
-        scope.switchView(scope.viewEnum.NONE);
-      }
+      // if (scope.isShowProvide == 0) {
+			//  http.get("Serv/" + rscope.loggedUser.id + "/all")
+			//  .then(function(response){
+      //     console.log("response.data: " + JSON.stringify(response));
+      //     scope.listServices = response.data;
+      //   scope.switchView(scope.viewEnum.PROVIDE);
+			//  }).
+      //   catch(function(err){noDlg.show(scope, err, "Error")});
+      // } else {
+      //   scope.switchView(scope.viewEnum.NONE);
+      // }
     }
 
     scope.goToAwaitingPage = function()
@@ -76,6 +76,7 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
     scope.modifyTechnician = function(){
       if (scope.isShowPersonalField == 0) {
         scope.switchView(scope.viewEnum.PERSONAL);
+        scope.gotoBottom();
       } else {
         scope.switchView(scope.viewEnum.NONE);
       }
@@ -177,6 +178,7 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
         //Asks for deletion confirmation
         if(window.confirm("Are you sure you want to delete your account?"))
         {
+          console.log("USER IS:" + rscope.loggedUser.id);
             http.delete("User/" + rscope.loggedUser.id)
             .then(function(){
                 state.go('home');
@@ -199,6 +201,14 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
        .then(function(){state.reload()})
        .catch(function(err){noDlg.show(scope, err, "Error")});
     }
+    scope.gotoBottom = function() {
+          // set the location.hash to the id of
+          // the element you wish to scroll to.
+          location.hash('userUpdate');
+
+          // call $anchorScroll()
+          $anchorScroll();
+    };
 	// scope.deleteService = function(id){
   //     console.log("In Tech delete function\n");
   //     http.delete("Serv/" + id + "/Order")
