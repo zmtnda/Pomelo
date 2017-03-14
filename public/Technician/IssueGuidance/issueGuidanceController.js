@@ -488,7 +488,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     scope.onConfirmAllOfferrings = function()
     {
         updateProgressBar("confirmAllOfferingsStage");
-        // console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
+        console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
         var offer = {};
         offer["tec_Id"] = rscope.loggedUser.tec_id;
         var catman = [];
@@ -503,7 +503,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           }
           for(var j = 0; j < scope.offerrings[i]["offer"]["issues"].length; j++){
             modIss.push(scope.offerrings[i]["offer"]["issues"][j]["modIss_Id"]);
-            serviceType.push(0);
+            serviceType.push(scope.offerrings[i]["offer"]["issues"][j]["serviceType"]);
             amount.push(scope.offerrings[i]["offer"]["issues"][j]["amount"]);
           }
         }
@@ -513,7 +513,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         offer["amount"] = amount;
 
         scope.postoffers["offer"] = offer;
-
+        console.log("MY JSON!!!!" + JSON.stringify(scope.postoffers));
         http.post("serv/" + rscope.loggedUser.tec_id, scope.postoffers)
           .then(function(response)
           {
