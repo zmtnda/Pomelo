@@ -36,10 +36,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     }
 
     // A set of boolean that indicates which column has been confirmed
-    scope.hasConfirmedCate = 0
-    scope.hasConfirmedManu = 0
-    scope.hasConfirmedModel = 0
-    scope.hasConfirmedIssue = 0
+    scope.hasConfirmedCate = false
+    scope.hasConfirmedManu = false
+    scope.hasConfirmedModel = false
+    scope.hasConfirmedIssue = false
 
     // Initializes all categories
     scope.allCates = cates
@@ -90,8 +90,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         for(var i = 0; i < loopingArray.length; i++)
         {
-          if(correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"] &&
-           scope.offerrings[offerId]["offer"][type][i][checkingField] === findingName)
+          if(correspondingModelId === scope.offerrings[offerId]["offer"][type][i]["correspondingModelId"] &&
+             scope.offerrings[offerId]["offer"][type][i][checkingField] === findingName)
           {
             scope.offerrings[offerId]["offer"][type].splice(i, 1);
           }
@@ -114,25 +114,33 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       var loopingArray = scope.offerrings[offerId]["display"][type]
       var counter = 0;
-      for(var i = 0; i < loopingArray.length; i++)
+      var checkingTheRightElementInTheArray
+
+      if(type === "issues")
       {
-        if(scope.offerrings[offerId]["display"][type][i][checkingField] === findingName)
+        for(var i = 0; i < loopingArray.length; i++)
         {
-           if(type === "issues")
+          checkingTheRightElementInTheArray = (scope.offerrings[offerId]["display"][type][i][checkingField] === findingName &&
+                                              correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"])
+
+          if(checkingTheRightElementInTheArray && scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
            {
-             if(correspondingModelId === scope.offerrings[offerId]["display"][type][i]["correspondingModelId"] &&
-                scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
-              {
-                  scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
-                  return true
-              }
-              else
-              {
-                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
-                return false;
-              }
+             scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
+             return true
            }
-           else {
+           else if (checkingTheRightElementInTheArray && scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 1)
+           {
+             scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
+             return false
+           }
+         }
+      }
+      else
+      {
+        for(var i = 0; i < loopingArray.length; i++)
+        {
+          if(scope.offerrings[offerId]["display"][type][i][checkingField] === findingName)
+          {
              if(scope.offerrings[offerId]["display"][type][i][buttonStyleName] === 0)
              {
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 1
@@ -143,9 +151,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                scope.offerrings[offerId]["display"][type][i][buttonStyleName] = 0
                return false;
              }
-           }
+          }
         }
       }
+
+      return false
     }
 
     var checkDuplicate = function(arr, obj, inputField, expectedDupVal, correspondingModelId)
@@ -184,8 +194,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                         "cateId": selectedCategoryId,
                         "offer": {"manus": [],
                                   "models": [],
-                                  "issues": [],
-                                  "amount": []},
+                                  "issues": []},
                         "display": {"manus": [],
                                     "models": [],
                                     "issues": []}}
@@ -235,27 +244,16 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       })
     }
 
-    scope.onClickRedoCategory = function()
-    {
-      numOfferings = 0;
-      scope.hasConfirmedCate = 0
-      scope.hasConfirmedManu = 0
-      scope.hasConfirmedModel = 0
-      scope.hasConfirmedIssue = 0
-      updateProgressBar("cateStage");
-      scope.offerrings = {}
-    }
-
     scope.onClickConfirmCategory = function()
     {
-      if(!angular.equals(scope.offerrings, {}))
+      if(!angular.equals(scope.offerrings, []))
       {
         for(var offerId in scope.offerrings)
         {
           onClickConfirmCategoryHelper(offerId)
         }
         updateProgressBar("manuStage");
-        scope.hasConfirmedCate = 1
+        scope.hasConfirmedCate = true
       }
       else
       {
@@ -306,14 +304,18 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickRedoManus = function()
     {
-      scope.hasConfirmedManu = 0
-      scope.hasConfirmedModel = 0
-      scope.hasConfirmedIssue = 0
+      scope.hasConfirmedCate = false
+      scope.hasConfirmedManu = false
+      scope.hasConfirmedModel = false
+      scope.hasConfirmedIssue = false
 
       for(var i in scope.offerrings)
       {
         scope.offerrings[i]["offer"]["manus"] = []
+        scope.offerrings[i]["display"]["manus"] = []
       }
+
+      updateProgressBar("cateStage")
     }
 
     scope.onClickConfirmManus = function()
@@ -324,7 +326,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         {
           onClickConfirmManusHelper(offerId)
         }
-        scope.hasConfirmedManu = 1
+        scope.hasConfirmedManu = true
         updateProgressBar("modelStage");
       }
       else
@@ -390,13 +392,17 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
     scope.onClickRedoModels = function()
     {
-      scope.hasConfirmedModel = 0
-      scope.hasConfirmedIssue = 0
+      scope.hasConfirmedManu = false
+      scope.hasConfirmedModel = false
+      scope.hasConfirmedIssue = false
 
       for(var i in scope.offerrings)
       {
         scope.offerrings[i]["offer"]["models"] = []
+        scope.offerrings[i]["display"]["models"] = []
       }
+
+      updateProgressBar("manuStage")
     }
 
     scope.onClickConfirmModel = function()
@@ -407,7 +413,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         {
           onClickConfirmModelHelper(offerId)
         }
-        scope.hasConfirmedModel = 1
+        scope.hasConfirmedModel = true
         updateProgressBar("issueStage");
       }
       else
@@ -437,7 +443,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
     {
       if(checkWhetherHasAFieldInJSON("issues"))
       {
-        scope.hasConfirmedIssue= 1
+        scope.hasConfirmedIssue= true
         updateProgressBar("finalStage");
       }
       else
@@ -446,23 +452,14 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
-    scope.onClickRedoModels = function()
-    {
-      scope.hasConfirmedIssue = 0
-
-      for(var i in scope.offerrings)
-      {
-        scope.offerrings[i]["display"]["issues"] = []
-        scope.offerrings[i]["offer"]["issues"] = []
-      }
-    }
-
-    scope.onClickIssue = function(offerId, selectedIssueId, selectedModIss_Id, selectedIssueName, correspondingModelId)
+    scope.onClickIssue = function(offerId, selectedIssueId, selectedModIss_Id, selectedIssueName, correspondingModelId, correspondingModelName)
     {
       var newIssue = {"issueId": selectedIssueId,
+                      "correspondingModelId": correspondingModelId, // added correspondingModelId in order to make popAnElement() works
+                      "correspondingModelName": correspondingModelName,
                       "modIss_Id": selectedModIss_Id,
                       "issueName": selectedIssueName}
-      console.log("MODISS IS: " + selectedModIss_Id);
+
       if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
       {
         scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
@@ -472,35 +469,28 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         popAnElement(offerId, "issues", "issueName", selectedIssueName, correspondingModelId)
       }
     }
-    // Input (Arrays of JSON):
-    // {
-    // 	"offer":{
-    //     "tec_Id" : 1,
-    //     "catMan_Id" : [3, 3],
-    //     "modIss_Id" : [2, 3],
-    //     "servType" : [0, 1],
-    //     "amount" : [59, 50]
-    // 	}
-    // }
 
-    // var newIssue = {"issueId": selectedIssueId,
-    //                 "modIss_Id": selectedModIss_Id,
-    //                 "issueName": selectedIssueName}
-    //
-    // if(changeButtonStyle("issues", offerId, "issue", selectedIssueName, "issueButtonStyle", correspondingModelId))
-    // {
-    //   scope.offerrings[offerId]["offer"]["issues"].push(newIssue)
-    // }
+    scope.onClickRedoIssues = function()
+    {
+      scope.hasConfirmedModel = false
+      scope.hasConfirmedIssue = false
+
+      for(var i in scope.offerrings)
+      {
+        scope.offerrings[i]["offer"]["issues"] = []
+        scope.offerrings[i]["display"]["issues"] = []
+      }
+
+      updateProgressBar("modelStage")
+    }
 
 
     scope.onConfirmAllOfferrings = function()
     {
-
         updateProgressBar("confirmAllOfferingsStage");
-        console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
+        // console.log("LEOS JSON!!!!" + JSON.stringify(scope.offerrings));
         var offer = {};
         offer["tec_Id"] = rscope.loggedUser.tec_id;
-        console.log("TECHNICIAN ID IS: " + offer["tec_Id"]);
         var catman = [];
         var modIss = [];
         var serviceType = [];
@@ -508,7 +498,6 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
         for(var i = 0; i < scope.offerrings.length; i++)
         {
-          console.log("GOING THROUGH " + i);
           for(var j = 0; j < scope.offerrings[i]["offer"]["manus"].length; j++){
             catman.push(scope.offerrings[i]["offer"]["manus"][j]["catMan_id"]);
           }
@@ -524,14 +513,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         offer["amount"] = amount;
 
         scope.postoffers["offer"] = offer;
-        console.log("THIS IS MY JSON!!!!" + JSON.stringify(scope.postoffers));
+
         http.post("serv/" + rscope.loggedUser.tec_id, scope.postoffers)
           .then(function(response)
           {
             return response["data"]
-          });
-
-
+          })
     }
-
 }]);

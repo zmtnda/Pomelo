@@ -42,6 +42,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
            }]
          }
       })
+      .state('awaitingListing', {
+         url: '/technician/awaitingListing',
+         templateUrl: 'Technician/AwaitingListPage/awaitingListPage.template.html',
+         controller: 'awaitingListPageController',
+      })
       .state('admin', {
          url: '/admin',
          templateUrl: 'Admin/admin.template.html',

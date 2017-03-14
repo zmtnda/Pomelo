@@ -394,3 +394,44 @@ CREATE VIEW ViewAllReviews AS
    WHERE R.serHis_id = SH.id_serHis AND SH.serTec_id = SO.id_serTec AND SH.cus_id = C.id_cus
       AND SO.tec_id = T.id_tec AND SO.modIss_id = MI.id_modIss
       AND MI.mod_id = M.id_mod AND MI.iss_id = I.id_iss;
+
+-- -----------------------------------------------------
+-- Create View for all stars of each technician
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewAllTechStars;
+CREATE VIEW ViewAllTechStars AS
+	SELECT T.id_tec, IFNULL(R.stars,0)
+	FROM Technicians T
+	LEFT JOIN
+	(SELECT tec_id, SUM(stars)/COUNT(1) AS stars
+	FROM Reviews
+	GROUP BY tec_id) R
+	ON T.id_tec = R.tec_id;
+
+-- -----------------------------------------------------
+-- Create Procedure to update ratings for each technician
+-- -----------------------------------------------------
+DROP PROCEDURE IF EXISTS UpdateRatings;
+
+DELIMITER $$
+CREATE PROCEDURE updateRatings ()
+BEGIN
+   DECLARE v_finished INTEGER DEFAULT 0;
+   DECLARE tecId INT DEFAULT 0;
+   DEClARE tecId_cursor CURSOR FOR
+   	SELECT id_tec FROM Technicians;
+   DECLARE CONTINUE HANDLER
+   	FOR NOT FOUND SET v_finished = 1;
+   OPEN tecId_cursor;
+   	calculate_update_ratings: LOOP
+   		FETCH tecId_cursor INTO tecId;
+   		IF v_finished = 1 THEN
+   		LEAVE calculate_update_ratings;
+   		END IF;
+   		UPDATE Technicians SET ratings = (SELECT IFNULL(SUM(stars)/COUNT(1),0)
+   										          FROM Reviews WHERE tec_id = tecId)
+   		WHERE id_tec = tecId;
+   	END LOOP calculate_update_ratings;
+   CLOSE tecId_cursor;
+END$$
+DELIMITER ;
