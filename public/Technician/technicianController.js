@@ -172,6 +172,7 @@ app.controller('technicianController', ['$scope', '$state','logService', '$http'
         //Asks for deletion confirmation
         if(window.confirm("Are you sure you want to delete your account?"))
         {
+          console.log("delete user id : " + rscope.loggedUser.id);
             http.delete("User/" + rscope.loggedUser.id)
             .then(function(){
                 state.go('home');

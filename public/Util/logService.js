@@ -40,7 +40,7 @@ function(rscope, http, state, nDlg, route, persisService) {
         })
         .then(function(response){
           console.log("???" + JSON.stringify(response.data))
-          rscope.loggedUser.id = response.data[0].id || response.data.id;
+          rscope.loggedUser.id = response.data[0].id_log || response.data.id_log;
           rscope.loggedUser.email = emailParam;
           rscope.loggedUser.password = passwordParam;
           rscope.loggedUser.role = response.data[0].role;
