@@ -63,7 +63,7 @@ function(rscope, http, state, nDlg, route, persisService) {
                 rscope.loggedUser.key = null;
             rscope.inSession = null;
             rscope.cookie = null;
-            nDlg.show(rscope, "Invalid Input??????");
+            nDlg.show(rscope, "Invalid username or password.");
         });
       }
 
