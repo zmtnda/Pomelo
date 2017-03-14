@@ -62,7 +62,7 @@
      <div class="col-xs-12 col-md-6 content-area" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
        <div class="thumbnail sample-show-hide">
            <h3>Issue(s)</h3>
-           <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()">Confirm</button>
+           <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()" ng-show="!hasConfirmedIssue">Confirm</button>
            <button type="button" class="btn btn-warning issueGuidanceBtn" ng-click="onClickRedoIssues()">Go Back</button>
            <div ng-repeat="oneOfferring in offerrings track by $index">
              <div ng-repeat="oneManu in oneOfferring.offer.manus track by $index">
@@ -126,11 +126,10 @@
                    <div class="label label-default issue-label row" ng-repeat="issue in oneOffer.offer.issues | orderBy : 'correspondingModelName'">
                      <span class"col-md-9"> {{issue.correspondingModelName}} > {{ issue.issueName }} </span>
                      <br><br>
-                     <select name="ServiceType" class="form-control .input-sm" class"col-md-3" ng-model="issue.serviceType">
-                      <option class="placeholder" selected disabled value="">Please Choose Service Type</option>
-                      <option value=0 >Item Based Service ($/Item)</option>
-                      <option value=1 >Time Based Service ($/Hour)</option>
-                    </select><br>
+                    <select ng-model="issue.serviceType" ng-options="selectedItem.id as selectedItem.name for selectedItem in serviceType">
+                    <option class="placeholder" selected disabled value="">Please Choose Service Type</option>
+                    </select>
+                    <br>
                        <input class"col-md-3" value="amount" name="amountInput" placeholder="$" class="form-control .input-sm" type="number"
                        ng-model="issue.amount"/>
                    </div>

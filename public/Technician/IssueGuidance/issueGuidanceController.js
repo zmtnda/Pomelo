@@ -1,5 +1,5 @@
-app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates',
-  function(scope, state, logSer, http, rscope, noDlg, cates)
+app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates','notifyDlg',
+  function(scope, state, logSer, http, rscope, noDlg, cates, nDlg)
   {
     /*IMPORTANT NOTE:
      1. The rest API uses manId while the controller uses manuId*/
@@ -34,6 +34,10 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       "selectedModel": [],
       "selectedIssue": []
     }
+
+    scope.serviceType = [
+            {name : "Item Based Service ($/Item)", id : 0},
+            {name : "Time Based Service ($/Hour)", id : 1}];
 
     // A set of boolean that indicates which column has been confirmed
     scope.hasConfirmedCate = false
@@ -517,6 +521,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         http.post("serv/" + rscope.loggedUser.tec_id, scope.postoffers)
           .then(function(response)
           {
+            nDlg.show(rscope, "Your services has been added successfully");
             return response["data"]
           })
     }
