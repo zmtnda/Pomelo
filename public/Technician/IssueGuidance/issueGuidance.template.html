@@ -125,13 +125,15 @@
                  <td>
                    <div class="label label-default issue-label row" ng-repeat="issue in oneOffer.offer.issues | orderBy : 'correspondingModelName'">
                      <span class"col-md-9"> {{issue.correspondingModelName}} > {{ issue.issueName }} </span>
-                     <br><br>
-                    <select ng-model="issue.serviceType" ng-options="selectedItem.id as selectedItem.name for selectedItem in serviceType">
-                    <option class="placeholder" selected disabled value="">Please Choose Service Type</option>
-                    </select>
-                    <br>
-                       <input class"col-md-3" value="amount" name="amountInput" placeholder="$" class="form-control .input-sm" type="number"
-                       ng-model="issue.amount"/>
+                     <div class="row">
+                        <select class="col-xs-12 col-md-9" ng-model="issue.serviceType" ng-options="selectedItem.id as selectedItem.name for selectedItem in serviceType">
+                         <option class="placeholder" selected disabled value="">Please Choose Service Type</option>
+                        </select>
+                        <div class="col-xs-12 col-md-3">
+                          <input value="amount" style="display:inline-block"name="amountInput" placeholder="$" class="form-control col-xs-12 col-md-3" type="number"
+                           ng-model="issue.amount"/>
+                        </div>
+                      </div>
                    </div>
                  </td>
                </tr>
