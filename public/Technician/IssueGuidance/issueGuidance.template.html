@@ -7,7 +7,7 @@
    </div>
    <!-- Category Collumn -->
    <div class="row">
-     <div class="col-xs-12 col-md-6 content-area" ng-hide="hasConfirmedCate">
+     <div class="col-xs-12 col-md-4 content-area" ng-hide="hasConfirmedCate">
        <div class="thumbnail sample-show-hide">
          <h3>Category(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-show="!hasConfirmedCate" ng-click="onClickConfirmCategory()">Confirm</button>
@@ -26,7 +26,7 @@
        </div>
      </div>
      <!-- Manufacturer Collumn -->
-     <div class="col-xs-12 col-md-6 content-area" ng-show="!hasConfirmedManu && hasConfirmedCate">
+     <div class="col-xs-12 col-md-4 content-area" ng-show="!hasConfirmedManu && hasConfirmedCate">
        <div class="thumbnail sample-show-hide">
          <h3>Manufacturer(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmManus()">Confirm</button>
@@ -41,7 +41,7 @@
        </div>
      </div>
      <!-- Model Collumn -->
-     <div class="col-xs-12 col-md-6 content-area" ng-show="!hasConfirmedModel && hasConfirmedCate && hasConfirmedManu">
+     <div class="col-xs-12 col-md-4 content-area" ng-show="!hasConfirmedModel && hasConfirmedCate && hasConfirmedManu">
        <div class="thumbnail sample-show-hide">
          <h3>Model(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmModel()">Confirm</button>
@@ -59,7 +59,7 @@
        </div>
      </div>
      <!-- Issue Collumn -->
-     <div class="col-xs-12 col-md-6 content-area" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
+     <div class="col-xs-12 col-md-4 content-area" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">
        <div class="thumbnail sample-show-hide">
            <h3>Issue(s)</h3>
            <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()" ng-show="!hasConfirmedIssue">Confirm</button>
@@ -105,10 +105,11 @@
           </div>
         </div>-->
         <!-- Offering Table -->
-     <div class="col-xs-12 col-md-6 content-area sample-show-hide">
+     <div class="col-xs-12 col-md-8 content-area sample-show-hide">
       <div class="thumbnail">
         <h3>You're offering:</h3>
-         <button type="button" ng-click="onConfirmAllOfferrings()" class="btn btn-success issueGuidanceBtn">Confirm All Offerrings</button>
+         <button type="button" ng-click="onConfirmAllOfferrings()" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && hasConfirmedIssue"
+            class="btn btn-success issueGuidanceBtn">Confirm All Offerrings</button>
          <div class = "table-responsive">
            <table class = "table">
              <thead>
