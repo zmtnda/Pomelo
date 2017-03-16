@@ -1,5 +1,5 @@
-app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates','notifyDlg',
-  function(scope, state, logSer, http, rscope, noDlg, cates, nDlg)
+app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates','notifyDlg', 'goToServices',
+  function(scope, state, logSer, http, rscope, noDlg, cates, nDlg, goto)
   {
     /*IMPORTANT NOTE:
      1. The rest API uses manId while the controller uses manuId*/
@@ -522,6 +522,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
           .then(function(response)
           {
             nDlg.show(rscope, "Your services has been added successfully");
+            goto.goToTechnician();
             return response["data"]
           })
     }
