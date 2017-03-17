@@ -19,7 +19,6 @@ function(state, route) {
 
    this.goToissueGudiance = function()
    {
-     console.log("riggerwetwengponwegpohwepogreoith woenhiu")
      state.go('issueGudiance');
    }
 
