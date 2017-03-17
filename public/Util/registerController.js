@@ -1,22 +1,10 @@
- app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg',
- function(rscope, scope, state, goSer, logSer, http, noDlg) {
+ app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter",
+ function(rscope, scope, state, goSer, logSer, http, noDlg, emf) {
     scope.user = {};
     scope.submitted = 0;
 
     scope.isValidZip = function(value){
         return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
-    }
-
-    var errorMessageFormatter = function(errorJSON)
-    {
-      var dataField = errorJSON["data"]
-      var errorStr = ""
-      dataField.forEach(function(ea){
-        console.log("Hi~~~: " + JSON.stringify(ea))
-        errorStr = errorStr.concat(ea["tag"] + ": " + ea["params"][0] + '\n\n')
-        console.log("Bye~~~: " + errorStr)
-      })
-      return errorStr
     }
 
     scope.postUser = function(){
@@ -50,7 +38,7 @@
 		  .catch(function(err)
       {
         console.log("ERROR!!!!!");
-        noDlg.show(scope, errorMessageFormatter(err), "Error")
+        noDlg.show(scope, emf.formatErrorCodeAndErrorArray(err), "Error")
       });
 	}
 
