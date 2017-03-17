@@ -19,6 +19,24 @@
   background-color: grey
 }
 
+#serviceTypeSelection{
+  float: left;
+  width: 70%;
+}
+
+#issueColumn{
+  width: 400px;
+  padding: 10px;
+}
+
+#amountSelection
+{
+  width: 25%;
+  float: left;
+  overflow:auto;
+  margin: 5px;
+}
+
 .issueGuidanceBtn{
   width: 100%
 }
