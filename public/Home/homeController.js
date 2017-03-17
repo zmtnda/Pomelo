@@ -6,8 +6,8 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
    }
 
    scope.addUser = function(){
-       regPopSer = regPopSer.show(scope, "Register")
-		 .then(function(){state.issueSelection()});
+     regPopSer.show(scope, "Register")
+     //regPopSer.close()
    }
 
    scope.goToAbout = function()

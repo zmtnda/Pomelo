@@ -9,4 +9,9 @@ app.service("registerPopService", ["$uibModal", function(uibM) {
             size: 'lg'
          }).result;
       }
+
+      this.close = function()
+      {
+        //uibM.dismissAll();
+      }
 }]);
