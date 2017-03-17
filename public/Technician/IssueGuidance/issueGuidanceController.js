@@ -27,6 +27,8 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
                   }
     }
 
+    scope.offerringsClass = "col-md-7"
+
     // Store the data of the buttons seletced by the user
     scope.selectedButtonValues = {
       "selectedType": [],
@@ -449,6 +451,7 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       {
         scope.hasConfirmedIssue= true
         updateProgressBar("finalStage");
+        scope.offerringsClass = "col-md-10 col-md-offset-1"
       }
       else
       {
