@@ -1,15 +1,15 @@
 app.service("logService", ["$rootScope", '$http', '$state', 'notifyDlg', '$route', 'userPersistenceService',
 function(rscope, http, state, nDlg, route, persisService) {
-      rscope.loggedUser = {email:null};
-      rscope.inSession = persisService.getInSession();
-
-      rscope.cookie = null;
+    rscope.loggedUser = {email:null};
+    rscope.inSession = persisService.getInSession();
+    rscope.cookie = null;
 
 		this.addUser = function(emailP, passwordP, roleP, fNameP, lNameP, hRateP, cityP, zipP)
 		{
 			return http.post("User/", {email: emailP, passwordHash: passwordP, role: roleP,
         firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP});
 		}
+
     this.logout = function(){
         return http.delete('Ssns/'+rscope.cookie)
         .then(function(){
@@ -21,6 +21,7 @@ function(rscope, http, state, nDlg, route, persisService) {
           persisService.clearCookieData();
         });
     }
+
     this.login = function(emailParam, passwordParam)
       {
         //this.logout();
@@ -67,8 +68,6 @@ function(rscope, http, state, nDlg, route, persisService) {
         });
       }
 
-
-
       this.isLoggedIn = function(){
         if(rscope.inSession == true)
          return 1;
@@ -76,7 +75,6 @@ function(rscope, http, state, nDlg, route, persisService) {
          return 0;
         }
       }
-
 
       if(rscope.inSession){
         var email = persisService.getCookieEmail();
