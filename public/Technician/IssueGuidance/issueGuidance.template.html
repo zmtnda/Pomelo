@@ -124,14 +124,14 @@
                  <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus">{{ manu.manuName }}</div></td>
                  <td><div class="label label-default issue-label" ng-repeat="model in oneOffer.offer.models">{{ model.modelName }}</div></td>
                  <td>
-                   <div class="label label-default issue-label" ng-repeat="issue in oneOffer.offer.issues | orderBy : 'correspondingModelName'">
+                   <div id="issueColumn" class="label label-default issue-label" ng-repeat="issue in oneOffer.offer.issues | orderBy : 'correspondingModelName'">
                      <div> {{issue.correspondingModelName}} > {{ issue.issueName }} </div>
                      <div>
-                        <select style="display: inline-block"ng-model="issue.serviceType" ng-options="selectedItem.id as selectedItem.name for selectedItem in serviceType">
+                        <select id="serviceTypeSelection" ng-model="issue.serviceType" ng-options="selectedItem.id as selectedItem.name for selectedItem in serviceType">
                          <option class="placeholder" selected disabled value="">Please Choose Service Type</option>
                         </select>
                         <span>
-                          <input value="amount" name="amountInput" placeholder="$" class="form-control col-xs-12 col-md-3" type="number"
+                          <input id="amountSelection" value="amount" name="amountInput" placeholder="$" class="form-control col-xs-12 col-md-3" type="number"
                            ng-model="issue.amount"/>
                         </span>
                       </div>
