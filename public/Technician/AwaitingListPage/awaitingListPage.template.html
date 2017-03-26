@@ -12,6 +12,8 @@
 								<button type="button" class="btn btn-warning btn-filter" data-target="pendiente">Laptop</button>
 								<button type="button" class="btn btn-danger btn-filter" data-target="cancelado">Desktop</button>
 								<button type="button" class="btn btn-default btn-filter" data-target="all">Tablet</button>
+								<button type="button" class="btn btn-default btn-filter" data-target="all">Pending</button>
+								<button type="button" class="btn btn-default btn-filter" data-target="all">Done</button>
 							</div>
 						</div>
 						<div class="table-container">
@@ -23,34 +25,42 @@
 										<th>Manufacturer</th>
 										<th>Model</th>
 										<th>Issue</th>
+										<th>Detail</th>
+										<th>Status</th>
 									</tr>
 								</theah>
 								<tbody>
-									<tr data-status="">
+									<tr data-status="" ng-repeat="eachListing in userListingData">
 										<td>
 											<div class="media">
 												<a href="#" class="pull-left">
 													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
 												</a>
 											</div>
+											<h5>Email: {{eachListing.email}}</h5>
 										</td>
 										<td>
-											Smart Phone
+											{{eachListing.name}}
 										</td>
 										<td>
-											iPhone
+											{{eachListing.manufacturer}}
 										</td>
 										<td>
-											<!--<a href="javascript:;" class="star">
-												<i class="glyphicon glyphicon-star"></i>
-											</a>-->
-											iPhone 7
+											{{eachListing.model}}
 										</td>
-
 										<td>
-											Big issue
+											{{eachListing.issue}}
+										</td>
+										<td>
+											{{eachListing.description}}
+										</td>
+										<td>
+											{{eachListing.status}}
 										</td>
 									</tr>
+									<!-- <tr>
+											<th></th>
+									</tr> -->
 								</tbody>
 							</table>
 						</div>
