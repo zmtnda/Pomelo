@@ -62,6 +62,26 @@ app.config(['$stateProvider', '$urlRouterProvider',
            userListing: ['$q', '$http', '$rootScope', function($q, http, rscope){
              return http.get('Receipt/'+ rscope.loggedUser.tec_id +'/technician')
               .then(function (res) {
+                res.data.forEach(function(ea)
+                {
+                  if(ea.status === 0)
+                  {
+                    ea.status = "Waiting for pick up"
+                  }
+                  else if (ea.status === 1)
+                  {
+                    ea.status = "Working on it"
+                  }
+                  else if (ea.status === 2)
+                  {
+                    ea.status = "Completed"
+                  }
+                  else if (ea.status === 3)
+                  {
+                    ea.status = 'Closed'
+                  }
+                })
+                
                 return $q.resolve(res.data)
               })
               .catch(function(err){

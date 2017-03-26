@@ -1,7 +1,20 @@
 app.controller('awaitingListPageController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'userListing',
   function(scope, state, logSer, http, rscope, noDlg, userListing) {
 
+    scope.sortValue = ""
+    scope.filterValue = ""
     scope.userListingData = userListing
+
+    scope.setSortValue = function(inputStr)
+    {
+        scope.sortValue = inputStr
+    }
+
+    scope.setFilterValue = function(inputStr)
+    {
+        scope.filterValue = inputStr
+    }
+
     scope.sampleData = [
                         {
                           "email": "cus1@pomelo.com",
