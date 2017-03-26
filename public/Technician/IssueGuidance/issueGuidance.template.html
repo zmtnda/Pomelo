@@ -103,7 +103,7 @@
           </div>
         </div>-->
         <!-- Offering Table -->
-     <div class="col-xs-12 content-area sample-show-hide" ng-class="offerringsClass">
+     <div class="col-xs-12 content-area sample-show-hide" ng-class="offerringsClass" style="border-style:none">
       <div class="thumbnail">
         <h3>You're offering:</h3>
          <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && !hasConfirmedIssue">Confirm Issues</button>
@@ -118,7 +118,7 @@
                <th>Model(s)</th>
                <th>Issue(s)</th>
              </thead>
-             <tbody>
+             <tbody style="width: 800px">
                <tr ng-repeat = "oneOffer in offerrings track by $index">
                  <td><div class="label label-default issue-label">{{ oneOffer.cate }}</div></td>
                  <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus">{{ manu.manuName }}</div></td>

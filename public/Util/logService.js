@@ -40,7 +40,7 @@ function(rscope, http, state, nDlg, route, persisService) {
           return http.get('/User?email=' + emailParam + '&all=true');
         })
         .then(function(response){
-          console.log("???" + JSON.stringify(response.data))
+          //console.log("???" + JSON.stringify(response.data))
           rscope.loggedUser.id = response.data[0].id_log || response.data.id_log;
           rscope.loggedUser.email = emailParam;
           rscope.loggedUser.password = passwordParam;
@@ -54,7 +54,10 @@ function(rscope, http, state, nDlg, route, persisService) {
           if(rscope.loggedUser.role === 0)
              state.go('customer');
           else if(rscope.loggedUser.role === 1)
+          {
              state.go('technician');
+             console.log("going to technician");
+           }
           else if(rscope.loggedUser.role === 2)
              state.go('admin');
         })

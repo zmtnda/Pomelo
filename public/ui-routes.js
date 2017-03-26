@@ -46,6 +46,18 @@ app.config(['$stateProvider', '$urlRouterProvider',
          url: '/technician/awaitingListing',
          templateUrl: 'Technician/AwaitingListPage/awaitingListPage.template.html',
          controller: 'awaitingListPageController',
+         resolve: {
+           userListing: ['$q', '$http', function($q, http) {
+             console.log("rscope  " +  rscope.loggedUser.tec_id)
+             return http.get('Receipt/' + rscope.loggedUser.tec_id + '/technician')
+             .then(function(response) {
+               return $q.resolve(response.data)
+             })
+             .catch(function(err) {
+               return $q.reject(response.data)
+             });
+           }]
+         }
       })
       .state('admin', {
          url: '/admin',
