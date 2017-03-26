@@ -10,9 +10,17 @@ app.controller('awaitingListPageController', ['$scope', '$state','logService', '
         scope.sortValue = inputStr
     }
 
-    scope.setFilterValue = function(inputStr)
+    scope.setFilterValue = function(val)
     {
-        scope.filterValue = inputStr
+      scope.filterValue = val
+    }
+
+    scope.filterBool = function(oneListing){
+      if(scope.filterValue === "")
+      {
+        return true
+      }
+      return oneListing["status"] === scope.filterValue
     }
 
     scope.sampleData = [
@@ -25,7 +33,7 @@ app.controller('awaitingListPageController', ['$scope', '$state','logService', '
                           "issue": "Can't turn on",
                           "description": "My Dell Desktop doesn’t turn on, please help!",
                           "amount": 200.5,
-                          "status": 1,
+                          "status": "Working on it",
                           "orderedDate": "2016-02-22T08:00:00.000Z",
                           "completedDate": "2017-03-08T20:32:18.000Z"
                         },
@@ -38,7 +46,7 @@ app.controller('awaitingListPageController', ['$scope', '$state','logService', '
                           "issue": "Can't turn off",
                           "description": "My Dell Desktolllelp!",
                           "amount": 270.5,
-                          "status": 2,
+                          "status": "Completed",
                           "orderedDate": "2016-02-22T08:00:00.000Z",
                           "completedDate": "2017-03-08T20:32:18.000Z"
                         },
@@ -51,7 +59,7 @@ app.controller('awaitingListPageController', ['$scope', '$state','logService', '
                           "issue": "Can't turn on",
                           "description": "My Hp Desktop doesn’t turn on, please help!",
                           "amount": 8800.5,
-                          "status": 3,
+                          "status": 'Closed',
                           "orderedDate": "2016-02-22T08:00:00.000Z",
                           "completedDate": "2017-03-08T20:32:18.000Z"
                         }

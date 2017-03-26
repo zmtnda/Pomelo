@@ -9,10 +9,11 @@
 						<div class="pull-left">
 							<h5>Filters:</h5>
 							<div class="btn-group">
-								<button type="button" class="btn btn-default btn-filter" data-target="all">Waiting</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">In Progress</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">Completed</button>
-								<button type="button" class="btn btn-default btn-filter" data-target="all">Closed</button>
+								<button type="button" class="btn btn-default btn-filter" ng-click="setFilterValue('Waiting for pick up')">Waiting</button>
+								<button type="button" class="btn btn-default btn-filter" ng-click="setFilterValue('Working on it')" >In Progress</button>
+								<button type="button" class="btn btn-default btn-filter" ng-click="setFilterValue('Completed')" >Completed</button>
+								<button type="button" class="btn btn-default btn-filter" ng-click="setFilterValue('Closed')" >Closed</button>
+								<button type="button" class="btn btn-default btn-filter" ng-click="setFilterValue('')">See All</button>
 						  </div>
 						</div>
 						<div class="pull-right">
@@ -38,17 +39,18 @@
 									</tr>
 								</theah>
 								<tbody>
-									<tr ng-repeat="eachListing in sampleData | orderBy:sortValue | filer:filterValue">
+									<tr ng-repeat="eachListing in sampleData | orderBy:sortValue | filter: filterBool">
 										<td>
 											<div class="media">
 												<a href="#" class="pull-left">
 													<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo">
 												</a>
 											</div>
+											<h5>Name: {{eachListing.name}}</h5>
 											<h5>Email: {{eachListing.email}}</h5>
 										</td>
 										<td>
-											{{eachListing.name}}
+											{{eachListing.category}}
 										</td>
 										<td>
 											{{eachListing.manufacturer}}
