@@ -1,3 +1,15 @@
+app.factory("initDataService", function($q, $http, $timeout){
+  return {
+    getGreetong: function(){
+      var deferred = $q.defer()
+      $timeout(function () {
+        deferred.resolve("ALLLL!!!")
+      }, 1000);
+      return deferred.promise
+    }
+  }
+})
+
 app.config(['$stateProvider', '$urlRouterProvider',
    function($stateProvider, $router) {
       //redirect to home if path is not matched
@@ -46,16 +58,15 @@ app.config(['$stateProvider', '$urlRouterProvider',
          url: '/technician/awaitingListing',
          templateUrl: 'Technician/AwaitingListPage/awaitingListPage.template.html',
          controller: 'awaitingListPageController',
-         resolve: {
-           userListing: ['$q', '$http', function($q, http) {
-             console.log("rscope  " +  rscope.loggedUser.tec_id)
-             return http.get('Receipt/' + rscope.loggedUser.tec_id + '/technician')
-             .then(function(response) {
-               return $q.resolve(response.data)
-             })
-             .catch(function(err) {
-               return $q.reject(response.data)
-             });
+         resolve:{
+           userListing: ['$q', '$http', '$rootScope', function($q, http, rscope){
+             return http.get('Receipt/'+ rscope.loggedUser.tec_id +'/technician')
+              .then(function (res) {
+                return $q.resolve(res.data)
+              })
+              .catch(function(err){
+                return $q.reject(err)
+              })
            }]
          }
       })
@@ -70,7 +81,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
                   return $q.resolve(response.data)//Note resolve() will put all the data in $scope
                })
                .catch(function(err){
-                 console.log("i'm error");
+                  return $q.reject(err)
                });
             }],//need one to get all users
             users: ['$q', '$http', '$stateParams', function($q, http, prms){

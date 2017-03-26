@@ -1,6 +1,7 @@
 app.controller('awaitingListPageController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'userListing',
   function(scope, state, logSer, http, rscope, noDlg, userListing) {
-    scope.userListing = userListing
+
+    scope.userListingData = userListing
     scope.sampleData = [
                         {
                           "email": "cus1@pomelo.com",
