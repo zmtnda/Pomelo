@@ -18,6 +18,10 @@
     "test": "node main.js",
     "start": "node main.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "ssh://58d960332d5271a2a0000026@pomelotech-437.rhcloud.com/~/git/pomelotech.git/"
+  },
   "author": [
     "Kris Campos-Flores",
     "Yiupang Chan",
