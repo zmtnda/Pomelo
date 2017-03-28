@@ -6,6 +6,10 @@
   padding-top: 20px;
 }
 
+table {
+	 table-layout: fixed;
+}
+
 .ng-show {
   transition:0.5s linear all;
   opacity:2;
@@ -25,8 +29,9 @@
 }
 
 #issueColumn{
-  width: 400px;
-  padding: 10px;
+  width: auto;
+  margin: 5px;
+  padding: 5px;
 }
 
 #amountSelection

@@ -113,12 +113,12 @@
          <div class = "table-responsive">
            <table class = "table">
              <thead>
-               <th>Categories</th>
-               <th>Manufacturer(s)</th>
-               <th>Model(s)</th>
-               <th>Issue(s)</th>
+               <th style="width: 180px">Categories</th>
+               <th style="width: 150px">Manufacturer(s)</th>
+               <th style="width: 150px">Model(s)</th>
+               <th style="width: auto">Issue(s)</th>
              </thead>
-             <tbody style="width: 800px">
+             <tbody>
                <tr ng-repeat = "oneOffer in offerrings track by $index">
                  <td><div class="label label-default issue-label">{{ oneOffer.cate }}</div></td>
                  <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus">{{ manu.manuName }}</div></td>

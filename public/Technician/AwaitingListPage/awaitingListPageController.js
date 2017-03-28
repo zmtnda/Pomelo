@@ -26,7 +26,6 @@ app.controller('awaitingListPageController', ['$scope', '$state','logService', '
     scope.sampleData = [
                         {
                           "email": "cus1@pomelo.com",
-                          "name": "Yiupang Chan",
                           "category": "Desktop",
                           "manufacturer": "Dell",
                           "model": "Dell Desktop",
@@ -39,7 +38,6 @@ app.controller('awaitingListPageController', ['$scope', '$state','logService', '
                         },
                         {
                           "email": "custttt2@pomelo.com",
-                          "name": "Yiupang Leee",
                           "category": "Desktop",
                           "manufacturer": "Apple",
                           "model": "Apple Desktop",
@@ -52,12 +50,11 @@ app.controller('awaitingListPageController', ['$scope', '$state','logService', '
                         },
                         {
                           "email": "cus1@pomelo.com",
-                          "name": "Leo Keen",
                           "category": "Laptop",
                           "manufacturer": "Hp",
                           "model": "Hp Desktop",
                           "issue": "Can't turn on",
-                          "description": "My Hp Desktop doesn’t turn on, please help!",
+                          "description": "My Hp Desktop doesn’t turn on, please help! My Hp Desktop doesn’t turn on, please help! My Hp Desktop doesn’t turn on, please help! ",
                           "amount": 8800.5,
                           "status": 'Closed',
                           "orderedDate": "2016-02-22T08:00:00.000Z",
