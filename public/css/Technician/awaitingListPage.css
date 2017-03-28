@@ -5,6 +5,17 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	color: #353535;
 }
+
+img{
+	height: 100px;
+	width: 100px;
+
+}
+
+table {
+	 table-layout: fixed;
+}
+
 .content h1 {
 	text-align: center;
 }
