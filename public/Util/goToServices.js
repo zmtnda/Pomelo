@@ -1,28 +1,48 @@
+//Note: This service is not being used because of unknown issue with the Digest Cycle.
+
 app.service("goToServices", ['$state', '$route',
-function(state, route) {
-   this.goToAdmin = function() {
-      state.go('admin');
+function(state, route)
+ {
+   this.goToAdmin = function()
+   {
+     timeout(function() {
+       state.go('admin');
+     })
    }
 
-   this.goToCustomer= function() {
-      state.go('customer');
+   this.goToCustomer= function()
+   {
+     timeout(function() {
+       state.go('customer');
+     })
    }
 
-   this.goToTechnician = function() {
-      state.go('technician');
+   this.goToTechnician = function()
+   {
+     timeout(function() {
+       state.go('technician');
+     })
    }
 
    this.goToAbout = function()
    {
-     state.go('about');
+     timeout(function() {
+       state.go('about');
+     })
    }
 
    this.goToissueGudiance = function()
    {
-     state.go('issueGudiance');
+     timeout(function() {
+       state.go('issueGudiance');
+     })
    }
 
-   this.retnHm = function(){
-     state.go('home');
+   this.retnHm = function()
+   {
+     timeout(function() {
+       state.go('home');
+     })
    }
+
 }]);
