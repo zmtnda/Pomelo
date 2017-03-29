@@ -44,11 +44,12 @@ router.post('/', function(req, res) {
   console.log(req.body.password);
   connections.getConnection(res, function(cnn) {
     cnn.query('SELECT * FROM (SELECT * FROM logins WHERE email = ?) l LEFT JOIN ' +
-              'Technicians t ON l.id_log = t.log_id WHERE status <> 0 ', req.body.email, function(err, result) {
+              'Technicians t ON l.id_log = t.log_id WHERE status is NULL OR status <> 0 ', req.body.email, function(err, result) {
+            console.log(result[0]);
       if (req.validator.check(result.length && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
-        console.log("same pass");
-        console.log(result[0]);
          cookie = ssnUtil.makeSession(result[0], res);
+         console.log("same pass");
+         console.log(result[0]);
          res.location(router.baseURL + '/'  + cookie).send(result[0]);
       }
       cnn.release();

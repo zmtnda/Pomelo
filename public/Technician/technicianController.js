@@ -87,7 +87,6 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
       if (scope.isShowOrderHistory == 1) {
         scope.switchView(scope.viewEnum.NONE);
       } else {
-          console.log("rscope.loggedUser.tec_id: " + rscope.loggedUser.tec_id);
         http.get("Receipt/" + rscope.loggedUser.tec_id + "/technician")
         .then(function(response){
           console.log("response.data: " + JSON.stringify(response));

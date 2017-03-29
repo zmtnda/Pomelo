@@ -58,6 +58,7 @@ router.get('/', function(req, res) {
 
       if(req.query.soFull)
       {
+        console.log("user get req.query.soFull");
         cnn.query('SELECT * FROM logins l left join technicians t '
                   + 'on l.id_log = t.log_id order by l.id_log', function(err, prsArr){
          console.log(JSON.stringify(prsArr));
@@ -68,15 +69,19 @@ router.get('/', function(req, res) {
       }
       else if(getAllBasedOnEmail)
       {
+        console.log("user get getAllBasedOnEmail");
          cnn.query("SELECT * FROM logins l left join technicians t on " +
                "l.id_log = t.log_id and email = ?", [specifier], allHandler);
       }
       else if (specifier)
       {
+        console.log("user get specifier");
          cnn.query('SELECT id_log, email FROM logins WHERE email = ?', [specifier], handler);
       }
-      else
+      else{
+        console.log("user get else");
          cnn.query('SELECT id_log, email FROM logins', handler);
+       }
    });
 });
 
@@ -106,7 +111,10 @@ router.post('/', function(req, res) {
              bcrypt.hash(body.passwordHash, salt, function(err, hash) {
                // Store hash in your password DB.
                body.passwordSalt = salt;
+               console.log("salt");
                console.log(salt);
+               console.log("hash");
+               console.log(hash);
                body.passwordHash = hash;
                var log_id = 0;
                var attrLoginTable = {email: body.email, passwordSalt: body.passwordSalt, passwordHash: body.passwordHash,

@@ -212,17 +212,17 @@ CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
     CONSTRAINT fkServicesOfferedByTechCategoriesManufacture
       FOREIGN KEY (catMan_id)
       REFERENCES CategoriesManufacturers (id_catMan)
       ON DELETE CASCADE
-      ON UPDATE NO ACTION,
+      ON UPDATE CASCADE,
   CONSTRAINT fkServicesOfferedByTechModelsIssues
     FOREIGN KEY (modIss_id)
     REFERENCES ModelsIssues (id_modIss)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION
+    ON UPDATE CASCADE
   )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -273,17 +273,17 @@ CREATE  TABLE IF NOT EXISTS Reviews (
     FOREIGN KEY (serHis_id)
     REFERENCES ServicesHistory (id_serHis)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT fkReviewsTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT fkReviewsCustomers
     FOREIGN KEY (cus_id)
     REFERENCES Customers (id_cus)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON UPDATE CASCADE
   )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -306,8 +306,8 @@ CREATE  TABLE IF NOT EXISTS Portfolio (
   CONSTRAINT fkPortfolioTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT fkPortfolioVideos
     FOREIGN KEY (vid_id)
     REFERENCES Videos (id_vid)
