@@ -1,4 +1,4 @@
-app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', function(scope, state, rscope,goSer, logSer, regPopSer) {
+app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', '$timeout', function(scope, state, rscope,goSer, logSer, regPopSer, timeout) {
     scope.user = {};
 
    scope.login = function(){
@@ -12,22 +12,17 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
 
    scope.goToAbout = function()
    {
-     goSer.goToAbout();
+     timeout(function() {
+       state.go('about');
+     })
    }
 
-   scope.goToAbout = goSer.goToAbout;
-
-   scope.goToissueGudiance = goSer.goToissueGudiance;
+   scope.goToTechnician = function(){
+     timeout(function() {
+       state.go('technician');
+     })
+   }
 
    rscope.logout = logSer.logout;
-
-   rscope.goMain = function(role){
-     if(role == 0)
-        state.go('customer');
-     else if(role == 1)
-        state.go('technician');
-     else if(role == 2)
-        state.go('admin');
-   }
 
 }])

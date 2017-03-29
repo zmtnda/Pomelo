@@ -1,4 +1,4 @@
-app.factory("initDataService", function($q, $http, $timeout){
+/*app.factory("initDataService", function($q, $http, $timeout){
   return {
     getGreetong: function(){
       var deferred = $q.defer()
@@ -8,7 +8,7 @@ app.factory("initDataService", function($q, $http, $timeout){
       return deferred.promise
     }
   }
-})
+})*/
 
 app.config(['$stateProvider', '$urlRouterProvider',
    function($stateProvider, $router) {
@@ -81,7 +81,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
                     ea.status = 'Closed'
                   }
                 })
-                
+
                 return $q.resolve(res.data)
               })
               .catch(function(err){
