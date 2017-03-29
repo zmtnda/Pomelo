@@ -25,41 +25,37 @@ function(rscope, http, state, nDlg, route, persisService) {
     this.login = function(emailParam, passwordParam)
       {
         //this.logout();
-        http.post("Ssns", {email: emailParam, password: passwordParam})
+        var result;
+        http.post("Ssns/", {email: emailParam, password: passwordParam})
         .then(function(response){
-           console.log("Logged In");
+          result = response;
           var location;
           location = response.headers().location.split('/');
           rscope.cookie = location[location.length - 1];
-          console.log("hi" + rscope.cookie);
-
           return http.get("Ssns/" + location[location.length - 1]);
         })
         .then(function(response){
-           console.log("user email In");
-          return http.get('/User?email=' + emailParam + '&all=true');
-        })
-        .then(function(response){
-          //console.log("???" + JSON.stringify(response.data))
-          rscope.loggedUser.id = response.data[0].id_log || response.data.id_log;
+        console.log("???" + JSON.stringify(result.data));
+
+          rscope.loggedUser.id = result.data.id_log;
           rscope.loggedUser.email = emailParam;
           rscope.loggedUser.password = passwordParam;
-          rscope.loggedUser.role = response.data[0].role;
-          rscope.loggedUser.tec_id = response.data[0].id_tec;
-          rscope.loggedUser.firstName = response.data[0].firstName || response.data.firstName;
-          rscope.loggedUser.lastName = response.data[0].lastName || response.data.lastName;
+          rscope.loggedUser.role = result.data.role;
+          rscope.loggedUser.tec_id = result.data.id_tec;
+          rscope.loggedUser.firstName = result.data.firstName;
+          rscope.loggedUser.lastName = result.data.lastName;
           rscope.inSession = true;
           persisService.setInSession(true);
           persisService.setCookieData(emailParam, passwordParam);
-          if(rscope.loggedUser.role === 0)
-             state.go('customer');
-          else if(rscope.loggedUser.role === 1)
-          {
-             state.go('technician');
-             console.log("going to technician");
+          if(rscope.loggedUser.role === 0){
+            state.go('customer');
            }
-          else if(rscope.loggedUser.role === 2)
-             state.go('admin');
+          else if(rscope.loggedUser.role === 1){
+            state.go('technician');
+          }
+          else if(rscope.loggedUser.role === 2){
+            state.go('admin');
+           }
         })
         .catch(function(err){
            console.log("what ? ? "+ JSON.stringify(err));
