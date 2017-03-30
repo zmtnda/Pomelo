@@ -60,7 +60,7 @@
         <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed" type="button" class="navbar-toggle">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
@@ -70,7 +70,7 @@
             <a class="navbar-brand" ng-if="inSession"><span ng-if="inSession">Hi Mr./Ms. {{loggedUser.lastName | uppercase}}</span> </a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+          <div uib-collapse="navCollapsed" class="navbar-collapse pull-right">
             <ul class="nav navbar-nav">
               <li class="active" ng-if="!inSession" role="presentation" ng-click="retnHm()"><a href="#">Home</a></li>
               <li class="active" ng-if="inSession" role="presentation" ng-click="goToTechnician()"><a href="#">Profile Page</a></li>
