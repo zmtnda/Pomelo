@@ -1,5 +1,5 @@
-app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices',
-  function(scope, location, state, logSer, http, rscope, noDlg, goto) {
+app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout',
+  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout) {
     scope.user = {};
     scope.viewEnum = {
       NONE: 0,
@@ -69,7 +69,16 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
 
     scope.goToAwaitingPage = function()
     {
-      state.go("awaitingListing")
+      timeout(function() {
+        state.go('awaitingListing');
+      })
+    }
+
+    scope.goToissueGudiance = function()
+    {
+      timeout(function() {
+        state.go('issueGudiance');
+      })
     }
 
     // Toggle view for modifying personal info

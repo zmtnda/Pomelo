@@ -1,0 +1,30 @@
+.ng-hide {
+
+  height: 0;
+}
+#submitBtn {
+  transition: all linear 2.5s;
+  background-color: lightblue;
+}
+
+/* The following classes are added automatically to an object that is being added to the scope.*/
+.ng-enter{
+  transition: 0.9s;
+  opacity: 0;
+}
+
+.ng-enter-active{
+  opacity: 1;
+}
+
+.ng-leave{
+  /*
+  The DOM elements in question will first duplicate itself. The duplication is visible during transition.
+  
+  transition: 0.1s;
+  opacity: 0;*/
+}
+
+.ng-leave-active{
+  opacity: 0;
+}
