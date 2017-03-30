@@ -1,15 +1,3 @@
-/*app.factory("initDataService", function($q, $http, $timeout){
-  return {
-    getGreetong: function(){
-      var deferred = $q.defer()
-      $timeout(function () {
-        deferred.resolve("ALLLL!!!")
-      }, 1000);
-      return deferred.promise
-    }
-  }
-})*/
-
 app.config(['$stateProvider', '$urlRouterProvider',
    function($stateProvider, $router) {
       //redirect to home if path is not matched

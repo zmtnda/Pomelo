@@ -19,8 +19,8 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/root-css.css" type="text/css"/>
   <link rel="stylesheet" href="css/Technician/issueGuidance.css" type="text/css"/>
-  <link rel="stylesheet" href="css/ngCss.css" type="text/css"/>
   <link rel="stylesheet" href="css/Customer/cust.css" type="text/css"/>
   <link rel="stylesheet" href="Util/cssFiles/regTmp.css" type="text/css"/>
 
@@ -55,16 +55,16 @@
 
     <title>PomeloTech - find your technicians</title>
 
-    <div class = "container" style="padding: 0px">
+    <div class = "container" style="padding: 0px" >
       <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand">Pomelo Tech</a>
             <a class="navbar-brand" ng-if="inSession"><span ng-if="inSession">Hi Mr./Ms. {{loggedUser.lastName | uppercase}}</span> </a>
