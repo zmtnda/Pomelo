@@ -1,5 +1,5 @@
  app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter",
- function(rscope, scope, state, goSer, logSer, http, noDlg, emf) {
+  function(rscope, scope, state, goSer, logSer, http, noDlg, emf) {
     scope.user = {};
     scope.submitted = 0;
 
@@ -35,6 +35,9 @@
 					state.reload();
 				}
 		  })
+      .then(function(){
+        //uibModalInstance.dismiss("cancel")
+      })
 		  .catch(function(err)
       {
         console.log("ERROR!!!!!");

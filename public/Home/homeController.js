@@ -1,4 +1,5 @@
-app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', '$timeout', function(scope, state, rscope,goSer, logSer, regPopSer, timeout) {
+app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', '$timeout',
+  function(scope, state, rscope,goSer, logSer, regPopSer, timeout) {
     scope.user = {};
 
    scope.login = function(){
