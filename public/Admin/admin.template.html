@@ -73,10 +73,23 @@
               <input type="text" ng-model="postingModel" class="form-control" style="width:80%; display:inline;">
               <button style="display:inline;" class="btn btn-default pull-right" type="button" ng-click="addCategory(postingModel)">Post</button>
             </div>
-            {{postingModel}}
             <div class="thumbnail" ng-repeat="cate in cates">
                 Id: {{cate.id_cat}}<br/>
                 Category: {{cate.category}}<br/>
+                <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddAManufacturerToDB">
+        <div class="thumbnail">
+            <div class="form-group" >
+              <select ng-model='selectedCate' ng-options='cate for cate in formattedCates'> </select>
+            </div>
+            <h4>{{selectedCate}}</h4>
+            <div class="thumbnail" ng-repeat="man in manus">
+                Id: {{man.id_cat}}<br/>
+                Manufacturer: {{man.category}}<br/>
                 <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
             </div>
         </div>
