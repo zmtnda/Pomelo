@@ -5,6 +5,7 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
     scope.wantModify = 0;
     scope.wantModifyP = 0;
     scope.addService = 0;
+    scope.selection = undefined;
 
     scope.addUser = function(){
       regPopSer = regPopSer.show(scope, "Add an User")
