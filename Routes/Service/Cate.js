@@ -10,7 +10,7 @@ router.baseURL = '/Cate';
 router.get('/', function(req, res) {
 	console.log("Get all catergoies");
 	connections.getConnection(res, function(cnn) {
-		cnn.query('SELECT id_cat, category from Categories ',
+		cnn.query('SELECT id_cat, category FROM Categories ',
 		function(err, result){
 			if(err){
 				console.log(JSON.stringify(err))
@@ -34,7 +34,7 @@ router.post('/', function(req, res) {
    var admin = req.session && req.session.isAdmin();
    var body = req.body;
 	var check_query = ' SELECT id_cat AS count FROM Categories WHERE category = ?';
-	var insert_query = ' INSERT INTO Categories (category) values (?) ';
+	var insert_query = ' INSERT INTO Categories (category) VALUES (?) ';
 
 	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newCategory'])) {
 		connections.getConnection(res, function(cnn) {
@@ -74,7 +74,7 @@ router.get('/:catId/manu', function(req, res) {
    var catId = req.params.catId;
 	var query =
 		' SELECT c.id_catMan AS catMan_id, m.id_man AS manId, m.manufacturer '+
-		' FROM manufacturers m, categoriesmanufacturers c ' +
+		' FROM Manufacturers m, CategoriesManufacturers c ' +
 		' WHERE c.man_id = m.id_man AND c.cat_id = ?'
 
 	connections.getConnection(res, function(cnn) {
@@ -160,7 +160,7 @@ router.get('/:catId/:manId/model', function(req, res) {
    var manId = req.params.manId;
 	var query =
 		' SELECT M.id_mod AS modelId, M.model FROM Models M, CategoriesManufacturers CM ' +
-		' WHERE CM.id_catMan = M.catMan_id and CM.cat_id = ? and CM.man_id = ? '
+		' WHERE CM.id_catMan = M.catMan_id AND CM.cat_id = ? AND CM.man_id = ? '
 
 	connections.getConnection(res, function(cnn) {
 		cnn.query(query, [catId, manId],

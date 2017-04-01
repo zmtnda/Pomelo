@@ -18,7 +18,7 @@ router.get('/serviceHistory/all', function(req, res) {
    if(vld.check(admin, Tags.noPermission)) {
       connections.getConnection(res, function(cnn) {
          qry = 'SELECT x.*, y.*, z.serviceName, v.status, v.amount ' + formatDate +
-			' FROM serviceHistory x JOIN Users y JOIN Services z JOIN ServicesOffer v WHERE x.userId = ? ' +
+			' FROM ServiceHistory x JOIN Users y JOIN Services z JOIN ServicesOffer v WHERE x.userId = ? ' +
 			' AND x.technicianId = y.id AND x.serviceID = z.id AND x.serviceID = v.serviceID AND x.technicianId = v.technicianId ';
 
          qryParams = req.session.id;
@@ -59,8 +59,8 @@ router.get('/', function(req, res) {
       if(req.query.soFull)
       {
         console.log("user get req.query.soFull");
-        cnn.query('SELECT * FROM logins l left join technicians t '
-                  + 'on l.id_log = t.log_id order by l.id_log', function(err, prsArr){
+        cnn.query('SELECT * FROM Logins l LEFT JOIN Technicians t '
+                  + 'ON l.id_log = t.log_id ORDER BY l.id_log', function(err, prsArr){
          console.log(JSON.stringify(prsArr));
           res.json(prsArr); // array notation to grab first person.
           cnn.release();
@@ -70,17 +70,17 @@ router.get('/', function(req, res) {
       else if(getAllBasedOnEmail)
       {
         console.log("user get getAllBasedOnEmail");
-         cnn.query("SELECT * FROM logins l left join technicians t on " +
+         cnn.query("SELECT * FROM Logins l LEFT JOIN Technicians t ON " +
                "l.id_log = t.log_id and email = ?", [specifier], allHandler);
       }
       else if (specifier)
       {
         console.log("user get specifier");
-         cnn.query('SELECT id_log, email FROM logins WHERE email = ?', [specifier], handler);
+         cnn.query('SELECT id_log, email FROM Logins WHERE email = ?', [specifier], handler);
       }
       else{
         console.log("user get else");
-         cnn.query('SELECT id_log, email FROM logins', handler);
+         cnn.query('SELECT id_log, email FROM Logins', handler);
        }
    });
 });
@@ -208,7 +208,7 @@ router.put('/:id', function(req, res) {
               if(body.password) {
                   body.password = bcrypt.hashSync(body.password, saltRounds);
               }
-           cnn.query("update Users set ? where id = ?", [req.body, req.params.id],
+           cnn.query("UPDATE Users set ? WHERE id = ?", [req.body, req.params.id],
            function(err) {
               if(err)
               {
