@@ -1,6 +1,6 @@
 {
     "host": "localhost",
     "user": "root",
-    "password": "Pleo123*",
-    "database": "zilikini_db"
+    "password": "password",
+    "database": "pomelotech"
 }
