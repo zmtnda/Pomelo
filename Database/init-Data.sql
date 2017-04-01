@@ -160,7 +160,7 @@
 		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15', '67a9cf34830567ca2955279cf0aa63840f61c26841d9f5addefb443b87599426ab5aedec94ccd341', 0);
 
 	-- insert data into review --
-	insert into `reviews` (`serHis_id`, `cus_id`, `tec_id`, `stars`, `comment`) values
+	insert into `Reviews` (`serHis_id`, `cus_id`, `tec_id`, `stars`, `comment`) values
 		(1, 1, 1, 5.0, 'Good Service, Fast'),
 		(2, 1, 1, 1.0, 'Bad Service'),
 		(3, 2, 1, 4.5, 'Okay but slow');

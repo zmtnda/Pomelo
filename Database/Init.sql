@@ -1,6 +1,6 @@
-drop database if exists zilikini_db;
-create database zilikini_db;
-use zilikini_db;
+drop database if exists pomelotech;
+create database pomelotech;
+use pomelotech;
 
 -- -----------------------------------------------------
 -- Table Logins
