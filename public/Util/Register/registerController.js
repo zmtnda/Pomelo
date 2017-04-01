@@ -1,5 +1,5 @@
- app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter", "$uibModalInstance",
-  function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns) {
+ app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter", "$uibModalInstance", '$timeout',
+  function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout) {
     scope.user = {};
     scope.isValidZip = function(value)
     {
@@ -11,13 +11,12 @@
 		  logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
          scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
 		  .then (function(){
-        if (scope.isValidZip(scope.user.zip)){
-          console.log("It is valid ZIP code")
+        if (!scope.isValidZip(scope.user.zip)){
+          noDlg.show(scope, "It is valid ZIP code", "Error")
         }
-        else
-        {
-          console.log("It is not valid zip code!");
-        }
+      })
+      .then(function(){
+        uibIns.close("Cancel")
       })
       .then (function(){
 			  if(rscope.loggedUser.email !== 'Admin@11.com'){
@@ -30,9 +29,6 @@
 					state.reload();
 				}
 		  })
-      .then(function(){
-        uibIns.close("Cancel")
-      })
 		  .catch(function(err){
         console.log("ERROR!!!!!");
         noDlg.show(scope, emf.formatErrorCodeAndErrorArray(err), "Error")

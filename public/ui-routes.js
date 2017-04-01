@@ -2,6 +2,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
    function($stateProvider, $router) {
       //redirect to home if path is not matched
       $router.otherwise("/");
+      
       $stateProvider
       .state('home',  {
          url: '/',
@@ -49,27 +50,29 @@ app.config(['$stateProvider', '$urlRouterProvider',
          resolve:{
            userListing: ['$q', '$http', '$rootScope', function($q, http, rscope){
              return http.get('Receipt/'+ rscope.loggedUser.tec_id +'/technician')
+             .then(function(res){
+               res.data.forEach(function(ea)
+               {
+                 if(ea.status === 0)
+                 {
+                   ea.status = "Waiting for pick up"
+                 }
+                 else if (ea.status === 1)
+                 {
+                   ea.status = "Working on it"
+                 }
+                 else if (ea.status === 2)
+                 {
+                   ea.status = "Completed"
+                 }
+                 else if (ea.status === 3)
+                 {
+                   ea.status = 'Closed'
+                 }
+               })
+               return $q.resolve(res)
+             })
               .then(function (res) {
-                res.data.forEach(function(ea)
-                {
-                  if(ea.status === 0)
-                  {
-                    ea.status = "Waiting for pick up"
-                  }
-                  else if (ea.status === 1)
-                  {
-                    ea.status = "Working on it"
-                  }
-                  else if (ea.status === 2)
-                  {
-                    ea.status = "Completed"
-                  }
-                  else if (ea.status === 3)
-                  {
-                    ea.status = 'Closed'
-                  }
-                })
-
                 return $q.resolve(res.data)
               })
               .catch(function(err){
@@ -97,6 +100,12 @@ app.config(['$stateProvider', '$urlRouterProvider',
                .then(function(response){
                   return $q.resolve(response.data)
                });
+            }],
+            cates: ['$q', '$http', '$stateParams', function($q, http, prms){
+              return http.get('Cate/')
+              .then(function(response){
+                return $q.resolve(response.data)
+              })
             }]
          }
       })

@@ -15,7 +15,7 @@
 .ng-enter{
   transition: 0.3s linear all;
   opacity: 0;
-  transform: translateY(15px);
+  transform: translateY(30px);
 }
 
 /*At the end of entering*/
