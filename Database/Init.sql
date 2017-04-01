@@ -398,14 +398,17 @@ CREATE VIEW ViewAllReviews AS
 -- -----------------------------------------------------
 -- Create View for all stars of each technician
 -- -----------------------------------------------------
+DROP VIEW IF EXISTS ViewReview;
+CREATE VIEW ViewReview AS
+SELECT tec_id, SUM(stars)/COUNT(1) AS stars
+FROM Reviews
+GROUP BY tec_id;
+
 DROP VIEW IF EXISTS ViewAllTechStars;
 CREATE VIEW ViewAllTechStars AS
 	SELECT T.id_tec, IFNULL(R.stars,0)
 	FROM Technicians T
-	LEFT JOIN
-	(SELECT tec_id, SUM(stars)/COUNT(1) AS stars
-	FROM Reviews
-	GROUP BY tec_id) R
+	LEFT JOIN ViewReview R
 	ON T.id_tec = R.tec_id;
 
 -- -----------------------------------------------------
