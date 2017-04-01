@@ -4,8 +4,9 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
     scope.users = users;
     scope.servs = servs;
     scope.cates = cates;
+    scope.formattedCates = cates.map(function(ea){return ea.category})
     scope.postingModel = "Enter a new category here"
-    scope.selection = undefined; // for dropdown lists
+    scope.selectedCate = undefined; // for dropdown lists
 
     scope.addUser = function(){
       regPopSer = regPopSer.show(scope, "Add an User")
