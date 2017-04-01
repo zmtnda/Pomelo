@@ -1,40 +1,43 @@
-app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http', 'notifyDlg', 'registerPopService', 'addServicePop', function(scope, state, users, servs, http, noDlg, regPopSer, addSerPop) {
+app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http', 'notifyDlg', 'registerPopService', 'addServicePop', 'cates',
+  function(scope, state, users, servs, http, noDlg, regPopSer, addSerPop, cates) {
 
     scope.users = users;
     scope.servs = servs;
-    scope.wantModify = 0;
-    scope.wantModifyP = 0;
-    scope.addService = 0;
-    scope.selection = undefined;
+    scope.cates = cates;
+    scope.postingModel = "Enter a new category here"
+    scope.selection = undefined; // for dropdown lists
 
     scope.addUser = function(){
       regPopSer = regPopSer.show(scope, "Add an User")
       .then(function(){state.reload()});
     }
 
-    scope.addCategory = function(){
-      addSerPop = addSerPop.showAddCategory(scope, "Add a Category")
-      .then(function(){state.reload()});
+    scope.addCategory = function(newCate){
+      http.post("cate/", {"newCategory": newCate})
+      .then(function(){
+        state.reload();
+      })
+      .catch(function(err){noDlg.show(scope, err, "Error")});
     }
 
     scope.addManufacturer = function(){
-      addSerPop = addSerPop.showAddManufacturer(scope, "Add a Manufacturer")
-      .then(function(){state.reload()});
+      //TODO
     }
 
     scope.addModel = function(){
-      addSerPop = addSerPop.showAddModel(scope, "Add a Model")
-      .then(function(){state.reload()});
+      //TODO
     }
 
     scope.postService = function()
     {
-        http.post("User/" + 0 + "/Serv", scope.field + "/?admin=true")
-        .then(function(){state.go('admin');})
-        .catch(function(err){noDlg.show(scope, err, "Error")});
+      //TODO
+      http.post("User/" + 0 + "/Serv", scope.field + "/?admin=true")
+      .then(function(){state.go('admin');})
+      .catch(function(err){noDlg.show(scope, err, "Error")});
     }
 
     scope.deleteUser = function(id){
+      //TODO
       http.delete("User/" + id)
       .then(function(){
           state.reload();
@@ -42,9 +45,9 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
       .catch(function(err){noDlg.show(scope, err, "Error")});
      }
 
-     /*FOR FUTURE
     scope.modifyUser = function(){
-    }*/
+      //TODO
+    }
 
     scope.deleteService = function(id){
       http.delete("Serv/" + id)
@@ -54,14 +57,7 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
       .catch(function(err){noDlg.show(scope, err, "Error")});
     }
 
-    /* FOR FUTURE
     scope.modifyService = function(id){
-        scope.wantModify = 1;
-        http.put("User/"+id, scope.user)
-        .then(function(){
-          noDlg.show(scope, "Please re-login to see the changes", "NOTE!!!")
-          state.reload()
-        })
-        .catch(function(err){noDlg.show(scope, err, "Error")});
-    }*/
+        //TODO
+    }
 }])

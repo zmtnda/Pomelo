@@ -1,9 +1,5 @@
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<body>
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
     <ul class="navbar-nav mr-auto" style="list-style-type: none;">
       <li class="nav-item active">
         <a class="btn btn-default" type-"button" ng-click="selection = 'SeeAllUsers'">See all users</span></a>
@@ -12,7 +8,7 @@
         <a class="btn btn-default" type-"button" ng-click="selection = 'SeeAllServices'">See all services</a>
       </li>
       <li class="nav-item active">
-        <a class="btn btn-default" type-"button" ng-click="addUser()"  ng-click="selection = 'AddAnUser'">Add an user</a>
+        <a class="btn btn-default" type-"button" ng-click="addUser()" ng-click="selection = 'AddAnUser'">Add an user</a>
       </li>
       <li class="nav-item active">
         <a class="btn btn-default" type-"button" ng-click="selection = 'AddACategoryToDB'">Add a Category to DB</a>
@@ -31,44 +27,59 @@
       <input class="form-control mr-sm-2" type="text" placeholder="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>-->
+  </nav>
+
+  <div ng-switch="selection">
+
+    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllUsers">
+        <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
+                <!-- id: {{user.id}}<br/> -->
+                Email: {{user.email}}<br/>
+                Role: <span ng-switch="{{user.role}}">
+                          <span ng-switch-when="1">Technician</span>
+                          <span ng-switch-when="2">Admin</span>
+                      </span><br/>
+                First Name: {{user.firstName}}<br/>
+                Last Name: {{user.lastName}}<br/>
+                Hourly Rate: {{user.hourlyRate}}<br/>
+                City: {{user.city}}<br/>
+                Zip Code: {{user.zip}}<br/>
+
+                <button class="btn btn-danger btn-sm pull-right" type-"button" ng-click="deleteUser(user.id)">Delete</button>
+                <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyUser()">MODIFY</button> -->
+        </div>
+    </div>
+
+    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllServices">
+        <div class="thumbnail" ng-repeat="serv in servs">
+                Category: {{serv.category}}<br/>
+                Manufacturer: {{serv.manufacturer}}<br/>
+                Model: {{serv.model}}<br/>
+                Issue: {{serv.issue}}<br/>
+                Service Type: <span ng-switch="{{serv.servType}}">
+                              <span ng-switch-when="0">Item based</span>
+                              <span ng-switch-when="1">Service based</span>
+                            </span><br/>
+                Estimated Amount: {{serv.estAmount}}<br/>
+
+                <button class="btn btn-danger btn-sm pull-right" type-"button" ng-click="deleteService(serv.id)">Delete</button>
+                <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyService()">MODIFY</button> -->
+        </div>
+    </div>
+
+    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddACategoryToDB">
+        <div class="thumbnail">
+            <div class="form-group" >
+              <input type="text" ng-model="postingModel" class="form-control" style="width:80%; display:inline;">
+              <button style="display:inline;" class="btn btn-default pull-right" type="button" ng-click="addCategory(postingModel)">Post</button>
+            </div>
+            {{postingModel}}
+            <div class="thumbnail" ng-repeat="cate in cates">
+                Id: {{cate.id_cat}}<br/>
+                Category: {{cate.category}}<br/>
+                <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
+            </div>
+        </div>
+    </div>
   </div>
-</nav>
-
-<div ng-switch="selection">
-
-  <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllUsers">
-      <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
-              <!-- id: {{user.id}}<br/> -->
-              Email: {{user.email}}<br/>
-              Role: <span ng-switch="{{user.role}}">
-                        <span ng-switch-when="1">Technician</span>
-                        <span ng-switch-when="2">Admin</span>
-                    </span><br/>
-              First Name: {{user.firstName}}<br/>
-              Last Name: {{user.lastName}}<br/>
-              Hourly Rate: {{user.hourlyRate}}<br/>
-              City: {{user.city}}<br/>
-              Zip Code: {{user.zip}}<br/>
-
-              <button class="btn btn-danger" type-"button" ng-click="deleteUser(user.id)">Delete User</button>
-              <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyUser()">MODIFY</button> -->
-      </div>
-  </div>
-
-  <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllServices">
-      <div class="thumbnail" ng-repeat="serv in servs">
-              Category: {{serv.category}}<br/>
-              Manufacturer: {{serv.manufacturer}}<br/>
-              Model: {{serv.model}}<br/>
-              Issue: {{serv.issue}}<br/>
-              Service Type: <span ng-switch="{{serv.servType}}">
-                            <span ng-switch-when="0">Item based</span>
-                            <span ng-switch-when="1">Service based</span>
-                          </span><br/>
-              Estimated Amount: {{serv.estAmount}}<br/>
-
-              <button class="btn btn-danger" type-"button" ng-click="deleteService(serv.id)">Delete Service</button>
-              <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyService()">MODIFY</button> -->
-      </div>
-  </div>
-</div>
+</body>
