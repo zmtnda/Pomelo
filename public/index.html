@@ -72,7 +72,7 @@
               <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand">Pomelo Tech</a>
-            <a class="navbar-brand" ng-if="inSession"><span ng-if="inSession">Hi Mr./Ms. {{loggedUser.lastName | uppercase}}</span> </a>
+            <a class="navbar-brand"><span ng-if="inSession">Hi Mr./Ms. {{loggedUser.lastName | uppercase}}</span> </a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div uib-collapse="navCollapsed" class="navbar-collapse pull-right">
@@ -90,5 +90,5 @@
     </div>
   </header>
   <!--The ui-view directive tells $state where to place your templates.-->
-  <div ui-view></div>
+  <div style="margin-top:10px;" ui-view></div>
 </html>
