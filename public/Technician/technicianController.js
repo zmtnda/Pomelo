@@ -15,7 +15,7 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
     scope.isShowPersonalField = 0;
     scope.listServices = [];
     scope.field = {};
-	 var service = {};
+	  var service = {};
 
     scope.switchView = function(newView) {
       switch (newView) {

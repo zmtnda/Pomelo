@@ -30,7 +30,6 @@
   <script src="Home/homeController.js"></script>
   <script src="Filter/buttonFilter.js"></script>
   <script src="Customer/customerController.js"></script>
-  <script src="Technician/IssueGuidance/issueGuidanceCustomDirective.js"></script>
   <script src="Technician/IssueGuidance/issueGuidanceController.js"></script>
   <script src="Technician/AwaitingListPage/awaitingListPageController.js"></script>
   <script src="Technician/technicianController.js"></script>
@@ -72,7 +71,7 @@
               <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand">Pomelo Tech</a>
-            <a class="navbar-brand" ng-if="inSession"><span ng-if="inSession">Hi Mr./Ms. {{loggedUser.lastName | uppercase}}</span> </a>
+            <a class="navbar-brand"><span ng-if="inSession">Hi Mr./Ms. {{loggedUser.lastName | uppercase}}</span> </a>
           </div>
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div uib-collapse="navCollapsed" class="navbar-collapse pull-right">
@@ -89,7 +88,6 @@
       </nav>
     </div>
   </header>
-
-  <ui-view/>
-
+  <!--The ui-view directive tells $state where to place your templates.-->
+  <div style="margin-top:10px;" ui-view></div>
 </html>

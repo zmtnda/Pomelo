@@ -8,7 +8,6 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
 
    scope.addUser = function(){
      regPopSer.show(scope, "Register")
-     //regPopSer.close()
    }
 
    scope.goToAbout = function()

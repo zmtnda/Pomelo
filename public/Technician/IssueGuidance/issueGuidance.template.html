@@ -82,32 +82,14 @@
            </div>
          </div>
        </div>
-       <!-- Implementation for model column by only using display
-       <div class="col-xs-12 col-md-2">
-         <div class="thumbnail" ng-show="hasConfirmedCate && hasConfirmedManu">
-           <h3>Model(s)</h3>
-          <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmModel()" ng-show="!hasConfirmedCate || !hasConfirmedManu || !hasConfirmedModel">Confirm</button>
-          <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="cancelSelection('model')" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel">Redo</button>
-          <div ng-repeat="oneOfferring in offerrings track by $index">
-            <div class="thumbnail" ng-repeat="oneManu in oneOfferring.display.manus track by $index">
-              <h5>{{ oneOfferring.cate }} > {{ oneManu.manufacturer }} </h5>
-              <div ng-repeat = "model in oneOfferring.display.models track by $index">
-                <div ng-if="model.correspondingManuId === oneManu.manId">
-                  <div ng-click="onClickModel(oneOfferring.offerId, model.modelId, model.model)"
-                   ng-class="modelButtonStatesJSON[selected][$index] | buttonFilter"
-                   class="label label-default issue-label">{{ model.model }}</div>
-                </div>
-               </div>
-              </div>
-            </div>
-          </div>
-        </div>-->
-        <!-- Offering Table -->
+     <!-- Offering Table -->
      <div class="col-xs-12 content-area sample-show-hide" ng-class="offerringsClass" style="border-style:none">
       <div class="thumbnail">
         <h3>You're offering:</h3>
-         <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && !hasConfirmedIssue">Confirm Issues</button>
-         <button type="button" ng-click="onConfirmAllOfferrings()" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && hasConfirmedIssue"
+         <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()"
+          ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && !hasConfirmedIssue">Confirm Issues</button>
+         <button type="button" ng-click="onConfirmAllOfferrings()"
+          ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && hasConfirmedIssue"
             class="btn btn-success issueGuidanceBtn">Confirm All Offerrings</button>
          <button type="button" class="btn btn-warning issueGuidanceBtn" ng-click="onClickRedoIssues()" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && !hasConfirmedIssue">Redo all issues</button>
          <div class = "table-responsive">

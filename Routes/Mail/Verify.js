@@ -25,7 +25,7 @@ router.get("/account/:email/:hash", function(req, res) {
    '         AND passwordHash=?) L ' +
    ' INNER JOIN Technicians T ' +
    ' ON L.id_log = T.log_id ';
-   var enable_query = ' UPDATE technicians SET status=1 WHERE log_id=? ';
+   var enable_query = ' UPDATE Technicians SET status=1 WHERE log_id=? ';
 
    connections.getConnection(res, function(cnn) {
       cnn.query(check_query, [email, hash], function(err, result) {

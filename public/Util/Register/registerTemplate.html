@@ -1,4 +1,4 @@
-<center ng-controller = 'registerController'>
+<center>
     <div id="login-form">
         <form method="post">
             <table align="center" width="90%" border="0">
@@ -41,8 +41,10 @@
                 </tr>
 
                 <tr>
-                    <td><button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-if="!submitted" ng-click="postUser()">Sign Me Up</button>
-                        <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="$close()">Cancel</button></td>
+                    <td>
+                      <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="postUser()">Sign Me Up</button>
+                      <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="$close()">Cancel</button>
+                    </td>
                 </tr>
             </table>
             <br>

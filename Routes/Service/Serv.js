@@ -327,7 +327,7 @@ router.put('/:servId/:techId/Order', function(req, res) {
 									'whenCompleted': new Date()
 								};
 								//time to insert a new record in the orderhistory table
-								cnn.query(' INSERT INTO serviceHistory SET ?', order,
+								cnn.query(' INSERT INTO ServiceHistory SET ?', order,
 								function(err){
 									if(err){
 										console.log("Error in Serv/:servId:techId/Order" + JSON.stringify(order));
@@ -363,7 +363,7 @@ router.delete('/:servId/:techId/Order', function(req, res) {
 	var techId = req.params.techId;
 	console.log("id = " + servId);
 	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT * FROM servicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
+		cnn.query(' SELECT * FROM ServicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
 			function(err, result){
 				if(result.length ){
 					// if(result[0].status == 1){
@@ -375,7 +375,7 @@ router.delete('/:servId/:techId/Order', function(req, res) {
 						// 	cnn.release();
 					// }
 					//delete it don't require else
-					cnn.query(' DELETE FROM servicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
+					cnn.query(' DELETE FROM ServicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
 						function(err){
 							if (err)
 								console.log("Error deleting Serv/:servId ");
