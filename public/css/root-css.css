@@ -11,24 +11,27 @@
   width: 100%;
 }
 
-/* The following classes are added automatically to an object that is being added to the scope.*/
+/* The following classes are added automatically to an elements that is being added to or took out the scope.*/
 .ng-enter{
-  transition: 0.9s;
+  transition: 0.3s linear all;
   opacity: 0;
+  transform: translateY(15px);
 }
 
-.ng-enter-active{
+/*At the end of entering*/
+.ng-enter.ng-enter-active{
+  transform: translateY(0px);
   opacity: 1;
 }
 
+/*At the start of leaving*/
 .ng-leave{
-  /*
-  The DOM elements in question will first duplicate itself. The duplication is visible during transition.
-
-  transition: 0.1s;
-  opacity: 0;*/
+  transition: 9s liner all;
+  opacity: 1;
+  transform: translateX(0);
 }
 
-.ng-leave-active{
+.ng-leave.ng-leave-active{
+  transform: translateZ(-100%);
   opacity: 0;
 }
