@@ -4,19 +4,23 @@
  margin:0;
  padding:0;
 }
+
 #login-form
 {
  margin-top:5px;
 }
+
 table
 {
  padding:25px;
 }
+
 table tr,td
 {
  padding:10px;
- //border:solid #e1e1e1 1px;
+ /*border:solid #e1e1e1 1px;*/
 }
+
 table tr td input
 {
  width:97%;
@@ -27,9 +31,9 @@ table tr td input
  font-family:Verdana, Geneva, sans-serif;
  font-size:16px;
  background:#f9f9f9;
- transition-duration:0.5s;
  box-shadow: inset 0px 0px 1px rgba(0,0,0,0.4);
 }
+
 table tr td select
 {
  width:97%;
@@ -40,7 +44,6 @@ table tr td select
  font-family:Verdana, Geneva, sans-serif;
  font-size:16px;
  background:#f9f9f9;
- transition-duration:0.5s;
  box-shadow: inset 0px 0px 1px rgba(0,0,0,0.4);
 }
 
@@ -59,11 +62,13 @@ table tr td button
  font-weight:bolder;
  text-transform:uppercase;
 }
+
 table tr td button:active
 {
  position:relative;
  top:1px;
 }
+
 table tr td a
 {
  text-decoration:none;
@@ -115,4 +120,3 @@ table tr td a
 {
  color:#00a2d1;
 }
-
