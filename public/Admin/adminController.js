@@ -1,5 +1,5 @@
-app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http', 'notifyDlg', 'registerPopService', 'addServicePop', 'cates',
-  function(scope, state, users, servs, http, noDlg, regPopSer, addSerPop, cates) {
+app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http', 'notifyDlg', 'registerPopService', 'cates',
+  function(scope, state, users, servs, http, noDlg, regPopSer, cates) {
 
     //Display diplay in thumbnaills' lists
     scope.users = users;
@@ -16,7 +16,7 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
     scope.formattedModelInIssue = undefined
 
     scope.addUser = function(){
-      regPopSer = regPopSer.show(scope, "Add an User")
+      regPopSer.show(scope, "Add an User")
       .then(function(){state.reload()});
     }
 
@@ -121,7 +121,7 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
     scope.addIssue = function(postingIssue, selectedModel){
       var parsedModelDataJSON = JSON.parse(selectedModel)
 
-      http.post("cate/" + parsedModelDataJSON.modelId + "/issues", {"newIssue": postingIssue, "issueId": -1})
+      http.post("cate/" + parsedModelDataJSON.modelId + "/issues", {"issue": postingIssue, "issueId": -1})
       .then(function(res){
         state.reload()
       })
