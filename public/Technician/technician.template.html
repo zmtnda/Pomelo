@@ -3,57 +3,27 @@
 <div id="page-top" class="index">
   <!-- Header -->
   <section class="success" id="about">
-        <div class="row">
-            <div class="col-md-2">
+
+            <div class="col-md-offset-1">
                 <img class="img-responsive" src="img/profile.png" alt="">
-                <div class="intro-text">
+
+                    <span class="skills">Android - IOS - User Experience Designer</span>
                     <hr class="star-light">
-                    <span class="skills">Andriod - IOS - User Experience Designer</span>
-                </div>
+            </div>
+          <br>
+
+          <div class="row">
+            <div class="col-md-offset-1">
+                  <button type="button" class="btn" style="width: 15%" ng-click="goToissueGudiance()">Provide A Service</button>
+                  <button type="button" class="btn" style="width: 15%" ng-click="goToAwaitingPage()">Awaiting Offers</button>
+                  <button type="button" class="btn" style="width: 10%" ng-click="showListOrders()">My Orders</button>
+                  <button type="button" class="btn" style="width: 10%" ng-click="showListServices()">My Services</button>
+                  <button type="button" class="btn" style="width: 20%" href="#userUpdate" ng-click="modifyTechnician()">Update Account</button>
+                  <button type="button" class="btn btn-warning" style="width: 20%" ng-click="deleteTechnician()">Delete this Account</button>
             </div>
 
-            <div class="col-md-2">
-              <ul class="nav nav-sidebar">
-                <li>
-                  <h4>Help Other Students</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-click="goToissueGudiance()">Provide A Service</button><br/></li>
-                <li></br></li>
-                <li>
-                  <h4>See All Awaiting Offers</h4>
-                  <!--  This button has been linked-->
-                  <button type="button" class="btn" style="width: 100%" ng-click="goToAwaitingPage()">Awaiting Offers</button></li>
-                <li></br></li>
-                <li>
-                  <h4>View Your Orders</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-click="showListOrders()">My Orders</button></li>
-                <li></br></li>
-                <li>
-                  <h4>View Your Services</h4>
-                  <button type="button" class="btn" style="width: 100%" ng-click="showListServices()">My Services</button></li>
-                <li></br></li>
-                <li>
-                  <h4>Update Personal Info</h4>
-                  <button type="button" class="btn" style="width: 100%" href="#userUpdate" ng-click="modifyTechnician()">Update Account</button></li>
-                <li></br></li>
-                <li>
-                  <h4>BYE</h4>
-                  <button type="button" class="btn btn-warning" style="width: 100%" ng-click="deleteTechnician()">Delete this Account</button></li>
-              </ul>
-            </div>
-
-            <div class="col-md-8" style="color:black">
-              <div class="thumbnail" ng-if="isShowProvide">
-                  <fieldset class="form-group">
-                     <label>Service Name</label>
-                     <select ng-model="field.serviceName" ng-options="item.serviceName for item in listServices">
-                     </select>
-                  </fieldset>
-                  <fieldset class="form-group">
-                    <label>Amount</label>
-                    <input type="amount" class="form-control" placeholder="Amount" ng-model="field.amount">
-                  </fieldset>
-                  <button type="button" class="btn btn-primary" ng-click="postService()">Add to My Services</button>
-              </div>
+            <br>
+            <div class="col-md-10 col-md-offset-1" style="color:black">
 
               <div class = "thumbnail" ng-if="isShowListOrders">
                 <h2>My orders</h2>
@@ -93,7 +63,11 @@
                    </table>
                 </div>
               </div>
+
+            </div>
+
               <!-- SHOW ALL SERVICES -->
+            <div class="col-md-10 col-md-offset-1" style="color:black">
              <div class = "thumbnail" ng-if="isShowListServices">
                <h2>My Services</h2>
                <div class="table-responsive" style="width:100%; overflow:auto;">
@@ -145,10 +119,25 @@
                   </table>
                </div>
              </div>
+           </div>
             </div>
         </div>
   </section>
 
+
+<section id="about">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12 text-center">
+              <h2>About Me</h2>
+              <hr class="star-primary">
+          </div>
+          <p>My name is Tech1, I currently have had experience in repair and fix Android phone for over 5 years.</p>
+          <p>My goal is to create wonderful custoner service, with fast repair time, and low price.</p>
+      </div>
+  </div>
+
+</section>
   <!-- Portfolio Grid Section -->
   <section id="portfolio">
       <div class="container">
@@ -223,13 +212,13 @@
       </div>
   </section>
 
-  <section data-brackets-id="4060" class="success" id="about">
+  <!-- <section data-brackets-id="4060" class="success" id="about">
           <div data-brackets-id="4061" class="container">
               <div data-brackets-id="4062" class="row">
 
               </div>
         </div>
-  </section>
+  </section> -->
 
   <!-- SHOW PROMPTING USER'S NEW INFO-->
   <section ng-if="isShowPersonalField" id="userUpdate">
@@ -259,13 +248,7 @@
                               <p class="help-block text-danger"></p>
                           </div>
                       </div>
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Password</label>
-                              <input type="email" class="form-control" ng-model="user.password" placeholder="Password" id="email" required data-validation-required-message="Please enter your password.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
+
                       <div class="row control-group">
                           <div class="form-group col-xs-12 floating-label-form-group controls">
                               <label>Email Address</label>
@@ -276,23 +259,41 @@
 
                       <div class="row control-group">
                           <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Phone Number</label>
-                              <input type="tel" class="form-control" ng-model="user.phone" placeholder="Phone Number" id="phone" required data-validation-required-message="Please enter your phone number.">
+                              <label>Password</label>
+                              <input type="password" class="form-control" ng-model="user.password" placeholder="Password" id="email" required data-validation-required-message="Please enter your password.">
                               <p class="help-block text-danger"></p>
                           </div>
                       </div>
+
                       <div class="row control-group">
                           <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Address</label>
-                              <input type="tel" class="form-control" placeholder="Address" id="address" required data-validation-required-message="Please enter your address.">
+                              <label>Hourly Rate</label>
+                              <input type="number" class="form-control" ng-model="user.hourlyRate" placeholder="Hourly Rate" id="hourlyRate" required data-validation-required-message="Please enter your Hourly Rate.">
                               <p class="help-block text-danger"></p>
                           </div>
                       </div>
+
+                      <div class="row control-group">
+                          <div class="form-group col-xs-12 floating-label-form-group controls">
+                              <label>City</label>
+                              <input type="text" class="form-control" placeholder="City" ng-model="user.city" id="city" required data-validation-required-message="Please enter your city.">
+                              <p class="help-block text-danger"></p>
+                          </div>
+                      </div>
+
+                      <div class="row control-group">
+                          <div class="form-group col-xs-12 floating-label-form-group controls">
+                              <label>Zip Code</label>
+                              <input type="number" class="form-control" placeholder="Zip code" ng-model="user.zip" id="zip" required data-validation-required-message="Please enter your zip code.">
+                              <p class="help-block text-danger"></p>
+                          </div>
+                      </div>
+
                       <br>
                       <div id="success"></div>
                       <div class="row">
                           <div class="form-group col-xs-12">
-                              <button type="submit" class="btn btn-success btn-lg">Confirm Changes</button>
+                              <button type="submit" ng-click="postUser()" class="btn btn-success btn-lg">Confirm Changes</button>
                           </div>
                       </div>
                   </form>
