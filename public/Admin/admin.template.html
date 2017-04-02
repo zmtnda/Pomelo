@@ -30,7 +30,6 @@
   </nav>
 
   <div ng-switch="selection">
-
     <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllUsers">
         <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
                 <!-- id: {{user.id}}<br/> -->
