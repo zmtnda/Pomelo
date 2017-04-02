@@ -7,9 +7,6 @@ router.baseURL = '/Serv';
 var formatDate = ', DATE_FORMAT(timestamp, \'\%b \%d \%Y \%h\:\%i \%p\') as formatDate';
 
 // Begin '/Serv/' functions
-
-
-
 /* Add a new service for the technician
 * Front end will make sure all the required params are attached with JSON
 * Valid only if technician himself
@@ -115,7 +112,7 @@ router.post('/:tecId', function(req, res) {
                 + ' ) T3 ON T1.modIss_id = T3.id_modIss '
                 + ' ORDER BY tec_id ';
 
-  if(vld.checkPrsOK(LogUser)){
+  if(vld.checkAdmin(LogUser)){
   	connections.getConnection(res, function(cnn) {
   		cnn.query(selectQry, LogUser, function(err, result){
   			if(err){
@@ -164,32 +161,31 @@ router.get('/:tecId/all', function(req, res) {
 		});
 }});
 
-// Retrieve all the technician and associated services
-// based on the service chosen
-// AU must be admin
-router.get('/:servId/Services', function(req, res) {
+// Customer Retrieve all the technicians for the issue
+// No AU required
+router.get('/:issId/Issues', function(req, res) {
 	var vld = req.validator;
 	var user = req.session;
-	var servId = req.params.servId;
-  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
-                + ' FROM ServicesOfferedByTech T1 '
-                + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
-                + ' FROM CategoriesManufacturers T1 '
-                + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
-                + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
-                + ' ) T2 ON T1.catMan_id = T2.id_catMan '
-                + ' INNER JOIN (SELECT id_modIss, model, issue '
-                + ' FROM ModelsIssues T1 '
-                + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
-                + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
-                + ' ) T3 ON T1.modIss_id = T3.id_modIss '
-                + ' WHERE (catMan_id , modIss_id ) '
-                + ' IN (' + qryParams.join(',') + ')'
-                + ' ORDER BY modIss_id ';
-	console.log("get from ServicesOffer");
-	if(vld.check(user, Tags.noPermission)){
+	var issId = req.params.issId;
+    var selectQry = ' SELECT tech.firstName, tech.lastName, tech.hourlyRate, '
+                  + ' tech.city, tech.ratings, tech.bad_id, category, manufacturer, '
+                  + ' model, issue, servType, estAmount '
+                  + ' FROM ServicesOfferedByTech T1 '
+                  + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
+                  + ' FROM CategoriesManufacturers T1 '
+                  + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
+                  + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
+                  + ' ) T2 ON T1.catMan_id = T2.id_catMan '
+                  + ' INNER JOIN (SELECT id_modIss, model, issue '
+                  + ' FROM ModelsIssues T1 '
+                  + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
+                  + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
+                  + ' AND T3.id_iss = ? '
+                  + ' ) T3 ON T1.modIss_id = T3.id_modIss '
+                  + ' INNER JOIN Technicians tech ON T1.tec_id = tech.id_tec '
+                  + ' ORDER BY tech.ratings DESC';
 		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT *' + formatDate + ' FROM ServicesOffer WHERE serviceId = ? ', servId,
+			cnn.query(selectQry, issId,
 			function(err, result){
 				if(!err){
 					res.json(result);
@@ -201,233 +197,7 @@ router.get('/:servId/Services', function(req, res) {
 				}
 			});
 		});
-	}
-});
-// Begin '/Serv/:techId' functions.
 
-// Retrieve all the services provided by Serv owner or admin.
-// Returns
-//       Services     - URI of the services being offer,
-//			serviceName	 - services technician offer
-//			amount		 - the amount of services
-//       userId       - ID of the User making the Serv
-//       status       - 0 for open, 1 pending, 2 closed
-//       timeStamp    - Time of Serv start
-//       technicianId - of the creator of a service
-//
-router.get('/:techId', function(req, res) {
-	var vld = req.validator;
-	var techId = req.session && req.params.techId;
-
-	if(vld.checkPrsOK(techId, Tags.noPermission)){
-		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT *' + formatDate + ' FROM ServicesOffer T1 JOIN Services T2 '
-			+ ' WHERE T1.serviceId = T2.id  AND technicianId = ? ', techId,
-			function(err, result){
-				if(!err){
-					res.json(result);
-					cnn.release();
-				}
-				else{
-					res.status(404).end();
-					cnn.release();
-				}
-			});
-		});
-	}
-});
-// Begin '/Serv/:userId' functions.
-
-// Retrieve all the services requested by user or admin
-// Returns
-//       Services     - URI of the services being offer,
-//			serviceName	 - services technician offer
-//			amount		 - the amount of services
-//       userId       - ID of the User making the Serv
-//       status       - 0 for open, 1 pending, 2 closed
-//       timeStamp    - Time of Serv start
-//       technicianId - of the creator of a service
-//
-router.get('/:userId', function(req, res) {
-	var vld = req.validator;
-	var usrId = req.session && req.params.userId;
-
-	if(vld.checkPrsOK(userId, Tags.noPermission)){
-		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT * FROM ServicesOffer T1 JOIN Services T2 '
-			+ ' WHERE T1.serviceId = T2.id  AND userId = ? ', usrId,
-			function(err, result){
-				if(!err){
-					res.json(result);
-					cnn.release();
-				}
-				else{
-					res.status(404).end();
-					cnn.release();
-				}
-			});
-		});
-	}
-});
-// Begin '/Serv/:servId' functions.
-
-// Retrieve Serv-specific info. AU must be Serv owner or admin or customer.
-// Returns
-//       Services     - URI of the challenge being played,
-//       userId       - ID of the User making the Serv
-//       status       - 0 for open, 1 pending, 2 closed
-//       timeStamp    - Time of Serv start
-//       technicianId - of the creator of a service
-//
-router.get('/:servId', function(req, res) {
-   var vld = req.validator;
-	var servId = req.params.servId;
-	var loginId = req.session && req.session.id;
-
-   connections.getConnection(res, function(cnn) {
-      cnn.query('SELECT * FROM ServicesOffer WHERE userId = ? && '
-		+ ' serviceId = ? OR technicianId = ? && serviceId = ? ',
-		[loginId, servId, logginId, servId],
-      function(err, result) {
-         if (!err)
-            res.json(result[0]);
-			else
-				res.status(404).end();
-			cnn.release();
-      });
-   });
 });
 
-//Update Service table status and Create an order history
-//if user order the service and have open ticket for that serivce
-router.put('/:servId/:techId/Order', function(req, res) {
-	var vld = req.validator;
-	var servId = req.session && req.params.servId;
-	var techId = req.params.techId;
-
-		connections.getConnection(res, function(cnn) {
-			//check if such servId exist and get techId
-			cnn.query(' SELECT * FROM ServicesOffer WHERE id = ? AND technicianId = ? ', [servId, techId],
-				function(err, result){
-					console.log("Order servId= " + servId );
-					if(vld.chain(result.length, Tags.notFound).check(!result[0].status == 1, Tags.alreadyTakenService)){
-						//check if service is already taken when status = 1
-						cnn.query(' UPDATE ServicesOffer SET status = ? WHERE id = ? AND technicianId = ? ', [1 ,servId, techId],
-						function(err){
-							if(err){
-								res.status(400).end();
-								console.log("Error Ordering the services");
-							}
-							else{
-								console.log("Successfully updated service=" + JSON.stringify(result[0]));
-								var order = {
-									'userId': req.session.id,
-									'technicianId': result[0].technicianId,
-									'serviceId': result[0].serviceId,
-									'whenCompleted': new Date()
-								};
-								//time to insert a new record in the orderhistory table
-								cnn.query(' INSERT INTO ServiceHistory SET ?', order,
-								function(err){
-									if(err){
-										console.log("Error in Serv/:servId:techId/Order" + JSON.stringify(order));
-										res.status(400).json(err);
-									}
-									else{
-										console.log("Successfully added order history");
-										res.end();
-									}
-										cnn.release();
-								});
-							}
-
-						});
-					}
-					else
-						cnn.release();
-				});
-
-	});
-});
-
-// Delete a service specified by <Servld>.
-//	Serv/:servId
-// Delete a service specified by <Servld>. Admin or Service Owner
-// If there is an open ticket for that service only Admin can delete it
-// status 0 for open, 1 pending, 2 closed, 3 cancel
-router.delete('/:servId/:techId/Order', function(req, res) {
-   // function is yet to be implemeneted.
-	var vld = req.validator;
-	var servId = req.params.servId;
-	var loginId = req.session && req.session.id;
-	var techId = req.params.techId;
-	console.log("id = " + servId);
-	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT * FROM ServicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
-			function(err, result){
-				if(result.length ){
-					// if(result[0].status == 1){
-						// if(vld.checkAdmin() || loginId){
-						// 	//continue to delete the following query
-						// 	console.log("It is admin after all to delete the pending service Serv/:servId ");
-						// }
-						// else
-						// 	cnn.release();
-					// }
-					//delete it don't require else
-					cnn.query(' DELETE FROM ServicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
-						function(err){
-							if (err)
-								console.log("Error deleting Serv/:servId ");
-							res.end();
-							cnn.release();
-						});
-				}
-
-				else{
-					res.status(404).end();
-					cnn.release();
-				}
-
-		});
-	});
-   res.end();
-});
-//delete from service table
-// router.delete('/:servId', function(req, res) {
-//    // function is yet to be implemeneted.
-// 	var vld = req.validator;
-// 	var servId = req.params.servId;
-// 	var loginId = req.session && req.session.id;
-// 	connections.getConnection(res, function(cnn) {
-// 		cnn.query(' SELECT * FROM Services WHERE id = ? ', servId,
-// 			function(err, result){
-// 				if(result.length){
-// 					if(result[0].status == 1){
-// 						if(vld.checkAdmin()){
-// 							//continue to delete the following query
-// 							console.log("It is admin after all to delete the pending service Serv/:servId ");
-// 						}
-// 						else
-// 							cnn.release();
-// 					}
-//
-// 					//delete it don't require else
-// 					cnn.query(' DELETE FROM Services WHERE id = ? ', servId,
-// 						function(err){
-// 							if (err)
-// 								console.log("Error deleting Serv/:servId ");
-// 							res.end();
-// 							cnn.release();
-// 						});
-// 				}
-// 				else{
-// 					res.status(404).end();
-// 					cnn.release();
-// 				}
-//
-// 		});
-// 	});
-//    res.end();
-// });
 module.exports = router;

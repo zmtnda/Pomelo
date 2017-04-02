@@ -106,8 +106,8 @@
         <div class="thumbnail">
             <div class="form-group">
               <h4>Select a category</h4>
-              <select ng-model='selectedCate' ng-change="initManDataInIssueTag(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
-              <div ng-if="formattedManusInModel">
+              <select ng-model='selectedCate' ng-change="initManDataInModelTag(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
+              <div ng-if="selectedCate">
                 <h4>Select a manufacturer</h4>
                 <select ng-model='selectedManu' ng-change="initModelData(selectedCate, selectedManu)" ng-options='manu for manu in formattedManusInModel'> </select>
                 <div ng-if="selectedCate && selectedManu" style="padding-top: 10px;">
@@ -135,7 +135,7 @@
                 <select ng-model='selectedManu' ng-change="initModelDataInIssueTag(selectedCate, selectedManu)" ng-options='manu for manu in formattedManusInIssue'> </select>
                 <div ng-if="formattedModelInIssue">
                   <h4>Select a model</h4>
-                  <select ng-model='selectedModel' ng-change="initIssueData(selectedCate, selectedManu, selectedModel)" ng-options='model for model in formattedModelInIssue'> </select>
+                  <select ng-model='selectedModel' ng-change="initIssueData(selectedModel)" ng-options='model for model in formattedModelInIssue'> </select>
                   <div ng-if="selectedCate && selectedManu && selectedModel" style="padding-top: 10px;">
                     <h4>Create a new model</h4>
                     <input type="text" ng-model="postingIssue" class="form-control" style="width:80%; display:inline;">
