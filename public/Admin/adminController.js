@@ -121,10 +121,10 @@ app.controller('adminController', ['$scope', '$state', 'users', 'servs', '$http'
     scope.addIssue = function(postingIssue, selectedModel){
       var parsedModelDataJSON = JSON.parse(selectedModel)
 
-      http.post("cate/" + parsedModelDataJSON.modelId + "/issues", {"newIssue": postingIssue})
+      http.post("cate/" + parsedModelDataJSON.modelId + "/issues", {"newIssue": postingIssue, "issueId": -1})
       .then(function(res){
         state.reload()
       })
-      .catch(function(err){noDlg.show(scope, err, "Error")});
+      .catch(function(err){noDlg.show(scope, err, "Error", "lg")});
     }
 }])
