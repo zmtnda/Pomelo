@@ -137,7 +137,7 @@
                   <h4>Select a model</h4>
                   <select ng-model='selectedModel' ng-change="initIssueData(selectedModel)" ng-options='model for model in formattedModelInIssue'> </select>
                   <div ng-if="selectedCate && selectedManu && selectedModel" style="padding-top: 10px;">
-                    <h4>Create a new model</h4>
+                    <h4>Create a new issue</h4>
                     <input type="text" ng-model="postingIssue" class="form-control" style="width:80%; display:inline;">
                     <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addIssue(postingIssue, selectedModel)">Post</button>
                   </div>
