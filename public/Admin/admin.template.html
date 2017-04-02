@@ -31,26 +31,26 @@
 
   <div ng-switch="selection">
 
-    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllUsers">
+    <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllUsers">
         <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
                 <!-- id: {{user.id}}<br/> -->
-                Email: {{user.email}}<br/>
-                Role: <span ng-switch="{{user.role}}">
+                <b>Email</b>: {{user.email}}<br/>
+                <b>Role:</b> <span ng-switch="{{user.role}}">
                           <span ng-switch-when="1">Technician</span>
                           <span ng-switch-when="2">Admin</span>
                       </span><br/>
-                First Name: {{user.firstName}}<br/>
-                Last Name: {{user.lastName}}<br/>
-                Hourly Rate: {{user.hourlyRate}}<br/>
-                City: {{user.city}}<br/>
-                Zip Code: {{user.zip}}<br/>
+                <b>First Name:</b> {{user.firstName}}<br/>
+                <b>Last Name:</b> {{user.lastName}}<br/>
+                <b>Hourly Rate:</b> {{user.hourlyRate}}<br/>
+                <b>City:</b> {{user.city}}<br/>
+                <b>Zip Code:</b> {{user.zip}}<br/>
 
                 <button class="btn btn-danger btn-sm pull-right" type-"button" ng-click="deleteUser(user.id)">Delete</button>
                 <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyUser()">MODIFY</button> -->
         </div>
     </div>
 
-    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllServices">
+    <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllServices">
         <div class="thumbnail" ng-repeat="serv in servs">
                 Category: {{serv.category}}<br/>
                 Manufacturer: {{serv.manufacturer}}<br/>
@@ -67,32 +67,92 @@
         </div>
     </div>
 
-    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddACategoryToDB">
+    <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddACategoryToDB">
         <div class="thumbnail">
             <div class="form-group" >
-              <input type="text" ng-model="postingModel" class="form-control" style="width:80%; display:inline;">
-              <button style="display:inline;" class="btn btn-default pull-right" type="button" ng-click="addCategory(postingModel)">Post</button>
+              <h4>Enter a new category below</h4>
+              <input type="text" ng-model="postingCategory" class="form-control" style="width:80%; display:inline;">
+              <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addCategory(postingCategory)">Post</button>
             </div>
             <div class="thumbnail" ng-repeat="cate in cates">
-                Id: {{cate.id_cat}}<br/>
-                Category: {{cate.category}}<br/>
+                id_cat: {{cate.id_cat}}<br/>
+                category: {{cate.category}}<br/>
                 <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
             </div>
         </div>
     </div>
 
-    <div class="col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddAManufacturerToDB">
+    <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddAManufacturerToDB">
         <div class="thumbnail">
-            <div class="form-group" >
-              <select ng-model='selectedCate' ng-options='cate for cate in formattedCates'> </select>
+            <div class="form-group">
+              <h4>Select a category</h4>
+              <select ng-model='selectedCate' ng-change="initManData(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
+              <div ng-if='selectedCate' style="padding-top: 10px;">
+                <h4>Create a new manufacturer</h4>
+                <input type="text" ng-model="postingManu" class="form-control" style="width:80%; display:inline;">
+                <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addManufacturer(postingManu, selectedCate)">Post</button>
+              </div>
             </div>
-            <h4>{{selectedCate}}</h4>
-            <div class="thumbnail" ng-repeat="man in manus">
-                Id: {{man.id_cat}}<br/>
-                Manufacturer: {{man.category}}<br/>
+            <div class="thumbnail"  ng-repeat="man in manus">
+                catMan_id: {{man.catMan_id}}<br/>
+                manufacturer: {{man.manufacturer}}<br/>
+                manId: {{man.manId}}<br/>
+                <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddAModelToDB">
+        <div class="thumbnail">
+            <div class="form-group">
+              <h4>Select a category</h4>
+              <select ng-model='selectedCate' ng-change="initManDataInModelTag(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
+              <div ng-if="selectedCate">
+                <h4>Select a manufacturer</h4>
+                <select ng-model='selectedManu' ng-change="initModelData(selectedCate, selectedManu)" ng-options='manu for manu in formattedManusInModel'> </select>
+                <div ng-if="selectedCate && selectedManu" style="padding-top: 10px;">
+                  <h4>Create a new model</h4>
+                  <input type="text" ng-model="postingModel" class="form-control" style="width:80%; display:inline;">
+                  <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addModel(postingModel, selectedCate, selectedManu)">Post</button>
+                </div>
+              </div>
+            </div>
+            <div class="thumbnail"  ng-repeat="model in models">
+                modelId: {{model.modelId}}<br/>
+                model: {{model.model}}<br/>
+                <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddAIssueToDB">
+        <div class="thumbnail">
+            <div class="form-group">
+              <h4>Select a category</h4>
+              <select ng-model='selectedCate' ng-change="initManDataInIssueTag(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
+              <div ng-if="formattedManusInIssue">
+                <h4>Select a manufacturer</h4>
+                <select ng-model='selectedManu' ng-change="initModelDataInIssueTag(selectedCate, selectedManu)" ng-options='manu for manu in formattedManusInIssue'> </select>
+                <div ng-if="formattedModelInIssue">
+                  <h4>Select a model</h4>
+                  <select ng-model='selectedModel' ng-change="initIssueData(selectedModel)" ng-options='model for model in formattedModelInIssue'> </select>
+                  <div ng-if="selectedCate && selectedManu && selectedModel" style="padding-top: 10px;">
+                    <h4>Create a new model</h4>
+                    <input type="text" ng-model="postingIssue" class="form-control" style="width:80%; display:inline;">
+                    <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addIssue(postingIssue, selectedModel)">Post</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="thumbnail" ng-repeat="issue in issues">
+                issueId: {{issue.issueId}}<br/>
+                issue: {{issue.issue}}<br/>
+                modIssId: {{issue.modIssId}}<br/>
+                catMan_id: {{issue.catMan_id}}<br/>
                 <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
             </div>
         </div>
     </div>
   </div>
+
 </body>
