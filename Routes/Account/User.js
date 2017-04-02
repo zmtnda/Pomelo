@@ -38,14 +38,15 @@ router.get('/serviceHistory/all', function(req, res) {
 // GET email=<email or email prefix>
 // Return a single user whose email matches the provided one as a resource URL.
 //
-// Authorization is only granted to users with admin status.
+// Authorization is only granted to users.
 // Not Found error will be returned should there be no user with the specified email.
 //
 // email - principal string identifier, unique across all Users
 // id - id of user with said email, so that URI would be User/<id>
 router.get('/', function(req, res) {
-   var specifier = req.query.email || !req.session.isAdmin() && req.session.email;
-   var getAllBasedOnEmail = req.query.all;
+   var technician = (req.session && !req.session.isAdmin()) && req.session.email;
+   var admin = req.query.soFull && (req.session && req.session.isAdmin());
+   var usrId = req.session && req.session.id;
    connections.getConnection(res, function(cnn) {
       var handler = function(err, prsArr) {
          res.json(prsArr[0]); // array notation to grab first person.
@@ -55,10 +56,9 @@ router.get('/', function(req, res) {
          res.json(prsArr);
          cnn.release();
       }
-
-      if(req.query.soFull)
+      if(admin)
       {
-        console.log("user get req.query.soFull");
+        console.log("user is admin get req.query.soFull");
         cnn.query('SELECT * FROM Logins l LEFT JOIN Technicians t '
                   + 'ON l.id_log = t.log_id ORDER BY l.id_log', function(err, prsArr){
          console.log(JSON.stringify(prsArr));
@@ -67,20 +67,15 @@ router.get('/', function(req, res) {
 
         });
       }
-      else if(getAllBasedOnEmail)
+      else if (technician)
       {
-        console.log("user get getAllBasedOnEmail");
-         cnn.query("SELECT * FROM Logins l LEFT JOIN Technicians t ON " +
-               "l.id_log = t.log_id and email = ?", [specifier], allHandler);
+        console.log("user is not admin");
+         cnn.query('SELECT id_log, email FROM Logins WHERE email = ?', [technician], handler);
       }
-      else if (specifier)
-      {
-        console.log("user get specifier");
-         cnn.query('SELECT id_log, email FROM Logins WHERE email = ?', [specifier], handler);
-      }
-      else{
-        console.log("user get else");
-         cnn.query('SELECT id_log, email FROM Logins', handler);
+      else {
+        res.status(400);
+        res.send('Unauthorized user');
+        cnn.release();
        }
    });
 });
@@ -141,25 +136,7 @@ router.post('/', function(req, res) {
                  });
              });
            });
-          //  {email: emailP, passwordHash: passwordP, role: roleP,
-          //    firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP}
-          // var attrTechTable = {log_id: body.email, passwordSalt: body.passwordSalt, passwordHash: body.passwordHash,
-          //    role: body.role, whenRegistered: body.whenRegistered};
-              // CREATE  TABLE IF NOT EXISTS Technicians (
-              //   id_tec INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-              //   log_id INT(11) UNSIGNED NOT NULL ,
-              //   firstName VARCHAR(45) NOT NULL ,
-              //   lastName VARCHAR(45) NOT NULL ,
-              //   hourlyRate NUMERIC (6,2) UNSIGNED NOT NULL ,
-              //   city VARCHAR(30) NOT NULL,
-              //   zip VARCHAR(20) NOT NULL,
-              //   avatar VARCHAR (200) NULL,
-              //   ratings FLOAT(5,4) NOT NULL,
-              //   bad_id INT(11) UNSIGNED NOT NULL,
-              //   status INT(11) NOT NULL,
-          //  body.passwordHash = bcrypt.hashSync(body.password, saltRounds); // Hash passwords using Bcrypt.
-
-            cnn.release();
+          cnn.release();
          });
    }
 });
