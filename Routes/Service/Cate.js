@@ -315,36 +315,60 @@ router.get('/:modelId/issues', function(req, res) {
 
 // Assign new issue to specific model
 // Require modelId on link and pass in issue Id
+// if issue id is -1, then check to add new issue
 router.post('/:modelId/issues', function(req, res) {
 	console.log('Assign issue to model');
    var vld = req.validator;
    var admin = req.session && req.session.isAdmin();
 	var modelId = req.params.modelId;
    var body = req.body;
-	var check_query = ' SELECT mod_id FROM ModelsIssues WHERE mod_id=? AND iss_id=? ';
-	var insert_query = ' INSERT INTO ModelsIssues (mod_id, iss_id) VALUES (?,?) ';
 
-	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['issueId'])) {
+	var check_exist_issue_query = ' SELECT id_iss FROM Issues WHERE LCASE(issue) = LCASE(?) ';
+	var insert_new_issue_query = ' INSERT INTO Issues (issue) VALUES (?) ';
+	var check_issue_in_model_query = ' SELECT mod_id FROM ModelsIssues WHERE mod_id=? AND iss_id=? ';
+	var insert_issue_to_model_query = ' INSERT INTO ModelsIssues (mod_id, iss_id) VALUES (?,?) ';
+
+	if (vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['issueId', 'issue'])) {
 		connections.getConnection(res, function(cnn) {
-			cnn.query(check_query, [modelId, body.issueId],
-		 	function(err, result){
-				if(err) {
-					console.log("Error checking for exist model issue");
+			async.waterfall([
+				function(callback) { // check if issue is new or not
+					if (body.issueId == -1)
+						cnn.query(check_exist_issue_query, body.issue, callback);
+					else
+						callback(null, {insertNewIssue: 1}, null);
+				},
+				function(result, fields, callback) {
+					if (!result.hasOwnProperty('insertNewIssue') && result.length == 0) // insert new issue
+						cnn.query(insert_new_issue_query, body.issue, callback);
+					else if (!result.hasOwnProperty('insertNewIssue') && result.length > 0) // exists issue in table
+						callback(null, result, null);
+					else
+						callback(null, {id_iss: body.issueId}, null); // id pass in
+				},
+				function(result, fields, callback) {
+					if (result.hasOwnProperty('insertId')) // new insert issue no need to check
+						callback(null, result, null);
+					else {
+						if (result.length > 0)	// assign new id if new issue exist in table
+							body.issueId = result[0].id_iss;
+						cnn.query(check_issue_in_model_query, [modelId, body.issueId], callback); // check issue with model
+					}
+				},
+				function(result, fields, callback) {	// assign issue to model
+					if (result.hasOwnProperty('insertId'))
+						cnn.query(insert_issue_to_model_query, [modelId, result.insertId], callback);
+					else if (result.length == 0)
+						cnn.query(insert_issue_to_model_query, [modelId, body.issueId], callback);
+					else // already exist issue with model
+						callback({success: 0, respons: 'Issue already binded with model'}, null);
+				}
+			], function(err, result) {
+				if (err) {
+					console.log("Error posting issue to model");
 					res.status(400).json(err);
-				} else if (result.length > 0) {
-					console.log("Issue for this model already exists");
-					res.json({success: 1, created: 0});
 				} else {
-					cnn.query(insert_query, [modelId, body.issueId],
-					function(err, result) {
-						if(err) {
-							console.log("Err assign issue into model");
-							res.status(400).json(err);
-						} else {
-							console.log("Assign issue to model successful");
-							res.json({success: 1, created: 1});
-						}
-					});
+					result.success = 1;
+					res.json(result)
 				}
 			});
 			cnn.release();
