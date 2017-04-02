@@ -72,7 +72,7 @@
             <div class="form-group" >
               <h4>Enter a new category below</h4>
               <input type="text" ng-model="postingCategory" class="form-control" style="width:80%; display:inline;">
-              <button style="display:inline;" class="btn btn-default pull-right" type="button" ng-click="addCategory(postingCategory)">Post</button>
+              <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addCategory(postingCategory)">Post</button>
             </div>
             <div class="thumbnail" ng-repeat="cate in cates">
                 id_cat: {{cate.id_cat}}<br/>
@@ -88,9 +88,9 @@
               <h4>Select a category</h4>
               <select ng-model='selectedCate' ng-change="initManData(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
               <div ng-if='selectedCate' style="padding-top: 10px;">
-                <h4>Create a new manufacturer for    {{selectedCate}}</h4>
+                <h4>Create a new manufacturer</h4>
                 <input type="text" ng-model="postingManu" class="form-control" style="width:80%; display:inline;">
-                <button style="display:inline;" class="btn btn-default pull-right" type="button" ng-click="addManufacturer(postingManu, selectedCate)">Post</button>
+                <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addManufacturer(postingManu, selectedCate)">Post</button>
               </div>
             </div>
             <div class="thumbnail"  ng-repeat="man in manus">
@@ -106,14 +106,14 @@
         <div class="thumbnail">
             <div class="form-group">
               <h4>Select a category</h4>
-              <select ng-model='selectedCate' ng-change="initManDataInModelTag(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
+              <select ng-model='selectedCate' ng-change="initManDataInIssueTag(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
               <div ng-if="formattedManusInModel">
                 <h4>Select a manufacturer</h4>
                 <select ng-model='selectedManu' ng-change="initModelData(selectedCate, selectedManu)" ng-options='manu for manu in formattedManusInModel'> </select>
                 <div ng-if="selectedCate && selectedManu" style="padding-top: 10px;">
-                  <h4>Create a new model for {{selectedCate}} and {{selectedManu}} </h4>
+                  <h4>Create a new model</h4>
                   <input type="text" ng-model="postingModel" class="form-control" style="width:80%; display:inline;">
-                  <button style="display:inline;" class="btn btn-default pull-right" type="button" ng-click="addModel(postingModel, selectedCate, selectedManu)">Post</button>
+                  <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addModel(postingModel, selectedCate, selectedManu)">Post</button>
                 </div>
               </div>
             </div>
@@ -124,5 +124,35 @@
             </div>
         </div>
     </div>
+
+    <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="AddAIssueToDB">
+        <div class="thumbnail">
+            <div class="form-group">
+              <h4>Select a category</h4>
+              <select ng-model='selectedCate' ng-change="initManDataInIssueTag(selectedCate)" ng-options='cate for cate in formattedCates'> </select>
+              <div ng-if="formattedManusInIssue">
+                <h4>Select a manufacturer</h4>
+                <select ng-model='selectedManu' ng-change="initModelDataInIssueTag(selectedCate, selectedManu)" ng-options='manu for manu in formattedManusInIssue'> </select>
+                <div ng-if="formattedModelInIssue">
+                  <h4>Select a model</h4>
+                  <select ng-model='selectedModel' ng-change="initIssueData(selectedCate, selectedManu, selectedModel)" ng-options='model for model in formattedModelInIssue'> </select>
+                  <div ng-if="selectedCate && selectedManu && selectedModel" style="padding-top: 10px;">
+                    <h4>Create a new model</h4>
+                    <input type="text" ng-model="postingIssue" class="form-control" style="width:80%; display:inline;">
+                    <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addIssue(postingIssue, selectedModel)">Post</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="thumbnail" ng-repeat="issue in issues">
+                issueId: {{issue.issueId}}<br/>
+                issue: {{issue.issue}}<br/>
+                modIssId: {{issue.modIssId}}<br/>
+                catMan_id: {{issue.catMan_id}}<br/>
+                <button class="btn btn-danger btn-sm pull-right" type-"button" style="display:inline;" ng-click="">Delete</button>
+            </div>
+        </div>
+    </div>
   </div>
+
 </body>
