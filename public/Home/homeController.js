@@ -23,6 +23,12 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
      })
    }
 
+   scope.goToOpinion = function(){
+     timeout(function() {
+       state.go('opinion');
+     })
+   }
+
    rscope.logout = logSer.logout;
 
 }])
