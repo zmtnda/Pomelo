@@ -33,6 +33,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
          url: '/technician/services',
          templateUrl: 'Technician/services/services.template.html',
          controller: 'servicesController',
+       })
+      .state('opinion', {
+         url: '/opinion',
+         templateUrl: 'Opinion/opinion.template.html',
+        //  controller: '',
       })
       .state('issueGudiance', {
          url: '/technician/IssueGuidance',

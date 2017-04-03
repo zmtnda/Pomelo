@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="css/Technician/issueGuidance.css" type="text/css"/>
   <link rel="stylesheet" href="css/Customer/cust.css" type="text/css"/>
   <link rel="stylesheet" href="css/Admin/admin.css" type="text/css"/>
-  <link rel="stylesheet" href="Util/cssFiles/regTmp.css" type="text/css"/>
+  <link rel="stylesheet" href="Util/css/register.css" type="text/css"/>
 
   <script src="pomeloApp.js"></script>
 
@@ -44,10 +44,10 @@
   <script src="Util/Dialog/dialogService.js"></script>
 
   <!--Register services: -->
-  <script src="Util/logService.js"></script>
   <script src="Util/userPersistenceService.js"></script>
   <script src="Util/goToServices.js"></script>
   <script src="Util/errorFormatterService.js"></script>
+  <script src="Util/logService.js"></script>
 
   <script src="ui-routes.js"></script>
 
@@ -80,7 +80,7 @@
               <li class="active" ng-if="!inSession" role="presentation" ng-click="retnHm()"><a href="#">Home</a></li>
               <li class="active" ng-if="inSession" role="presentation" ng-click="goToTechnician()"><a href="#">Profile Page</a></li>
               <li role="presentation"><a href="#" ng-click="goToAbout()">About Us</a></li>
-              <li role="presentation"><a href="https://docs.google.com/forms/d/1N1yCBjDKHL5MWz1AoMRSwKthJza7xi7KPRRWh2k6fYo/viewform?embedded=true">Give Us Your Opinion</a></li>
+              <li role="presentation"><a ng-click="goToOpinion()">Give Us Your Opinion</a></li>
               <li role="presentation"><a href="#">Terms and Conditions</a></li><!--TODO-->
               <li role="presentation" ng-if="inSession" ng-click="logout()"><a href="#">Logout</a></li>
             </ul>
