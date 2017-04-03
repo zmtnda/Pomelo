@@ -1,7 +1,7 @@
 app.config(['$stateProvider', '$urlRouterProvider',
    function($stateProvider, $router) {
       //redirect to home if path is not matched
-      $router.otherwise("/");
+      $router.otherwise("/home");
 
       $stateProvider
       .state('home',  {
