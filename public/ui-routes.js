@@ -24,6 +24,16 @@ app.config(['$stateProvider', '$urlRouterProvider',
          templateUrl: 'About/about.html',
         //  controller: '',
       })
+      .state('orders', {
+         url: '/technician/orders',
+         templateUrl: 'Technician/Orders/Orders.template.html',
+         controller: 'ordersController',
+      })
+      .state('services', {
+         url: '/technician/services',
+         templateUrl: 'Technician/services/services.template.html',
+         controller: 'servicesController',
+       })
       .state('opinion', {
          url: '/opinion',
          templateUrl: 'Opinion/opinion.template.html',
