@@ -106,10 +106,6 @@ router.post('/', function(req, res) {
              bcrypt.hash(body.passwordHash, salt, function(err, hash) {
                // Store hash in your password DB.
                body.passwordSalt = salt;
-               console.log("salt");
-               console.log(salt);
-               console.log("hash");
-               console.log(hash);
                body.passwordHash = hash;
                var log_id = 0;
                var attrLoginTable = {email: body.email, passwordSalt: body.passwordSalt, passwordHash: body.passwordHash,
@@ -166,38 +162,63 @@ router.get('/:id', function(req, res) {
    }
 });
 
-// Update User <usrId>, with body giving an object with one or more of the specified fields.
-//
-// AU must be the User in question, or an admin.
-// Note: Role changes require an admin.
-//
+// User validation for security purpose when updating account info
+router.post('/:logId/validation', function(req, res) {
+   var vld = req.validator;
+   var password = req.body.password;
+   var tech = req.params.logId;
+
+   if(vld.checkPrsOK(tech))
+   {
+     connections.getConnection(res, function(cnn) {
+       cnn.query('SELECT passwordHash FROM Logins WHERE id_log = ? ', tech,
+          function(err, result){
+            if(err) {
+               res.status(400).json(err);
+            }
+            else if (req.validator.check(result && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
+              res.json({success: 1});
+            }
+            else { //if result is 0
+              res.json({success: 0});
+            }
+          });
+          cnn.release();
+     });
+   }});
+// Update technician account,
+// with json input giving all specified attributes.
+// AU must be the technician in question, or an admin.
+// Note: Currently DO NOT consider Role changes
+// assuming password is correct
 // Errors if there is old password is not provide when changing the password
-router.put('/:id', function(req, res) {
+router.put('/:logId/info', function(req, res) {
    var vld = req.validator;
    var body = req.body;
-   var admin = req.session && req.session.isAdmin();
+   var tech = req.params.logId;
 
-  // console.log("CHANING INFO " + JS);
-   if(vld.checkPrsOK(req.params.id) && vld.chain(!body.role || admin, Tags.noPermission))
-   { // check to see if the user is trying to change the password
-     console.log(JSON.stringify(body));
-          connections.getConnection(res, function(cnn) { // Done with if conditional
-              if(body.password) {
-                  body.password = bcrypt.hashSync(body.password, saltRounds);
-              }
-           cnn.query("UPDATE Users set ? WHERE id = ?", [req.body, req.params.id],
-           function(err) {
-              if(err)
-              {
-                console.log(err);
-                 res.status(400).end();
-              }
-              else {
-                 res.end();
-              }
-           });
-           cnn.release();
-        });
+   if(vld.checkPrsOK(tech))
+   {
+
+     // check to see if the user is trying to change the password
+     // console.log(JSON.stringify(body));
+        //   connections.getConnection(res, function(cnn) { // Done with if conditional
+        //       if(body.password) {
+        //           body.password = bcrypt.hashSync(body.password, saltRounds);
+        //       }
+        //    cnn.query("UPDATE Users set ? WHERE id = ?", [req.body, req.params.id],
+        //    function(err) {
+        //       if(err)
+        //       {
+        //         console.log(err);
+        //          res.status(400).end();
+        //       }
+        //       else {
+        //          res.end();
+        //       }
+        //    });
+        //    cnn.release();
+        // });
     }
 });
 
