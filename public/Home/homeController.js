@@ -3,7 +3,7 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
     scope.user = {};
 
    scope.login = function(){
-       logSer.login(scope.user.email, scope.user.password);
+     logSer.login(scope.user.email, scope.user.password);
    }
 
    scope.addUser = function(){

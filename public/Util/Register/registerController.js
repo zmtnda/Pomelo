@@ -31,7 +31,7 @@
 		  })
 		  .catch(function(err){
         console.log("ERROR!!!!!");
-        noDlg.show(scope, emf.formatErrorCodeAndErrorArray(err), "Error")
+        noDlg.show(scope, emf.formatErrorCodeAndErrorArray(err), "Error", 'lg')
       });
 	}
 }])

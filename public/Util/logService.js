@@ -35,8 +35,6 @@ function(rscope, http, state, nDlg, route, persisService) {
           return http.get("Ssns/" + location[location.length - 1]);
         })
         .then(function(response){
-        console.log("???" + JSON.stringify(result.data));
-
           rscope.loggedUser.id = result.data.id_log;
           rscope.loggedUser.email = emailParam;
           rscope.loggedUser.password = passwordParam;
@@ -58,7 +56,6 @@ function(rscope, http, state, nDlg, route, persisService) {
            }
         })
         .catch(function(err){
-           console.log("what ? ? "+ JSON.stringify(err));
             for (var key in rscope.loggedUser)
                 rscope.loggedUser.key = null;
             rscope.inSession = null;
