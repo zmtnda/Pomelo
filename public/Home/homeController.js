@@ -3,7 +3,7 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
     scope.user = {};
 
    scope.login = function(){
-       logSer.login(scope.user.email, scope.user.password);
+     logSer.login(scope.user.email, scope.user.password);
    }
 
    scope.addUser = function(){
@@ -20,6 +20,12 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
    scope.goToTechnician = function(){
      timeout(function() {
        state.go('technician');
+     })
+   }
+
+   scope.goToOpinion = function(){
+     timeout(function() {
+       state.go('opinion');
      })
    }
 

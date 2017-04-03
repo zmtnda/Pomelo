@@ -1,5 +1,5 @@
 <body>
-  <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded col-xs-10 col-md-10 col-lg-10 col-md-offset-1">
     <ul class="navbar-nav mr-auto" style="list-style-type: none;">
       <li class="nav-item active">
         <a class="btn btn-default" type-"button" ng-click="selection = 'SeeAllUsers'">See all users</span></a>
@@ -28,9 +28,7 @@
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>-->
   </nav>
-
   <div ng-switch="selection">
-
     <div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1" ng-switch-when="SeeAllUsers">
         <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
                 <!-- id: {{user.id}}<br/> -->
@@ -137,7 +135,7 @@
                   <h4>Select a model</h4>
                   <select ng-model='selectedModel' ng-change="initIssueData(selectedModel)" ng-options='model for model in formattedModelInIssue'> </select>
                   <div ng-if="selectedCate && selectedManu && selectedModel" style="padding-top: 10px;">
-                    <h4>Create a new model</h4>
+                    <h4>Create a new issue</h4>
                     <input type="text" ng-model="postingIssue" class="form-control" style="width:80%; display:inline;">
                     <button style="display:inline;" class="btn btn-sm btn-info pull-right" type="button" ng-click="addIssue(postingIssue, selectedModel)">Post</button>
                   </div>

@@ -1,8 +1,8 @@
 app.config(['$stateProvider', '$urlRouterProvider',
    function($stateProvider, $router) {
       //redirect to home if path is not matched
-      $router.otherwise("/");
-      
+      $router.otherwise("/home");
+
       $stateProvider
       .state('home',  {
          url: '/',
@@ -22,6 +22,21 @@ app.config(['$stateProvider', '$urlRouterProvider',
       .state('about', {
          url: '/about',
          templateUrl: 'About/about.html',
+        //  controller: '',
+      })
+      .state('orders', {
+         url: '/technician/orders',
+         templateUrl: 'Technician/Orders/Orders.template.html',
+         controller: 'ordersController',
+      })
+      .state('services', {
+         url: '/technician/services',
+         templateUrl: 'Technician/services/services.template.html',
+         controller: 'servicesController',
+       })
+      .state('opinion', {
+         url: '/opinion',
+         templateUrl: 'Opinion/opinion.template.html',
         //  controller: '',
       })
       .state('issueGudiance', {
