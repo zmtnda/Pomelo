@@ -2,6 +2,7 @@ var Express = require('express');
 var connections = require('../Connections.js');
 var Tags = require('../Validator.js').Tags;
 var router = Express.Router({caseSensitive: true});
+var async = require('async');
 router.baseURL = '/User';
 
 var formatDate = ', DATE_FORMAT(whenCompleted, \'\%b \%d \%Y \%h\:\%i \%p\') as formatDate';
@@ -90,9 +91,7 @@ router.post('/', function(req, res) {
   /* var admin = req.session && req.session.isAdmin(); */
   var admin = req.session;
   if (admin && !body.passwordHash)
-  //if (!body.password)
-
-  body.passwordHash = "*";                       // Blockig password
+    body.passwordHash = "*";                       // Blockig password
   body.whenRegistered = new Date();
 
    if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'passwordHash', 'role', 'hourlyRate', 'city', 'zip'])
@@ -176,11 +175,8 @@ router.post('/:logId/validation', function(req, res) {
             if(err) {
                res.status(400).json(err);
             }
-            else if (req.validator.check(result && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
+            else if (req.validator.check(result.length > 0 && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.noPermission)) {
               res.json({success: 1});
-            }
-            else { //if result is 0
-              res.json({success: 0});
             }
           });
           cnn.release();
@@ -196,29 +192,56 @@ router.put('/:logId/info', function(req, res) {
    var vld = req.validator;
    var body = req.body;
    var tech = req.params.logId;
+   var attrLoginTable = {};
 
    if(vld.checkPrsOK(tech))
    {
-
-     // check to see if the user is trying to change the password
-     // console.log(JSON.stringify(body));
-        //   connections.getConnection(res, function(cnn) { // Done with if conditional
-        //       if(body.password) {
-        //           body.password = bcrypt.hashSync(body.password, saltRounds);
-        //       }
-        //    cnn.query("UPDATE Users set ? WHERE id = ?", [req.body, req.params.id],
-        //    function(err) {
-        //       if(err)
-        //       {
-        //         console.log(err);
-        //          res.status(400).end();
-        //       }
-        //       else {
-        //          res.end();
-        //       }
-        //    });
-        //    cnn.release();
-        // });
+      connections.getConnection(res, function(cnn) { // Done with if conditional
+      async.series([
+        function(callback) {
+          if(body.password){
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+              bcrypt.hash(body.password, salt, function(err, hash) {
+              attrLoginTable.passwordSalt = salt;
+              attrLoginTable.passwordHash = hash;
+              delete body.password;
+              callback(null);
+              });
+            });
+          }
+          else{
+            callback(null);
+          }
+        },
+				function(callback) {
+          if(body.email){
+            attrLoginTable.email = body.email;
+            delete body.email;
+            callback(null);
+          }
+          else{
+            callback(null);
+          }
+        },
+        function(callback) {
+          cnn.query(' UPDATE Logins SET ? WHERE id_log = ? ', [attrLoginTable, tech], callback);
+        },
+        function(callback) {
+          if (Object.keys(body).length){
+           cnn.query(' UPDATE Technicians set ? WHERE log_id = ? ', [body, tech], callback);
+         }
+         else {
+           callback(null);
+         }
+        }], function(err, result) {
+				if (err) {
+					res.status(400).json(err);
+				} else {
+					res.json({success: 1});
+				}
+			});
+        cnn.release();
+       });
     }
 });
 

@@ -10,23 +10,24 @@ var Validator = function(req, res) {
 
 // List of errors, and their corresponding resource string tags
 Validator.Tags = {
-   noLogin: "noLogin",              // No active session/login
-   noPermission: "noPermission",    // Login lacks permission.
-   missingField: "missingField",    // Field missing from request. Params[0] is field name
-   badValue: "badValue",            // Field has bad value.  Params[0] gives field name
-   notFound: "notFound",            // Entity not present in DB
-   badLogin: "badLogin",            // Email/password combination invalid
-   dupEmail: "dupEmail",            // Email duplicates an existing email
-   noTerms: "noTerms",              // Acceptance of terms is required.
-   noOldPwd: "noOldPwd",            // Change of password requires an old password
-   dupName: "dupName",              // Name duplicates an existing Service Name
-   incompAttempt: "incompAttempt",  // Standing Attempt
-   badChlName: "badChlName",        // Bad Challenge Name
-   attNotClosable: "attNotClosable",// Attempt not in a closable state
-   attClosed: "attClosed",          // Attempt is alread closed
-   excessAtts: "excessAtts",        // Too many attempts for this challenge.
-   oldPwdMismatach: "oldPwdMismatch",// Incorrect old password.
-   maxServiceLimitReached: "maxServiceLimitReached", // for when someone tries to post more than 5 services
+	noLogin: "No Login",              // No active session/login
+	noPermission: "No Permission",    // Login lacks permission.
+	valueExisted: "Value already existed", //Update info with same value
+	missingField: "Missing Fields",    // Field missing from request. Params[0] is field name
+	badValue: "badValue",            // Field has bad value.  Params[0] gives field name
+	notFound: "notFound",            // Entity not present in DB
+	badLogin: "badLogin",            // Email/password combination invalid
+	dupEmail: "dupEmail",            // Email duplicates an existing email
+	noTerms: "noTerms",              // Acceptance of terms is required.
+	noOldPwd: "noOldPwd",            // Change of password requires an old password
+	dupName: "dupName",              // Name duplicates an existing Service Name
+	incompAttempt: "incompAttempt",  // Standing Attempt
+	badChlName: "badChlName",        // Bad Challenge Name
+	attNotClosable: "attNotClosable",// Attempt not in a closable state
+	attClosed: "attClosed",          // Attempt is alread closed
+	excessAtts: "excessAtts",        // Too many attempts for this challenge.
+	oldPwdMismatach: "oldPwdMismatch",// Incorrect old password.
+	maxServiceLimitReached: "maxServiceLimitReached", // for when someone tries to post more than 5 services
 	alreadyTakenService: "alreadyTakenService" //it is one to one service between technician, service and user
 }
 
