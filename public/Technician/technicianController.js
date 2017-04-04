@@ -1,5 +1,5 @@
-app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout',
-  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout) {
+app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop',
+  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop) {
     scope.user = {};
     scope.viewEnum = {
       NONE: 0,
@@ -83,13 +83,15 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
 
     // Toggle view for modifying personal info
     scope.modifyTechnician = function(){
-      if (scope.isShowPersonalField == 0) {
-        scope.switchView(scope.viewEnum.PERSONAL);
-        scope.gotoBottom();
-      } else {
-        scope.switchView(scope.viewEnum.NONE);
-      }
+      // if (scope.isShowPersonalField == 0) {
+      //   scope.switchView(scope.viewEnum.PERSONAL);
+      //   scope.gotoBottom();
+      // } else {
+      //   scope.switchView(scope.viewEnum.NONE);
+      // }
+      passVerifyPop.show(scope, "passVerifyPop")
     }
+
 
     scope.gotoOrders = function()
     {

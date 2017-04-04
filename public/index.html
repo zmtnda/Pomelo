@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html ng-app="mainApp" ng-controller="homeController" style="width:100%;">
 
+  <head>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  </head>
+
   <!-- <link rel="stylesheet" href="css/index.css"> -->
 
   <!--angularjs linking: -->
@@ -41,6 +45,8 @@
   <!--Helpers' templates-->
   <script src="Util/Register/registerPop.js"></script>
   <script src="Util/Register/registerController.js"></script>
+  <script src="Util/PasswordVerify/PassVerifyPop.js"></script>
+  <script src="Util/PasswordVerify/PassVerifyController.js"></script>
   <script src="Util/Dialog/dialogService.js"></script>
 
   <!--Register services: -->
@@ -81,8 +87,20 @@
               <li class="active" ng-if="inSession" role="presentation" ng-click="goToTechnician()"><a href="#">Profile Page</a></li>
               <li role="presentation"><a href="#" ng-click="goToAbout()">About Us</a></li>
               <li role="presentation"><a ng-click="goToOpinion()">Give Us Your Opinion</a></li>
-              <li role="presentation"><a href="#">Terms and Conditions</a></li><!--TODO-->
-              <li role="presentation" ng-if="inSession" ng-click="logout()"><a href="#">Logout</a></li>
+              <li role="presentation"><a href="#">Terms and Conditions</a></li>
+
+              <li ng-if="inSession" uib-dropdown>
+                <a id="single-button" uib-dropdown-toggle ng-disabled="disabled">
+                  Account <span class="caret"></span>
+                </a>
+                <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                  <li role="menuitem"><a href="#">Change Email</a></li>
+                  <li role="menuitem"><a href="#">Change Password</a></li>
+                  <li class="divider"></li>
+                  <li role="menuitem" ng-click="logout()"><a href="#">Logout</a></li>
+                </ul>
+              </li>
+              <!-- <li role="presentation" ng-if="inSession" ng-click="logout()"><a href="#">Logout</a></li> -->
             </ul>
           </div>
         </div>
