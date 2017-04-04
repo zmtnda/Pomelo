@@ -8,7 +8,6 @@ use pomelotech;
 CREATE  TABLE IF NOT EXISTS Logins (
   id_log INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(128) NOT NULL ,
-  passwordSalt VARCHAR(30) NOT NULL ,
   passwordHash VARCHAR(128) NOT NULL ,
   role INT(11) UNSIGNED NOT NULL ,
   whenRegistered DATETIME not null,
@@ -46,7 +45,7 @@ CREATE  TABLE IF NOT EXISTS Technicians (
   avatar VARCHAR (200) NULL,
   ratings FLOAT(5,4) NOT NULL,
   bad_id INT(11) UNSIGNED NOT NULL,
-  status INT(11) NOT NULL,
+  status INT(11) NOT NULL DEFAULT 0,
   CONSTRAINT fkTechniciansLogins
     FOREIGN KEY (log_id )
     REFERENCES Logins (id_log)
@@ -85,8 +84,8 @@ CREATE  TABLE IF NOT EXISTS Certifications (
 CREATE  TABLE IF NOT EXISTS Videos (
   id_vid INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL ,
-  directory VARCHAR (200) NOT NULL,
-  description VARCHAR(500) NOT NULL ,
+  url VARCHAR (200) NOT NULL,
+  description VARCHAR(500) NULL ,
   CONSTRAINT fkVideosTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians(id_tec)
@@ -100,8 +99,8 @@ CREATE  TABLE IF NOT EXISTS Videos (
 CREATE  TABLE IF NOT EXISTS Photos (
   id_pho INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL ,
-  directory VARCHAR (200) NOT NULL,
-  description VARCHAR(500) NOT NULL ,
+  url VARCHAR (200) NOT NULL,
+  description VARCHAR(500) NULL ,
   CONSTRAINT fkPhotosTechnicians
     FOREIGN KEY (tec_id )
     REFERENCES Technicians (id_tec)
@@ -155,6 +154,7 @@ CREATE  TABLE IF NOT EXISTS Models (
   id_mod INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   catMan_id INT(11) UNSIGNED NOT NULL,
   model VARCHAR(50) NOT NULL DEFAULT "",
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
   CONSTRAINT fkModelsCategoriesManufacturers
     FOREIGN KEY (catMan_id)
     REFERENCES CategoriesManufacturers (id_catMan)
@@ -240,9 +240,9 @@ CREATE  TABLE IF NOT EXISTS ServicesHistory (
   amount NUMERIC (5,2) UNSIGNED NOT NULL ,
   status INT(11) NOT NULL,
   orderedDate DATETIME NOT NULL,
-  completedDate DATETIME NOT NULL,
-  serHisHash VARCHAR(128) NOT NULL,
-  isReview TINYINT(1) DEFAULT 0,
+  completedDate DATETIME NULL,
+  isReview TINYINT(1) NOT NULL DEFAULT 0,
+  notes VARCHAR(500) NULL,
   CONSTRAINT fkServicesHistoryServicesOfferedByTech
     FOREIGN KEY (serTec_id)
     REFERENCES ServicesOfferedByTech (id_serTec)
@@ -264,7 +264,7 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Reviews (
   id_rev INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  stars TINYINT UNSIGNED NOT NULL ,
+  stars TINYINT(1) UNSIGNED NOT NULL ,
   comment VARCHAR(500),
   serHis_id INT(11) UNSIGNED NOT NULL,
   cus_id INT(11) UNSIGNED NOT NULL,
@@ -295,35 +295,34 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Portfolio (
   id_por INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) UNSIGNED NOT NULL ,
-  websites VARCHAR(200) NULL DEFAULT NULL ,
-  aboutMe VARCHAR(500) NULL DEFAULT NULL ,
-  companyName VARCHAR(100) NULL DEFAULT NULL ,
-  companyAddress VARCHAR(100) NULL DEFAULT NULL ,
-  companyPhone VARCHAR(45) NULL DEFAULT NULL ,
-  vid_id INT(11) UNSIGNED NULL DEFAULT NULL ,
-  pho_id INT(11) UNSIGNED NULL DEFAULT NULL ,
+  tec_id INT(11) UNSIGNED NOT NULL,
+  websites VARCHAR(200) NULL,
+  aboutMe VARCHAR(500) NULL,
+  avatar VARCHAR(200) NULL,
+  companyName VARCHAR(100) NULL,
+  companyAddress VARCHAR(100) NULL,
+  companyPhone VARCHAR(45) NULL,
   CONSTRAINT fkPortfolioTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT fkPortfolioVideos
-    FOREIGN KEY (vid_id)
-    REFERENCES Videos (id_vid)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT fkPortfolioPhotos
-    FOREIGN KEY (pho_id)
-    REFERENCES Photos (id_pho)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON UPDATE CASCADE
   )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 SHOW WARNINGS;
 
+CREATE TABLE IF NOT EXISTS EmailVerification (
+  hash CHAR(100) NOT NULL PRIMARY KEY,
+  email VARCHAR(128) NOT NULL,
+  type TINYINT(2) UNSIGNED NOT NULL,
+  createdDate DATETIME NOT NULL
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+SHOW WARNINGS;
 -- -----------------------------------------------------
 -- Create View for all cat man
 -- -----------------------------------------------------
