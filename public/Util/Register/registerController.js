@@ -6,6 +6,52 @@
         return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
     }
 
+    var checkMissingFields = function()
+    {
+      if(scope.user.email == undefined)
+      {
+        scope.warning-email = {
+          "background-color" : "#ffcccc",
+        }
+      }
+      if(scope.user.password == undefined)
+      {
+        scope.warning-pass = {
+          "background-color" : "#ffcccc",
+        }
+      }
+      if(scope.user.firstName == undefined)
+      {
+        scope.warning-first = {
+          "background-color" : "#ffcccc",
+        }
+      }
+      if(scope.user.lastName == undefined)
+      {
+        scope.warning-last = {
+          "background-color" : "#ffcccc",
+        }
+      }
+      if(scope.user.hourlyRate == undefined)
+      {
+        scope.warning-hourlyRate = {
+          "background-color" : "#ffcccc",
+        }
+      }
+      if(scope.user.city == undefined)
+      {
+        scope.warning-city = {
+          "background-color" : "#ffcccc",
+        }
+      }
+      if(scope.user.zip == undefined)
+      {
+        scope.warning-zip = {
+          "background-color" : "#ffcccc",
+        }
+      }
+    }
+
     scope.postUser = function()
     {
 		  logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
@@ -15,6 +61,9 @@
           noDlg.show(scope, "It is valid ZIP code", "Error")
         }
       })
+      .then(function()){
+        return checkMissingFields()
+      }
       .then(function(){
         uibIns.close("Cancel")
       })
