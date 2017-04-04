@@ -18,36 +18,34 @@ router.get("/account/:email/:hash", function(req, res) {
    var email = req.params.email;
    var hash = req.params.hash;
    var check_query =
-   ' SELECT L.id_log, T.status ' +
-   ' FROM (SELECT id_log ' +
-   '       FROM Logins ' +
-   '       WHERE DATEDIFF(NOW(), whenRegistered) < 10 AND email=? ' +
-   '         AND passwordHash=?) L ' +
-   ' INNER JOIN Technicians T ' +
-   ' ON L.id_log = T.log_id ';
-   var enable_query = ' UPDATE Technicians SET status=1 WHERE log_id=? ';
+   ' SELECT 1 FROM EmailVerification WHERE hash=? AND email=? AND type=1 ';
+   var enable_query = ' UPDATE Technicians SET status=1 ' +
+                      ' WHERE log_id=(SELECT id_log FROM Logins WHERE email=? LIMIT 1) ';
+   var delete_hash_query = ' DELETE FROM EmailVerification where hash=? ';
 
    connections.getConnection(res, function(cnn) {
-      cnn.query(check_query, [email, hash], function(err, result) {
-         if(err) {
-            console.log("Error checking account");
-            res.status(400).json(err);
-         } else if(result.length == 0) {
-            console.log("No row statisfy in table");
-            res.status(200).json({success: 0});
-         } else {
-            cnn.query(enable_query, result[0].id_log, function(err, result) {
-               if(err) {
-                  console.log("Error activate account");
-                  res.status(400).json(err);
-               } else {
-                  console.log("Successful activate account")
-                  res.status(200).json({success: 1});
-               }
-            })
-         }
-      });
-      cnn.release();
+     async.waterfall([
+       function(callback) { // check hash
+         cnn.query(check_query, [hash, email], callback);
+       },
+       function(result, fields, callback) { // update tech
+         if (result.length > 0)
+           cnn.query(enable_query, email, callback);
+         else
+           callback({success: 0, response: "Link doens't exists"});
+       },
+       function(result, fields, callback) { // delete hash
+         cnn.query(delete_hash_query, hash, callback);
+       }
+     ], function(err, result) {
+       if (err) {
+         console.log("Can't verify");
+         res.status(400).json(err);
+       } else {
+         res.status(200).json({success: 1, email: email, hash: hash});
+       }
+     });
+     cnn.release();
    });
 });
 

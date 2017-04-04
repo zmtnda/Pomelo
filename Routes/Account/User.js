@@ -107,7 +107,7 @@ router.post('/', function(req, res) {
                body.passwordSalt = salt;
                body.passwordHash = hash;
                var log_id = 0;
-               var attrLoginTable = {email: body.email, passwordSalt: body.passwordSalt, passwordHash: body.passwordHash,
+               var attrLoginTable = {email: body.email, passwordHash: body.passwordHash,
                  role: body.role, whenRegistered: body.whenRegistered};
                  cnn.query('INSERT INTO Logins SET ?', attrLoginTable, function(err, result) {
                     if(err) {
@@ -116,7 +116,7 @@ router.post('/', function(req, res) {
                       log_id = result.insertId;
                       console.log("success login insert and id_lod = " + log_id);
                       var attrTechTable = {log_id: log_id, firstName: body.firstName, lastName: body.lastName,
-                        hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '1'};
+                        hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '0'};
                         console.log(JSON.stringify(attrTechTable));
                       cnn.query('INSERT INTO Technicians SET ?', attrTechTable, function(err, result) {
                         if(err) {
