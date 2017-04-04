@@ -22,7 +22,6 @@
                 <input type="password" class="form-control" onkeydown = "if (event.keyCode == 13)
                             document.getElementById('submit').click()" placeholder="Password" ng-model="user.password">
               </fieldset>
-
             </form>
             <button ng-if="!inSession" type="button"  id="submit" class="btn btn-lg btn-light" ng-click="login()">Login</button>
             <button ng-if="!inSession" class="btn btn-lg btn-dark" ng-click="addUser()">Sign Up</button>

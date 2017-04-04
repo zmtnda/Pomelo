@@ -1,5 +1,5 @@
-app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout',
-  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout) {
+app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop',
+  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop) {
     scope.user = {};
     scope.viewEnum = {
       NONE: 0,
@@ -83,43 +83,43 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
 
     // Toggle view for modifying personal info
     scope.modifyTechnician = function(){
-      if (scope.isShowPersonalField == 0) {
-        scope.switchView(scope.viewEnum.PERSONAL);
-        scope.gotoBottom();
-      } else {
-        scope.switchView(scope.viewEnum.NONE);
-      }
+      // if (scope.isShowPersonalField == 0) {
+      //   scope.switchView(scope.viewEnum.PERSONAL);
+      //   scope.gotoBottom();
+      // } else {
+      //   scope.switchView(scope.viewEnum.NONE);
+      // }
+      passVerifyPop.show(scope, "passVerifyPop")
     }
-    //Toggle a list of orders by a http call
-    scope.showListOrders = function()
+
+
+    scope.gotoOrders = function()
     {
-      if (scope.isShowOrderHistory == 1) {
-        scope.switchView(scope.viewEnum.NONE);
-      } else {
-        http.get("Receipt/" + rscope.loggedUser.tec_id + "/technician")
-        .then(function(response){
-          console.log("response.data: " + JSON.stringify(response));
-          scope.listOrders = response.data;
-          scope.switchView(scope.viewEnum.ORDERS);
-        }).
-        catch(function(err){noDlg.show(scope, err, "Error")});
-      }
+      timeout(function() {
+        state.go('orders');
+      })
     }
     //Toggle a list of services by a http call
-    scope.showListServices = function()
-    {
-      if (scope.isShowOrderHistory == 1) {
-        scope.switchView(scope.viewEnum.NONE);
-      } else {
-          console.log("rscope.loggedUser.tec_id: " + rscope.loggedUser.tec_id);
-        http.get("Serv/" + rscope.loggedUser.tec_id + "/all")
-        .then(function(response){
-          console.log("response.data: " + JSON.stringify(response));
-          scope.listServices = response.data;
-          scope.switchView(scope.viewEnum.SERVICES);
-        }).
-        catch(function(err){noDlg.show(scope, err, "Error")});
-      }
+    // scope.showListServices = function()
+    // {
+    //   if (scope.isShowOrderHistory == 1) {
+    //     scope.switchView(scope.viewEnum.NONE);
+    //   } else {
+    //       console.log("rscope.loggedUser.tec_id: " + rscope.loggedUser.tec_id);
+    //     http.get("Serv/" + rscope.loggedUser.tec_id + "/all")
+    //     .then(function(response){
+    //       console.log("response.data: " + JSON.stringify(response));
+    //       scope.listServices = response.data;
+    //       scope.switchView(scope.viewEnum.SERVICES);
+    //     }).
+    //     catch(function(err){noDlg.show(scope, err, "Error")});
+    //   }
+    // }
+
+    scope.goToServices = function(){
+      timeout(function() {
+        state.go('services');
+      })
     }
 
   scope.postModify = function()
@@ -217,14 +217,5 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
           // call $anchorScroll()
           $anchorScroll();
     };
-	// scope.deleteService = function(id){
-  //     console.log("In Tech delete function\n");
-  //     http.delete("Serv/" + id + "/Order")
-  //     .then(function(){
-  //         state.reload();
-  //     })
-  //     .catch(function(err){noDlg.show(scope, err, "Error")});
-  //   }
-
 
 }]);

@@ -2,6 +2,7 @@ var Express = require('express');
 var connections = require('../Connections.js');
 var Tags = require('../Validator.js').Tags;
 var router = Express.Router({caseSensitive: true});
+var async = require('async');
 router.baseURL = '/User';
 
 var formatDate = ', DATE_FORMAT(whenCompleted, \'\%b \%d \%Y \%h\:\%i \%p\') as formatDate';
@@ -90,9 +91,7 @@ router.post('/', function(req, res) {
   /* var admin = req.session && req.session.isAdmin(); */
   var admin = req.session;
   if (admin && !body.passwordHash)
-  //if (!body.password)
-
-  body.passwordHash = "*";                       // Blockig password
+    body.passwordHash = "*";                       // Blockig password
   body.whenRegistered = new Date();
 
    if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'passwordHash', 'role', 'hourlyRate', 'city', 'zip'])
@@ -106,13 +105,9 @@ router.post('/', function(req, res) {
              bcrypt.hash(body.passwordHash, salt, function(err, hash) {
                // Store hash in your password DB.
                body.passwordSalt = salt;
-               console.log("salt");
-               console.log(salt);
-               console.log("hash");
-               console.log(hash);
                body.passwordHash = hash;
                var log_id = 0;
-               var attrLoginTable = {email: body.email, passwordSalt: body.passwordSalt, passwordHash: body.passwordHash,
+               var attrLoginTable = {email: body.email, passwordHash: body.passwordHash,
                  role: body.role, whenRegistered: body.whenRegistered};
                  cnn.query('INSERT INTO Logins SET ?', attrLoginTable, function(err, result) {
                     if(err) {
@@ -121,7 +116,7 @@ router.post('/', function(req, res) {
                       log_id = result.insertId;
                       console.log("success login insert and id_lod = " + log_id);
                       var attrTechTable = {log_id: log_id, firstName: body.firstName, lastName: body.lastName,
-                        hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '1'};
+                        hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '0'};
                         console.log(JSON.stringify(attrTechTable));
                       cnn.query('INSERT INTO Technicians SET ?', attrTechTable, function(err, result) {
                         if(err) {
@@ -166,38 +161,87 @@ router.get('/:id', function(req, res) {
    }
 });
 
-// Update User <usrId>, with body giving an object with one or more of the specified fields.
-//
-// AU must be the User in question, or an admin.
-// Note: Role changes require an admin.
-//
+// User validation for security purpose when updating account info
+router.post('/:logId/validation', function(req, res) {
+   var vld = req.validator;
+   var password = req.body.password;
+   var tech = req.params.logId;
+
+   if(vld.checkPrsOK(tech))
+   {
+     connections.getConnection(res, function(cnn) {
+       cnn.query('SELECT passwordHash FROM Logins WHERE id_log = ? ', tech,
+          function(err, result){
+            if(err) {
+               res.status(400).json(err);
+            }
+            else if (req.validator.check(result.length > 0 && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.noPermission)) {
+              res.json({success: 1});
+            }
+          });
+          cnn.release();
+     });
+   }});
+// Update technician account,
+// with json input giving all specified attributes.
+// AU must be the technician in question, or an admin.
+// Note: Currently DO NOT consider Role changes
+// assuming password is correct
 // Errors if there is old password is not provide when changing the password
-router.put('/:id', function(req, res) {
+router.put('/:logId/info', function(req, res) {
    var vld = req.validator;
    var body = req.body;
-   var admin = req.session && req.session.isAdmin();
+   var tech = req.params.logId;
+   var attrLoginTable = {};
 
-  // console.log("CHANING INFO " + JS);
-   if(vld.checkPrsOK(req.params.id) && vld.chain(!body.role || admin, Tags.noPermission))
-   { // check to see if the user is trying to change the password
-     console.log(JSON.stringify(body));
-          connections.getConnection(res, function(cnn) { // Done with if conditional
-              if(body.password) {
-                  body.password = bcrypt.hashSync(body.password, saltRounds);
-              }
-           cnn.query("UPDATE Users set ? WHERE id = ?", [req.body, req.params.id],
-           function(err) {
-              if(err)
-              {
-                console.log(err);
-                 res.status(400).end();
-              }
-              else {
-                 res.end();
-              }
-           });
-           cnn.release();
-        });
+   if(vld.checkPrsOK(tech))
+   {
+      connections.getConnection(res, function(cnn) { // Done with if conditional
+      async.series([
+        function(callback) {
+          if(body.password){
+            bcrypt.genSalt(saltRounds, function(err, salt) {
+              bcrypt.hash(body.password, salt, function(err, hash) {
+              attrLoginTable.passwordSalt = salt;
+              attrLoginTable.passwordHash = hash;
+              delete body.password;
+              callback(null);
+              });
+            });
+          }
+          else{
+            callback(null);
+          }
+        },
+				function(callback) {
+          if(body.email){
+            attrLoginTable.email = body.email;
+            delete body.email;
+            callback(null);
+          }
+          else{
+            callback(null);
+          }
+        },
+        function(callback) {
+          cnn.query(' UPDATE Logins SET ? WHERE id_log = ? ', [attrLoginTable, tech], callback);
+        },
+        function(callback) {
+          if (Object.keys(body).length){
+           cnn.query(' UPDATE Technicians set ? WHERE log_id = ? ', [body, tech], callback);
+         }
+         else {
+           callback(null);
+         }
+        }], function(err, result) {
+				if (err) {
+					res.status(400).json(err);
+				} else {
+					res.json({success: 1});
+				}
+			});
+        cnn.release();
+       });
     }
 });
 

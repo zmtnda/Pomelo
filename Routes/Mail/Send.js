@@ -1,15 +1,22 @@
+// Type for insert verification
+// 1 - registration
+// 2 - forgot password
+// 3 - review
+
 var Express = require('express');
 var connections = require('../Connections.js');
 var Tags = require('../Validator.js').Tags;
 var router = Express.Router({caseSensitive: true});
 var async = require('async');
 var nodemailer = require('nodemailer');
+var crypto = require('crypto');
 router.baseURL = '/Send';
 
 router.get("/", function(req, res) {
    console.log(req.get('host'));
    var link = 'http://'+ req.get('host')+ '/Verify/account/';
-   res.status(200).end('<a href="' + link + '">' + link + '</a>');
+   var hash = crypto.randomBytes(50).toString('hex');
+   res.status(200).json({hash: hash, length: hash.length});
 });
 
 // Send email for account verification
@@ -18,38 +25,40 @@ router.post("/account", function(req, res) {
    console.log("Send email for acc verification");
    var vld = req.validator;
    var body = req.body;
-   var check_query =
-      ' SELECT * ' +
-      ' FROM (SELECT email, passwordHash, id_log ' +
-	   '       FROM Logins ' +
-	   '       WHERE email=? AND passwordHash=?) L ' +
-      ' INNER JOIN Technicians T ' +
-      ' ON L.id_log = T.log_id';
+   var insert_verification_query = ' INSERT INTO EmailVerification VALUES (?,?,1,NOW()) ';
+   var check_email_query =
+     ' SELECT L.email, T.status FROM Logins L INNER JOIN Technicians T ON L.id_log = T.log_id AND L.email = ?';
 
-   var link = 'http://'+ req.get('host')+ '/Verify/account/';
    var title = '[Pomelo] Please verify your email address.';
+   var link = 'http://'+ req.get('host')+ '/Verify/account/';
+   var hash = crypto.randomBytes(50).toString('hex');
 
-   if(vld.hasFields(body, ['email', 'passwordHash'])) {
+   if(vld.hasFields(body, ['email'])) {
       connections.getConnection(res, function(cnn) {
-         cnn.query(check_query, [body.email, body.passwordHash],
-         function(err, result) {
-            if(err) {
-               console.log("Error checking before email verify acc");
-               res.status(400).json(err);
-            } else if (result.length == 0 ) {
-               console.log("No row satisfy - No mail send");
-               res.json({success: 0});
-            } else if (result.length > 0 && result[0].status == 1) {
-               console.log("Already Activated! - No mail send");
-               res.json({success: 1, sent: 0});
-            } else { //send mail here
-               console.log("Sending email for acc verification");
-               link = link + body.email + '/' + body.passwordHash;
-               var content = '<b>Please verify your account</b><br>' +
-                      '<a href='+ link + '>' + link + '</a>';
-               mail(res, body.email, title, content);
-            }
-         });
+        async.waterfall([
+          function(callback) { //check if email exists
+            cnn.query(check_email_query, body.email, callback);
+          },
+          function(result, fields, callback) {
+            console.log(`In check email - ${JSON.stringify(result)}`);
+            if (result.length > 0 && result[0].status == 0) //insert hash
+              cnn.query(insert_verification_query, [hash, body.email], callback);
+            else if (result.length > 0 && result[0].status != 0)
+              callback({success: 0, response: `Email ${body.email} already activated.`}, null);
+            else
+              callback({success: 0, response: `Email ${body.email} doesn't exists.`}, null);
+          }
+        ], function(error, result) {
+          if (error) {
+            console.log(`Error sending mail for ${body.email}`);
+            res.status(400).json(error);
+          } else {
+            console.log("Sending email for acc verification");
+            link = link + body.email + '/' + hash;
+            var content = `<b>Please verify your account</b><br><a href=${link}>${link}</a>`;
+            mail(res, body.email, title, content);
+          }
+        });
          cnn.release();
       });
    }
@@ -90,7 +99,7 @@ router.post("/review", function(req, res) {
                link = link + body.serHisId + '/' + body.serHisHash;
                var content = '<b>Please Review the service</b><br>' +
                       '<a href='+ link + '>' + link + '</a>';
-               mail(res, result[0].email, title, content);
+               mail(res, bodu.email, title, content);
             }
          });
          cnn.release();
@@ -114,7 +123,7 @@ function mail(res, receiver, title, body) {
    // setup email data with unicode symbols
    var mailOptions = {
       from: '"Pomelo 👻" <noreply.nnguy101@gmail.com>', // sender address
-      to: 'nnguy101@gmail.com', // change to reciever later
+      to: receiver, // change to reciever later
       subject: title, // Subject line
       html: body// html body
    };

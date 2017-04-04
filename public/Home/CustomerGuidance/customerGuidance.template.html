@@ -1,0 +1,129 @@
+<body class="container">
+   <h3 ng-bind = "progressMessage">Start from types</h3>
+   <div class="progress">
+     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="progressBarDisplay">
+              {{ progressPercentage }} Complete
+     </div>
+   </div>
+   <!-- Category Collumn -->
+   <div class="row">
+     <div class="col-xs-12 col-md-3 col-md-offset-1 content-area" ng-hide="hasConfirmedCate">
+       <div class="thumbnail sample-show-hide">
+         <h3>Category(s)</h3>
+           <button type="button" class="btn btn-success issueGuidanceBtn" ng-show="!hasConfirmedCate" ng-click="onClickConfirmCategory()">Confirm</button>
+         <div class = "table-responsive">
+           <table class = "table">
+             <tbody>
+               <tr ng-repeat = "cate in allCates track by $index" data-index="{{$index}}">
+                  <td>
+                    <button type="button" class="btn btn-default issue-label" ng-class="cate.cateButtonStyle | buttonFilter"
+                     ng-click="onClickCategory(cate.id_cat, cate.category, $index)"> {{ cate.category }} </button>
+                  </td>
+               </tr>
+             </tbody>
+           </table>
+          </div>
+       </div>
+     </div>
+     <!-- Manufacturer Collumn -->
+     <div class="col-xs-12 col-md-3 col-md-offset-1 content-area" ng-show="!hasConfirmedManu && hasConfirmedCate">
+       <div class="thumbnail sample-show-hide">
+         <h3>Manufacturer(s)</h3>
+           <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmManus()">Confirm</button>
+           <button type="button" class="btn btn-warning issueGuidanceBtn" ng-click="onClickRedoManus()">Go Back</button>
+           <div class="thumbnail" ng-repeat="oneOfferring in offerrings track by $index">
+             <h5>{{ oneOfferring.cate }}</h5>
+             <div ng-repeat="manu in oneOfferring.display.manus track by $index"
+                ng-class="manu.manuButtonStyle | buttonFilter"
+                ng-click="onClickManu(oneOfferring.offerId, manu.manId, manu.catMan_id, manu.manufacturer, manu.manuButtonStyle)"
+                class="label label-default issue-label"> {{ manu.manufacturer }}</div>
+           </div>
+       </div>
+     </div>
+     <!-- Model Collumn -->
+     <div class="col-xs-12 col-md-3 col-md-offset-1 content-area" ng-show="!hasConfirmedModel && hasConfirmedCate && hasConfirmedManu">
+       <div class="thumbnail sample-show-hide">
+         <h3>Model(s)</h3>
+           <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmModel()">Confirm</button>
+           <button type="button" class="btn btn-warning issueGuidanceBtn" ng-click="onClickRedoModels()">Go Back</button>
+           <div ng-repeat="oneOfferring in offerrings track by $index">
+             <div class="thumbnail" ng-repeat="oneManu in oneOfferring.offer.manus track by $index">
+               <h5>{{ oneOfferring.cate }} > {{ oneManu.manuName }}  <!--{{oneOfferring.display}} >> {{ oneManu}} --></h5>
+               <div ng-repeat="model in oneOfferring.display.models track by $index"
+                 ng-click="onClickModel(oneOfferring.offerId, model.modelId, model.model, oneManu.manuId)"
+                 ng-class="model.modelButtonStyle | buttonFilter"
+                 ng-if="model.correspondingManuId === oneManu.manuId"
+                 class="label label-default issue-label">{{ model.model }}</div>
+             </div>
+           </div>
+       </div>
+     </div>
+     <!-- Issue Collumn -->
+     <div class="col-xs-12 col-md-3 col-md-offset-1 content-area" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && !hasConfirmedIssue">
+       <div class="thumbnail sample-show-hide">
+           <h3>Issue(s)</h3>
+           <div ng-repeat="oneOfferring in offerrings track by $index">
+             <div ng-repeat="oneManu in oneOfferring.offer.manus track by $index">
+               <div ng-repeat="oneModel in oneOfferring.offer.models track by $index"
+                    ng-if="oneModel.correspondingManuId === oneManu.manuId">
+                 <div class="thumbnail">
+                   <h5>{{ oneOfferring.cate }} > {{ oneManu.manuName }} > {{ oneModel.modelName }}</h5>
+                   <div ng-repeat="issue in oneOfferring.display.issues track by $index">
+                    <div ng-if="issue.correspondingModelId === oneModel.modelId">
+                      <div ng-click="onClickIssue(oneOfferring.offerId, issue.issueId, issue.modIss_Id, issue.issue, oneModel.modelId, oneModel.modelName)"
+                        ng-class="issue.issueButtonStyle | buttonFilter"
+                        class="label label-default issue-label">{{ issue.issue }}
+                      </div>
+                    </div>
+                  </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     <!-- Offering Table -->
+     <div class="col-xs-12 content-area sample-show-hide" ng-class="offerringsClass" style="border-style:none">
+      <div class="thumbnail">
+        <h3>You're offering:</h3>
+         <button type="button" class="btn btn-success issueGuidanceBtn" ng-click="onClickConfirmIssue()"
+          ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && !hasConfirmedIssue">Confirm Issues</button>
+         <button type="button" ng-click="onConfirmAllOfferrings()"
+          ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && hasConfirmedIssue"
+            class="btn btn-success issueGuidanceBtn">Confirm All Offerrings</button>
+         <button type="button" class="btn btn-warning issueGuidanceBtn" ng-click="onClickRedoIssues()" ng-show="hasConfirmedCate && hasConfirmedManu && hasConfirmedModel && !hasConfirmedIssue">Redo all issues</button>
+         <div class = "table-responsive">
+           <table class = "table">
+             <thead>
+               <th style="width: 180px">Categories</th>
+               <th style="width: 150px">Manufacturer(s)</th>
+               <th style="width: 150px">Model(s)</th>
+               <th style="width: auto">Issue(s)</th>
+             </thead>
+             <tbody>
+               <tr ng-repeat = "oneOffer in offerrings track by $index">
+                 <td><div class="label label-default issue-label">{{ oneOffer.cate }}</div></td>
+                 <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus">{{ manu.manuName }}</div></td>
+                 <td><div class="label label-default issue-label" ng-repeat="model in oneOffer.offer.models">{{ model.modelName }}</div></td>
+                 <td>
+                   <div id="issueColumn" class="label label-default issue-label" ng-repeat="issue in oneOffer.offer.issues | orderBy : 'correspondingModelName'">
+                     <div> {{issue.correspondingModelName}} > {{ issue.issueName }} </div>
+                     <div>
+                        <select id="serviceTypeSelection" ng-model="issue.serviceType" ng-options="selectedItem.id as selectedItem.name for selectedItem in serviceType">
+                         <option class="placeholder" selected disabled value="">Please Choose Service Type</option>
+                        </select>
+                        <span>
+                          <input id="amountSelection" value="amount" name="amountInput" placeholder="$" class="form-control col-xs-12 col-md-3" type="number"
+                           ng-model="issue.amount"/>
+                        </span>
+                      </div>
+                   </div>
+                 </td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+   </div>
+</body>
