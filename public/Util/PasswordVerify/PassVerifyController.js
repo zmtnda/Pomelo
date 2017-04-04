@@ -14,4 +14,4 @@ app.controller('passVerifyController', ['$rootScope','$scope', '$state', 'goToSe
          return response["data"]
        })
    }
-}])
+}]);
