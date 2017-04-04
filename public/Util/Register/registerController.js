@@ -10,43 +10,43 @@
     {
       if(scope.user.email == undefined)
       {
-        scope.warning-email = {
+        scope.warningEmail = {
           "background-color" : "#ffcccc",
         }
       }
       if(scope.user.password == undefined)
       {
-        scope.warning-pass = {
+        scope.warningPass = {
           "background-color" : "#ffcccc",
         }
       }
       if(scope.user.firstName == undefined)
       {
-        scope.warning-first = {
+        scope.warningFirst = {
           "background-color" : "#ffcccc",
         }
       }
       if(scope.user.lastName == undefined)
       {
-        scope.warning-last = {
+        scope.warningLast = {
           "background-color" : "#ffcccc",
         }
       }
       if(scope.user.hourlyRate == undefined)
       {
-        scope.warning-hourlyRate = {
+        scope.warningHourlyRate = {
           "background-color" : "#ffcccc",
         }
       }
       if(scope.user.city == undefined)
       {
-        scope.warning-city = {
+        scope.warningCity = {
           "background-color" : "#ffcccc",
         }
       }
       if(scope.user.zip == undefined)
       {
-        scope.warning-zip = {
+        scope.warningZip = {
           "background-color" : "#ffcccc",
         }
       }
@@ -61,9 +61,9 @@
           noDlg.show(scope, "It is valid ZIP code", "Error")
         }
       })
-      .then(function()){
+      .then(function(){
         return checkMissingFields()
-      }
+      })
       .then(function(){
         uibIns.close("Cancel")
       })

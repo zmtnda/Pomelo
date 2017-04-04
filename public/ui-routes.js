@@ -5,7 +5,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
 
       $stateProvider
       .state('home',  {
-         url: '/',
+         url: '/home',
          templateUrl: 'Home/home.template.html',
          controller: 'homeController',
       })
