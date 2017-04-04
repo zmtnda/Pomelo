@@ -39,7 +39,27 @@ app.config(['$stateProvider', '$urlRouterProvider',
          templateUrl: 'Opinion/opinion.template.html',
         //  controller: '',
       })
-      .state('issueGudiance', {
+      .state('customerGudiance', {
+         url: '/Home/CustomerGuidance',
+         templateUrl: 'Home/CustomerGuidance/customerGuidance.template.html',
+         controller: 'customerGuidanceController',
+         //require loading up the map
+         resolve: {
+           cates: ['$q', '$http', '$stateParams', function($q, http, prms){
+             return http.get('Cate/')
+             .then(function(response){
+               return $q.resolve(response.data)
+             })
+           }],
+           manus: ['$q', '$http', '$stateParams', function($q, http, prms){
+             return http.get('Cate/')
+             .then(function(response){
+               return $q.resolve(response.data)
+             })
+           }]
+         }
+      })
+      .state('Gudiance', {
          url: '/technician/IssueGuidance',
          templateUrl: 'Technician/IssueGuidance/issueGuidance.template.html',
          controller: 'issueGuidanceController',

@@ -10,6 +10,12 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
      regPopSer.show(scope, "Register")
    }
 
+   scope.findTechnician = function(){
+     timeout(function() {
+       state.go('customerGudiance');
+     })
+   }
+
    scope.goToAbout = function()
    {
      timeout(function() {
