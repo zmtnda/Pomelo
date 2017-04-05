@@ -117,7 +117,7 @@ router.post('/', function(req, res) {
                       console.log("success login insert and id_lod = " + log_id);
                       var attrTechTable = {log_id: log_id, firstName: body.firstName, lastName: body.lastName,
                         hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '0'};
-                        console.log(JSON.stringify(attrTechTable));
+                        // console.log(JSON.stringify(attrTechTable));
                       cnn.query('INSERT INTO Technicians SET ?', attrTechTable, function(err, result) {
                         if(err) {
                           console.log("fail technician insert");
