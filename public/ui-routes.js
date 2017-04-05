@@ -52,7 +52,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
            }]
          }
       })
-      .state('Gudiance', {
+      .state('issueGudiance', {
          url: '/technician/IssueGuidance',
          templateUrl: 'Technician/IssueGuidance/issueGuidance.template.html',
          controller: 'issueGuidanceController',
