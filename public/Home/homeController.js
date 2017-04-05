@@ -35,6 +35,12 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
      })
    }
 
+   scope.customerGuidance = function(){
+     timeout(function() {
+       state.go('customerGudiance');
+     })
+   }
+
    rscope.logout = logSer.logout;
 
 }])

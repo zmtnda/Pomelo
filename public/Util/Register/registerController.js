@@ -6,52 +6,6 @@
         return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
     }
 
-    var checkMissingFields = function()
-    {
-      if(scope.user.email == undefined)
-      {
-        scope.warningEmail = {
-          "background-color" : "#ffcccc",
-        }
-      }
-      if(scope.user.password == undefined)
-      {
-        scope.warningPass = {
-          "background-color" : "#ffcccc",
-        }
-      }
-      if(scope.user.firstName == undefined)
-      {
-        scope.warningFirst = {
-          "background-color" : "#ffcccc",
-        }
-      }
-      if(scope.user.lastName == undefined)
-      {
-        scope.warningLast = {
-          "background-color" : "#ffcccc",
-        }
-      }
-      if(scope.user.hourlyRate == undefined)
-      {
-        scope.warningHourlyRate = {
-          "background-color" : "#ffcccc",
-        }
-      }
-      if(scope.user.city == undefined)
-      {
-        scope.warningCity = {
-          "background-color" : "#ffcccc",
-        }
-      }
-      if(scope.user.zip == undefined)
-      {
-        scope.warningZip = {
-          "background-color" : "#ffcccc",
-        }
-      }
-    }
-
     scope.postUser = function()
     {
 		  logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
@@ -60,9 +14,6 @@
         if (!scope.isValidZip(scope.user.zip)){
           noDlg.show(scope, "It is valid ZIP code", "Error")
         }
-      })
-      .then(function(){
-        return checkMissingFields()
       })
       .then(function(){
         uibIns.close("Cancel")
@@ -80,7 +31,6 @@
 		  })
 		  .catch(function(err){
         console.log("ERROR!!!!!");
-        noDlg.show(scope, emf.formatErrorCodeAndErrorArray(err), "Error", 'lg')
       });
 	}
 }])
