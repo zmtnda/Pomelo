@@ -43,6 +43,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
          url: '/customer/CustomerGuidance',
          templateUrl: 'Customer/CustomerGuidance/customerGuidance.template.html',
          controller: 'customerGuidanceController',
+         resolve: {
+           cates: ['$q', '$http', '$stateParams', function($q, http, prms){
+             return http.get('Cate/')
+             .then(function(response){
+               return $q.resolve(response.data)
+             })
+           }]
+         }
       })
       .state('Gudiance', {
          url: '/technician/IssueGuidance',
@@ -50,12 +58,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
          controller: 'issueGuidanceController',
          resolve: {
            cates: ['$q', '$http', '$stateParams', function($q, http, prms){
-             return http.get('Cate/')
-             .then(function(response){
-               return $q.resolve(response.data)
-             })
-           }],
-           manus: ['$q', '$http', '$stateParams', function($q, http, prms){
              return http.get('Cate/')
              .then(function(response){
                return $q.resolve(response.data)
