@@ -223,21 +223,26 @@ router.put('/:logId/info', function(req, res) {
           }
         },
         function(callback) {
-          cnn.query(' UPDATE Logins SET ? WHERE id_log = ? ', [attrLoginTable, tech], callback);
+          if (Object.keys(attrLoginTable).length){
+            cnn.query(' UPDATE Logins SET ? WHERE id_log = ? ', [attrLoginTable, tech], callback);
+          }
+          else {
+            callback(null);
+          }
         },
         function(callback) {
           if (Object.keys(body).length){
-           cnn.query(' UPDATE Technicians set ? WHERE log_id = ? ', [body, tech], callback);
-         }
-         else {
-           callback(null);
-         }
+            cnn.query(' UPDATE Technicians set ? WHERE log_id = ? ', [body, tech], callback);
+          }
+          else {
+            callback(null);
+          }
         }], function(err, result) {
-				if (err) {
-					res.status(400).json(err);
-				} else {
-					res.json({success: 1});
-				}
+      				if (err) {
+      					res.status(400).json(err);
+      				} else {
+      					res.json({success: 1});
+      				}
 			});
         cnn.release();
        });
