@@ -9,9 +9,19 @@ app.controller('passVerifyController', ['$rootScope','$scope', '$state', 'goToSe
        .then(function(response)
        {
          console.log(JSON.stringify(response));
-         noDlg.show(rscope, "Your services has been added successfully");
-         goSer.goToTechnician();
-         return response["data"]
+          if(response["data"]["success"] == 1){
+            noDlg.show(rscope, "Your services has been added successfully");
+            timeout(function() {
+              state.go('updateAccount');
+            })
+          }
+
+        console.log(response["data"]["success"]);
+         return response["data"]["success"];
        })
+       .catch(function(err){
+         console.log("ERRRRRRORRRRRRR");
+         throw err;
+       });
    }
 }]);

@@ -89,7 +89,8 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
       // } else {
       //   scope.switchView(scope.viewEnum.NONE);
       // }
-      passVerifyPop.show(scope, "passVerifyPop")
+      var success = passVerifyPop.show(scope, "passVerifyPop");
+      console.log("SUCCESS IS: " + success);
     }
 
 
