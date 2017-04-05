@@ -1,8 +1,8 @@
 <body class="container" ng-style="toggleBackground">
 
     <ul class = "pager">
-       <li class = "previous disabled"><a>&larr; Older</a></li>
-       <li class = "next"><a>Newer &rarr;</a></li>
+       <li class = "previous disabled"><a>&larr; Back</a></li>
+       <li class = "next"><a>Next &rarr;</a></li>
     </ul>
 
     <div class = "progress progress-striped active">
@@ -30,7 +30,7 @@
     </iframe>
 
     <div class="col-md-4 col-md-offset-4" id="centeredBoxForCate" ng-if="hasMapped">
-      <div ng-repeat="cate in cates"><h1><span class="label label-success" >{{cate.category}}</span></h1></div>
+      <div ng-repeat="cate in cates"><h1><span class="label label-default" >{{cate.category}}</span></h1></div>
     </div>
 
 </body>
