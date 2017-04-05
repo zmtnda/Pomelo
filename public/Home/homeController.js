@@ -2,6 +2,12 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
   function(scope, state, rscope,goSer, logSer, regPopSer, timeout) {
     scope.user = {};
 
+    scope.retnHm = function(){
+      timeout(function() {
+        state.go('home');
+      })
+    }
+
    scope.login = function(){
      logSer.login(scope.user.email, scope.user.password);
    }
