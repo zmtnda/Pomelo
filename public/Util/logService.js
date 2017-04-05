@@ -7,7 +7,16 @@ function(rscope, http, state, nDlg, route, persisService) {
 		this.addUser = function(emailP, passwordP, roleP, fNameP, lNameP, hRateP, cityP, zipP)
 		{
 			return http.post("User/", {email: emailP, passwordHash: passwordP, role: roleP,
-        firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP});
+        firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP})
+        .then(function(){
+          console.log("in add user: " + emailP)
+          return http.post("Send/account", {"email": emailP})// "success": 1/ 0 "response": already activated/ doesn't exist
+        })
+        .then(function(res){
+          if (res.success) {
+            // pop up: please verify the email.
+          }
+        })
 		}
 
     this.logout = function(){
