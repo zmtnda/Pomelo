@@ -11,7 +11,7 @@ var formatDate = ', DATE_FORMAT(timestamp, \'\%b \%d \%Y \%h\:\%i \%p\') as form
 * Front end will make sure all the required params are attached with JSON
 * Valid only if technician himself
 * Valid only if the serivce is not already offered
-* which mean no duplicate modIss_id
+* which mean no duplicate modIss_id and catMan_id pair
 */
 
 router.post('/:tecId', function(req, res) {
@@ -36,12 +36,14 @@ router.post('/:tecId', function(req, res) {
     connections.getConnection(res, function(cnn) {
       var selectParams = [];
       for( var i = 0; i < modIssids.length; i++){
-        qryParams.push('(?,?)');
+        qryParams.push('(?,?,?)');
         selectParams.push(req.params.tecId);
         selectParams.push(modIssids[i]);
+        selectParams.push(catManids[i]);
+        console.log("selectParams " + selectParams);
       }
       var serQuery = ' SELECT modIss_id FROM ServicesOfferedByTech WHERE '
-      							+ ' (tec_Id , modIss_id ) IN (' + qryParams.join(',') + ')'
+      							+ ' (tec_Id , modIss_id, catMan_Id ) IN (' + qryParams.join(',') + ')'
                     + ' ORDER BY modIss_id ';
       cnn.query(serQuery, selectParams, function(err, results) {
       if(err) {
