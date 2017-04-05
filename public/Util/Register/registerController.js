@@ -30,7 +30,7 @@
 				}
 		  })
 		  .catch(function(err){
-        console.log("ERROR!!!!!");
+        console.log("ERROR!!!!!" + JSON.stringify(err));
       });
 	}
 }])
