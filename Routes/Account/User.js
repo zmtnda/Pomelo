@@ -202,7 +202,6 @@ router.put('/:logId/info', function(req, res) {
           if(body.password){
             bcrypt.genSalt(saltRounds, function(err, salt) {
               bcrypt.hash(body.password, salt, function(err, hash) {
-              attrLoginTable.passwordSalt = salt;
               attrLoginTable.passwordHash = hash;
               delete body.password;
               callback(null);
