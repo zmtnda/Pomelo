@@ -176,7 +176,7 @@ function mail(res, receiver, title, body) {
    // setup email data with unicode symbols
    var mailOptions = {
       from: '"Pomelo 👻" <noreply.nnguy101@gmail.com>', // sender address
-      to: 'nnguy101@gmail.com', // change to receiver later
+      to: receiver, // change to receiver later
       subject: title, // Subject line
       html: body// html body
    };

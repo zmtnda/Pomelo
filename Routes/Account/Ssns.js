@@ -44,15 +44,21 @@ router.post('/', function(req, res) {
   console.log(req.body.password);
   connections.getConnection(res, function(cnn) {
     cnn.query('SELECT * FROM (SELECT * FROM Logins WHERE email = ?) l LEFT JOIN ' +
-              'Technicians t ON l.id_log = t.log_id AND status <> 0 ', req.body.email, function(err, result) {
+              'Technicians t ON l.id_log = t.log_id', req.body.email, function(err, result) {
       if(err){
          res.status(400).json(err);
       }
       else if (req.validator.check(result.length && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
-         cookie = ssnUtil.makeSession(result[0], res);
-         console.log("same pass");
-         console.log(result[0]);
-         res.location(router.baseURL + '/'  + cookie).send(result[0]);
+         if(result[0].role == 2 || (result[0].role == 1 && result[0].status == 1)) {
+           cookie = ssnUtil.makeSession(result[0], res);
+           console.log("same pass");
+           console.log(result[0]);
+           res.location(router.baseURL + '/'  + cookie).send(result[0]);
+         } else if (result[0].role == 1 && result[0].status == 0) {
+           res.status(400).json({success: 0, response: 'Need to verify your email'});
+         } else {
+           res.status(400).json({success: 0, response: 'Account is disabled'});
+         }
       }
       cnn.release();
     });
