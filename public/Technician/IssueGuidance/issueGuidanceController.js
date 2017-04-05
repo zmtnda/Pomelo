@@ -459,11 +459,12 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
       }
     }
 
-    scope.onClickIssue = function(offerId, selectedIssueId, selectedModIss_Id, selectedIssueName, correspondingModelId, correspondingModelName)
+    scope.onClickIssue = function(offerId, selectedIssueId, selectedCatman_id, selectedModIss_Id, selectedIssueName, correspondingModelId, correspondingModelName)
     {
       var newIssue = {"issueId": selectedIssueId,
                       "correspondingModelId": correspondingModelId, // added correspondingModelId in order to make popAnElement() works
                       "correspondingModelName": correspondingModelName,
+                      "catMan_id": selectedCatman_id,
                       "modIss_Id": selectedModIss_Id,
                       "issueName": selectedIssueName}
 
@@ -505,10 +506,11 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
 
         for(var i = 0; i < scope.offerrings.length; i++)
         {
-          for(var j = 0; j < scope.offerrings[i]["offer"]["manus"].length; j++){
-            catman.push(scope.offerrings[i]["offer"]["manus"][j]["catMan_id"]);
-          }
+          // for(var j = 0; j < scope.offerrings[i]["offer"]["manus"].length; j++){
+          //   catman.push(scope.offerrings[i]["offer"]["manus"][j]["catMan_id"]);
+          // }
           for(var j = 0; j < scope.offerrings[i]["offer"]["issues"].length; j++){
+            catman.push(scope.offerrings[i]["offer"]["issues"][j]["catMan_id"]);
             modIss.push(scope.offerrings[i]["offer"]["issues"][j]["modIss_Id"]);
             serviceType.push(scope.offerrings[i]["offer"]["issues"][j]["serviceType"]);
             amount.push(scope.offerrings[i]["offer"]["issues"][j]["amount"]);
