@@ -50,6 +50,7 @@ app.use('/Cate', require('./Routes/Service/Cate'));
 app.use('/Receipt', require('./Routes/Transaction/Receipt'));
 app.use('/Verify', require('./Routes/Mail/Verify'));
 app.use('/Send', require('./Routes/Mail/Send'));
+app.use('/UpdateVerify', require('./Routes/Mail/UpdateVerify'));
 app.use('/Review', require('./Routes/Review/Review'));
 
 // Clear all content from the database,
