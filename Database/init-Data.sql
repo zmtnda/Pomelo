@@ -41,16 +41,6 @@
 		(7, 'Tech_6', 'Zin2', 55.0, 'San Luis Obispo', 93403, 4.5, 3, 1),
 		(8, 'Tech_7', 'Zee2', 45.0, 'San Luis Obispo', 93406, 4.5, 3, 1),
 		(9, 'Tech_8', 'Tun', 25.5, 'Santa Maria', 93454, 2.5, 4, 1);
-		-- insert into `Technicians` (`log_id`, `firstName`, `lastName`, `hourlyRate`,
-		-- 	`City`, `Zip`, `ratings`, `bad_id`, `status`) values
-		-- 	(2, 'Tech_1', 'Byakugan', 46.5, 'SLO', 93401, 3.5, 2, 1),
-		-- 	(3, 'Tech_2', 'Uhara', 30.0, 'Santa Clara', 95050, 4.2, 3, 1),
-		-- 	(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 1),
-		-- 	(5, 'Tech_4', 'Zin', 50.0, 'San Luis Obispo', 93405, 4.5, 3, 1),
-		-- 	(6, 'Tech_5', 'Zee', 30.0, 'San Luis Obispo', 93405, 4.5, 3, 0),
-		-- 	(7, 'Tech_6', 'Zin2', 55.0, 'San Luis Obispo', 93403, 4.5, 3, 1),
-		-- 	(8, 'Tech_7', 'Zee2', 45.0, 'San Luis Obispo', 93406, 4.5, 3, 1),
-		-- 	(9, 'Tech_8', 'Tun', 25.5, 'Santa Maria', 93454, 2.5, 4, 1);
 
 	-- insert into certification --
 	insert into `Certifications` (`tec_id`, `certificationName`, `institution`, `yearObtained`) values
