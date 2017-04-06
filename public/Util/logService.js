@@ -51,6 +51,10 @@ function(rscope, http, state, nDlg, route, persisService) {
           rscope.loggedUser.tec_id = result.data.id_tec;
           rscope.loggedUser.firstName = result.data.firstName;
           rscope.loggedUser.lastName = result.data.lastName;
+          rscope.loggedUser.hourlyRate = result.data.hourlyRate;
+          rscope.loggedUser.city = result.data.city;
+          rscope.loggedUser.zip = result.data.zip;
+
           rscope.inSession = true;
           persisService.setInSession(true);
           persisService.setCookieData(emailParam, passwordParam);
