@@ -2,16 +2,18 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
   function(scope, state, logSer, http, rscope, noDlg, goto, cate)
   {
     scope.customerData = {
-      issue: "",
-      category: "",
-      manufacturer: "",
-      model: "",
-      issue: ""
+      issue: undefined,
+      category: undefined,
+      manufacturer: undefined,
+      model: undefined,
+      issue: undefined
     }
 
     scope.hasGone = false
     scope.hasMapped = false
+    scope.hasClickedCate = false
     scope.cates = cate
+    scope.manus = undefined
 
     scope.showMap = function()
     {
@@ -21,7 +23,17 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
     scope.showCategory = function(){
       scope.hasMapped = true
       scope.hasGone = false
-      console.log("asd");
+
+    }
+
+    scope.onClickCategory = function(seletcedCate){
+      console.log("sadasd  " + JSON.stringify(seletcedCate))
+      http.get('Cate/' + seletcedCate.id_cat + '/manu')
+      .then(function(res){
+        scope.manus = res.data
+        console.log(JSON.stringify(res))
+        scope.hasClickedCate = true
+      })
     }
 
   }]);
