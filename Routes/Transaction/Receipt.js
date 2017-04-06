@@ -55,7 +55,7 @@ router.get('/:tecId/technician', function(req, res) {
    var formatDate = ', DATE_FORMAT(orderedDate, \'\%b \%d \%Y \%h\:\%i \%p\') as orderedDate '
                  + ', DATE_FORMAT(completedDate, \'\%b \%d \%Y \%h\:\%i \%p\') as completedDate ';
    //   qry = 'SELECT x.*, y.*, z.serviceName, v.status, v.amount ' + formatDate +
-   var selectQry = ' SELECT email, category, manufacturer, model, issue, '
+   var selectQry = ' SELECT serTec_id, cus_id, email, category, manufacturer, model, issue, '
                  + ' description, amount, T4.status ' + formatDate
                  + ' FROM ServicesOfferedByTech T1 '
                  + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
@@ -68,7 +68,7 @@ router.get('/:tecId/technician', function(req, res) {
                  + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
                  + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
                  + ' ) T3 ON T1.modIss_id = T3.id_modIss AND T1.tec_id = ? '
-                 + ' INNER JOIN (SELECT serTec_id, email, description, amount, '
+                 + ' INNER JOIN (SELECT serTec_id, cus_id, email, description, amount, '
                  + ' status, orderedDate, completedDate '
                  + ' FROM ServicesHistory T1 '
                  + ' INNER JOIN Customers T2 ON T1.cus_id = T2.id_cus '

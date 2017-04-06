@@ -128,6 +128,32 @@ router.post('/:tecId', function(req, res) {
   	});
   }});
 
+// modify SerivcesOfferedByTech table
+router.put('/:serTecId/issue', function(req, res) {
+  var vld = req.validator;
+  var body = req.body;
+  var tecId = req.session.tec_id;
+  var logId = req.session.id;
+	var pkey = req.params.serTecId;
+  var selectQry = ' UPDATE ServicesOfferedByTech SET ? WHERE id_serTec = ? AND tec_id = ? '
+
+  if (vld.checkPrsOK(logId)) {
+    connections.getConnection(res, function(cnn) {
+      console.log("body " + JSON.stringify(body));
+      console.log("pkey " + pkey);
+      console.log("tecId " + tecId);
+			cnn.query( selectQry, [body, pkey, tecId], function(err, result){
+				if(err){
+					res.status(400).json(err);
+				}
+				else{
+					res.json({success: 1});
+				}
+			});
+      cnn.release();
+		});
+  }
+});
 // Retrieve all the Services in the database.
 // AU must be technician himself.
 router.get('/:tecId/all', function(req, res) {
@@ -135,7 +161,7 @@ router.get('/:tecId/all', function(req, res) {
 	var LogUser = req.params.tecId;
   var userId = req.session.id;
 
-  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
+  var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount '
                 + ' FROM ServicesOfferedByTech T1 '
                 + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
                 + ' FROM CategoriesManufacturers T1 '
@@ -147,8 +173,7 @@ router.get('/:tecId/all', function(req, res) {
                 + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
                 + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
                 + ' ) T3 ON T1.modIss_id = T3.id_modIss '
-                + ' WHERE tec_id = ? '
-                + ' ORDER BY tec_id ';
+                + ' WHERE tec_id = ? ';
 	if(vld.checkPrsOK(userId)){
 		connections.getConnection(res, function(cnn) {
 			cnn.query(selectQry, LogUser, function(err, result){
@@ -201,5 +226,6 @@ router.get('/:issId/Issues', function(req, res) {
 		});
 
 });
+
 
 module.exports = router;
