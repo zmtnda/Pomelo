@@ -232,7 +232,7 @@ router.put('/:logId/info', function(req, res) {
         },
         function(callback) {
           if (Object.keys(body).length){
-            cnn.query(' UPDATE Technicians set ? WHERE log_id = ? ', [body, tech], callback);
+            cnn.query(' UPDATE Technicians SET ? WHERE log_id = ? ', [body, tech], callback);
           }
           else {
             callback(null);
