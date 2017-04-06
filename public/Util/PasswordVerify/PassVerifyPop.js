@@ -8,4 +8,5 @@ app.service("passVerifyPop", ["$uibModal", function(uibM) {
             size: 'md'
          }).result;
       }
+
 }]);
