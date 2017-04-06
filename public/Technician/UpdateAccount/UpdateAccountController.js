@@ -1,5 +1,5 @@
-app.controller('updateAccountController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop',
-  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop) {
+app.controller('updateAccountController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop', 'changePasswordPop', 'changeEmailPop',
+  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop, changePasswordPop, changeEmailPop) {
 
     // console.log(rscope.loggedUser);
     // scope.user = {};
@@ -14,12 +14,12 @@ app.controller('updateAccountController', ['$scope', '$location','$state','logSe
 
     scope.onClickChangeEmail = function()
     {
-      passVerifyPop.show(scope, "passVerifyPop");
+      changeEmailPop.show(scope, "changeEmailPop");
     }
 
     scope.onClickChangePassword = function()
     {
-      passVerifyPop.show(scope, "passVerifyPop");
+      changePasswordPop.show(scope, "changePasswordPop");
     }
 
     scope.onClickChangeFirstName = function()

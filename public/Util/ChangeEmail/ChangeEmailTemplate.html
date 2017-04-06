@@ -1,0 +1,38 @@
+<center>
+    <div id="login-form">
+        <form method="post">
+            <table align="center" width="70%" border="0">
+                <h5>Verify your password</h5>
+
+                <tr>
+                    <td>
+                      <div ng-form='pass'>
+                        <input type="password" name="oldPassword" ng-model="user.password" placeholder="Old Password*" required />
+                      </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                      <div ng-form='newEmail'>
+                        <input type="email" name="newEmail" ng-model="email" placeholder="New Email*" required />
+                      </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                      <div ng-form='confirmNewEmail'>
+                        <input type="email" name="newConfirmedEmail" ng-model="user.confirmedNewEmail" placeholder="Confirm New Email*" required />
+                      </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                      <button ng-disabled="!pass.$valid || !newEmail.$valid || !confirmNewEmail.$valid || email != user.confirmedNewEmail" class="btn btn-success" type="submit" name="btn-signup" ng-click="changePass()">Verify Password</button>
+                      <button class="btn btn-warning" type="submit" name="btn-signup" ng-click="$close()">Cancel</button>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        </form>
+    </div>
+</center>
