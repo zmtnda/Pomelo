@@ -29,6 +29,13 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
      })
    }
 
+   scope.goToForgotPassword = function()
+   {
+     timeout(function() {
+       state.go('forgotPassword');
+     })
+   }
+
    scope.goToTechnician = function(){
      timeout(function() {
        state.go('technician');

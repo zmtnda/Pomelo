@@ -6,7 +6,6 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
       category: undefined,
       manufacturer: undefined,
       model: undefined,
-      issue: undefined
     }
 
     scope.hasGone = false

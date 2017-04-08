@@ -11,14 +11,14 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
         if(Array.isArray(dataField))
         {
           console.log(JSON.stringify(errorJSON));
-          tagError = "You are missing: "
-          dataField.forEach(function(ea){
+          errorStr = "You are missing field(s)."
+          /*dataField.forEach(function(ea){
             if(ea["tag"] === "missingField")
 
             // Separate by camel case
-            errorStr = errorStr.concat(ea["params"][0] + '; ')
+            errorStr = errorStr.concat(ea["params"][0])
           })
-          errorStr = tagError.concat(errorStr)
+          errorStr = tagError.concat(errorStr)*/
         }
         else
         {

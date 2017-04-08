@@ -1,6 +1,6 @@
 <center>
     <div id="login-form">
-        <form method="post">
+        <form>
             <table align="center" width="90%" border="0">
                 <tr><br>
                     <td>
@@ -16,8 +16,18 @@
                     <td><input type="email" name="email" ng-style="warning-email" ng-model="user.email" placeholder="Your Email*" required /></td>
                 </tr>
 
+                <tr ng-if="user.email">
+                    <td><input type="email" name="email" ng-style="warning-email" ng-model="user.confirmationEmail" placeholder="Please confirm your email*" required />
+                        <div class="text-danger" ng-if="user.confirmationEmail !== user.email">Emails doesn't match</div></td>
+                </tr>
+
                 <tr>
-                    <td><input type="password" name="pass" ng-style="warning-pass" ng-model="user.password" placeholder="Your Password*" required /></td>
+                    <td><input type="password" name="pass" ng-style="warning-pass" ng-model="user.password" ng-minlength=8 placeholder="Your Password*" required /></td>
+                </tr>
+
+                <tr ng-if="user.password">
+                    <td><input type="password" name="pass" ng-style="warning-pass" ng-minlength=8 ng-model="user.confirmationPassword" placeholder="Please confirm your password*" required />
+                        <div class="text-danger" ng-if="user.confirmationPassword !== user.password">Passwords don't match</div></td>
                 </tr>
 
                 <tr>
@@ -40,10 +50,14 @@
                     <td><input type="number" name="zip" ng-style="warning-zip" ng-model="user.zip" placeholder="Zip code*" required /></td>
                 </tr>
 
+                <tr class="text-danger" ng-if="parsedError">
+                    <td><h4>{{parsedError}}</h4></td>
+                </tr>
+
                 <tr>
                     <td>
-                      <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="postUser()">Sign Me Up</button>
-                      <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="$close()">Cancel</button>
+                      <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-if="user.confirmationEmail === user.email && user.confirmationPassword === user.password" ng-click="postUser()">Sign Me Up</button>
+                      <button class="btn btn-lg btn-warning button-submit-sign-up" type="submit" name="btn-signup" ng-click="$close()">Cancel</button>
                     </td>
                 </tr>
             </table>
