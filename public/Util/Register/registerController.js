@@ -3,6 +3,8 @@
   function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout) {
     scope.user = {confirmationEmail: "",
                   confirmationPassword: ""};
+    scope.noMissingFields = scope.user.email && scope.user.password && scope.user.role && scope.user.firstName && scope.user.lastName && scope.user.hourlyRate && scope.user.city && scope.user.zip
+    scope.hasClickedSignUp = false
     scope.parsedError = undefined
 
     scope.isValidZip = function(value)
@@ -12,30 +14,35 @@
 
     scope.postUser = function()
     {
-      logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
-         scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
-		  .then (function(){
-        if (!scope.isValidZip(scope.user.zip)){
-          noDlg.show(scope, "It is valid ZIP code", "Error")
-        }
-      })
-      .then(function(){
-        uibIns.close("Cancel")
-      })
-      .then (function(){
-			  if(rscope.loggedUser.email !== 'Admin@11.com'){
-					console.log("I am not admin" +rscope.loggedUser.email);
-          noDlg.show(scope, "A confirmation link has sent to your email account.", "Confirm")
-				}
-				else
-        {
-					console.log("I am admin");
-					state.reload();
-				}
-		  })
-		  .catch(function(err){
-        scope.parsedError = emf.formatErrorCodeAndErrorArray(err)
-        console.log("ERROR!!!!!" + JSON.stringify(err));
-      });
+      scope.hasClickedSignUp = true
+      scope.parsedError = undefined
+      if(scope.noMissingFields)
+      {
+        logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
+           scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
+  		  .then (function(){
+          if (!scope.isValidZip(scope.user.zip)){
+            noDlg.show(scope, "It is valid ZIP code", "Error")
+          }
+        })
+        .then(function(){
+          uibIns.close("Cancel")
+        })
+        .then (function(){
+  			  if(rscope.loggedUser.email !== 'Admin@11.com'){
+  					console.log("I am not admin" + rscope.loggedUser.email);
+            noDlg.show(scope, "A confirmation link has sent to your email account.", "Confirm")
+  				}
+  				else
+          {
+  					console.log("I am admin");
+  					state.reload();
+  				}
+  		  })
+  		  .catch(function(err){
+          scope.parsedError = errorMessageFormatter(err)
+          console.log("ERROR: " + JSON.stringify(err));
+        });
+      }
 	 }
 }])
