@@ -1,6 +1,10 @@
- app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter", "$uibModalInstance", '$timeout',
+ app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter",
+  "$uibModalInstance", '$timeout',
   function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout) {
-    scope.user = {};
+    scope.user = {confirmationEmail: "",
+                  confirmationPassword: ""};
+    scope.parsedError = undefined
+
     scope.isValidZip = function(value)
     {
         return /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value);
@@ -8,7 +12,7 @@
 
     scope.postUser = function()
     {
-		  logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
+      logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
          scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
 		  .then (function(){
         if (!scope.isValidZip(scope.user.zip)){
@@ -30,7 +34,8 @@
 				}
 		  })
 		  .catch(function(err){
+        scope.parsedError = emf.formatErrorCodeAndErrorArray(err)
         console.log("ERROR!!!!!" + JSON.stringify(err));
       });
-	}
+	 }
 }])

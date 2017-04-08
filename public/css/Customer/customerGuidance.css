@@ -3,6 +3,11 @@
   top: 50%;
 }
 
+body{
+  background: #f7f5f5;
+
+}
+
 #centeredBoxForCate{
   position: absolute;
   top:30%;
