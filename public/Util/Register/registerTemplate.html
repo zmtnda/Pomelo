@@ -63,8 +63,8 @@
               </tr>
 
               <tr class="text-danger" ng-if="hasClickedSignUp">
-                  <td ng-if="!noMissingFields"><h5>You're missing some fields</h5></td>
-                  <td ng-if="parsedError"><h5>{{parsedError}}</h5></td>
+                  <td><div ng-if="!user.email || !user.password || !user.role || !user.firstName || !user.lastName || !user.hourlyRate || !user.city || !user.zip"><h5>You're missing some fields</h5></div>
+                      <div ng-if="parsedError"><h5>{{parsedError}}</h5></div></td>
               </tr>
 
               <tr>
