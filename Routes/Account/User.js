@@ -95,7 +95,6 @@ router.post('/', function(req, res) {
     body.passwordHash = "*";                       // Blockig password
   body.whenRegistered = new Date();
 
-
   if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'passwordHash', 'role', 'hourlyRate', 'city', 'zip'])
   && vld.check(body.role >= 0 && body.role <=2, Tags.badValue, ["role"])) {
     emailCheck(body.email) // check if email is real
