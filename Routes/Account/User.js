@@ -134,22 +134,26 @@ router.post('/', function(req, res) {
 });
 
 // Check if the email already used on the ServicesOffer
-router.get('/emailExist/:newEmail', function(req, res) {
-  let email = req.params.newEmail;
+router.post('/emailExist', function(req, res) {
+  let vld = req.validator;
+  let body = req.body;
   let query = ' SELECT 1 FROM Logins WHERE email=? ';
-  connections.getConnection(res, function(cnn) {
-    cnn.query(query, email, function(err, result) {
-      if (err) {
-        console.log(err);
-        res.status(400).json(err);
-      } else if (result.length > 0) {
-        res.status(200).json({exist: 1, reponse: `Email ${email} already used`});
-      }
-      else {
-        res.status(200).json({exist: 0});
-      }
-    })
-  })
+
+  if (vld.hasFields(body, ['email'])) {
+    connections.getConnection(res, function(cnn) {
+      cnn.query(query, body.email, function(err, result) {
+        if (err) {
+          console.log(err);
+          res.status(400).json(err);
+        } else if (result.length > 0) {
+          res.status(200).json({exist: 1, reponse: `Email ${body.email} already used`});
+        }
+        else {
+          res.status(200).json({exist: 0});
+        }
+      });
+    });
+  }
 });
 
 
