@@ -9,6 +9,7 @@ var Tags = require('../Validator.js').Tags;
 var router = Express.Router({caseSensitive: true});
 var async = require('async');
 var nodemailer = require('nodemailer');
+var emailCheck = require('email-check');
 var crypto = require('crypto');
 router.baseURL = '/Send';
 
