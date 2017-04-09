@@ -140,19 +140,22 @@ router.post('/emailExist', function(req, res) {
   let query = ' SELECT 1 FROM Logins WHERE email=? ';
 
   if (vld.hasFields(body, ['email'])) {
-    connections.getConnection(res, function(cnn) {
-      cnn.query(query, body.email, function(err, result) {
-        if (err) {
-          console.log(err);
-          res.status(400).json(err);
-        } else if (result.length > 0) {
-          res.status(200).json({exist: 1, reponse: `Email ${body.email} already used`});
-        }
-        else {
-          res.status(200).json({exist: 0});
-        }
-      });
-    });
+    emailCheck(body.email)
+      .then(result =>
+        connections.getConnection(res, function(cnn) {
+          cnn.query(query, body.email, function(err, result) {
+            if (err) {
+              console.log(err);
+              res.status(400).json(err);
+            } else if (result.length > 0)
+              res.status(200).json({exist: 1, reponse: `Email ${body.email} already used`});
+            else
+              res.status(200).json({exist: 0, response: 'You can use this email'});
+          });
+          cnn.release();
+        })
+      )
+      .catch(err => res.status(400).json({response: `Email ${body.email} doesn't exist`}));
   }
 });
 
