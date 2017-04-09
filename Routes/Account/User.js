@@ -126,7 +126,7 @@ router.post('/', function(req, res) {
                           console.log("success technician insert");
                         }
                       });
-                       res.location(router.baseURL + '/' + log_id).end();
+                      res.location(router.baseURL + '/' + log_id).end();
                     }
                  });
              });
