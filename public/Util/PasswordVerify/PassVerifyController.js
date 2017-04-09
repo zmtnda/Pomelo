@@ -2,7 +2,7 @@ app.controller('passVerifyController', ['$rootScope','$scope', '$state', 'goToSe
  function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout, passVerifyPop) {
    scope.user = {};
 
-   scope.changePass = function()
+   scope.verifyPass = function()
    {
      console.log(JSON.stringify(rscope.loggedUser));
      console.log(JSON.stringify(scope.user));

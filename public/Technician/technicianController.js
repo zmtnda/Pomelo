@@ -69,10 +69,10 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
     // Toggle view for modifying personal info
     scope.modifyTechnician = function()
     {
-      // var success = passVerifyPop.show(scope, "passVerifyPop");
-      timeout(function() {
-        state.go('updateAccount');
-      })
+      passVerifyPop.show(scope, "passVerifyPop");
+      // timeout(function() {
+      //   state.go('updateAccount');
+      // })
     }
 
 
