@@ -1,5 +1,5 @@
-app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates', 'goToServices',
-  function(scope, state, logSer, http, rscope, noDlg, cates, goto)
+app.controller('issueGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'cates', 'goToServices', '$timeout',
+  function(scope, state, logSer, http, rscope, noDlg, cates, goto, timeout)
   {
     /*IMPORTANT NOTE:
      1. The rest API uses manId while the controller uses manuId*/
@@ -526,9 +526,48 @@ app.controller('issueGuidanceController', ['$scope', '$state','logService', '$ht
         http.post("serv/" + rscope.loggedUser.tec_id, scope.postoffers)
           .then(function(response)
           {
-            noDlg.show(rscope, "Your services has been added successfully");
-            goto.goToTechnician();
+            console.log(JSON.stringify(response['data']));
+            if(isArray(response['data'])){
+              console.log("IT IS AN ARRAY!");
+              var string = '';
+              for(var i = 0; i < response['data'].length; i++)
+              {
+                for(var j = 0; j < scope.offerrings.length; j++){
+                  for(var k = 0; k< scope.offerrings[j]["offer"]["issues"].length; k++){
+                    // console.log("j is: " + j);
+                    // console.log("k is: " + k);
+                    if(scope.offerrings[j]["offer"]["issues"][k]["modIss_Id"] == response['data'][i]["modIss_id"]){
+                      string += "service "
+                      + scope.offerrings[j]["offer"]["issues"][k]["issueName"]
+                      + " "
+                      + scope.offerrings[j]["offer"]["issues"][k]["correspondingModelName"]
+                      + " already exists!\n"
+                      + "\n";
+                    }
+                    // else{
+                      // console.log("GO TO ELSE");
+                      // console.log("i is: " + i);
+                      // console.log("j is: " + j);
+                      // console.log("k is: " + k);
+                      // console.log("modis id is: " + scope.offerrings[j]["offer"]["issues"][k]["modIss_Id"]);
+                      // console.log("response data is: " + response['data'][i]["modIss_id"]);
+                    // }
+                  }
+                }
+                // string += response['data'][i] + ' already exists!';
+              }
+              noDlg.show(rscope, string);
+            }
+            else{
+              noDlg.show(rscope, "Your services has been added successfully");
+            }
+            timeout(function () {
+              state.go('technician');
+            });
             return response["data"]
           })
+    }
+    function isArray(ob) {
+      return ob.constructor === Array;
     }
 }]);

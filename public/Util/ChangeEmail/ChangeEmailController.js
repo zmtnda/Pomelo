@@ -1,11 +1,12 @@
-app.controller('changeEmailController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter", "$uibModalInstance", '$timeout', 'passVerifyPop', 'userPersistenceService',
- function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout, passVerifyPop, persisService) {
+app.controller('changeEmailController', ['$rootScope','$scope', '$state', '$http', 'notifyDlg', '$timeout', 'userPersistenceService',
+ function(rscope, scope, state, http, noDlg, timeout, persisService) {
    scope.user = {};
 
    scope.changePass = function()
    {
      scope.newEmail = {};
      scope.newEmail.email = scope["email"];
+     
      http.put("User/" + rscope.loggedUser.id + "/info", scope.newEmail)
      .then(function(response){
        console.log(JSON.stringify(response["data"]));
