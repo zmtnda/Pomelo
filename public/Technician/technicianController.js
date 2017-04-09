@@ -52,21 +52,6 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
       }
     }
 
-    // Toggle view for viewing provided services
-    scope.showProvide = function(){
-      // if (scope.isShowProvide == 0) {
-			//  http.get("Serv/" + rscope.loggedUser.id + "/all")
-			//  .then(function(response){
-      //     console.log("response.data: " + JSON.stringify(response));
-      //     scope.listServices = response.data;
-      //   scope.switchView(scope.viewEnum.PROVIDE);
-			//  }).
-      //   catch(function(err){noDlg.show(scope, err, "Error")});
-      // } else {
-      //   scope.switchView(scope.viewEnum.NONE);
-      // }
-    }
-
     scope.goToAwaitingPage = function()
     {
       timeout(function() {
@@ -82,15 +67,12 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
     }
 
     // Toggle view for modifying personal info
-    scope.modifyTechnician = function(){
-      // if (scope.isShowPersonalField == 0) {
-      //   scope.switchView(scope.viewEnum.PERSONAL);
-      //   scope.gotoBottom();
-      // } else {
-      //   scope.switchView(scope.viewEnum.NONE);
-      // }
-      var success = passVerifyPop.show(scope, "passVerifyPop");
-      console.log("SUCCESS IS: " + success);
+    scope.modifyTechnician = function()
+    {
+      passVerifyPop.show(scope, "passVerifyPop");
+      // timeout(function() {
+      //   state.go('updateAccount');
+      // })
     }
 
 
