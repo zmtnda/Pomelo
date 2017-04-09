@@ -29,6 +29,7 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
           }
           else if(dataField.success === 0)// Check if the email actually exist in email providers.
           {
+            console.log("ERROR: " + JSON.stringify(errorJSON));
             errorStr = dataField.response;
           }
           else
