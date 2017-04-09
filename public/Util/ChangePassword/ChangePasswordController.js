@@ -1,5 +1,5 @@
-app.controller('changePasswordController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter", "$uibModalInstance", '$timeout', 'passVerifyPop', 'userPersistenceService',
- function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout, passVerifyPop, persisService) {
+app.controller('changePasswordController', ['$rootScope','$scope', '$state', '$http', 'notifyDlg', '$timeout', 'userPersistenceService',
+ function(rscope, scope, state, http, noDlg, timeout, persisService) {
    scope.pass = {};
 
    scope.changePass = function()
@@ -10,6 +10,7 @@ app.controller('changePasswordController', ['$rootScope','$scope', '$state', 'go
      http.put("User/" + rscope.loggedUser.id + "/info", scope.newPass)
      .then(function(response){
        console.log(JSON.stringify(response["data"]));
+       rscope.loggedUser.password = scope.newPass.password;
        persisService.setCookieData(rscope.loggedUser.email, scope.newPass.password);
        timeout(function() {
          state.go('technician');

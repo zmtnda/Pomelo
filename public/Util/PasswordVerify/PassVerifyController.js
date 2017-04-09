@@ -1,5 +1,5 @@
-app.controller('passVerifyController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter", "$uibModalInstance", '$timeout', 'passVerifyPop',
- function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout, passVerifyPop) {
+app.controller('passVerifyController', ['$rootScope','$scope', '$state', 'logService', '$http', 'notifyDlg', '$timeout',
+ function(rscope, scope, state, logSer, http, noDlg, timeout) {
    scope.user = {};
 
    scope.verifyPass = function()
