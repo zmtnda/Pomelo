@@ -123,10 +123,10 @@ router.post('/', function(req, res) {
                           console.log("fail technician insert");
                            res.status(400).json(err);
                         } else {
+                          res.location(router.baseURL + '/' + log_id).end();
                           console.log("success technician insert");
                         }
                       });
-                      res.location(router.baseURL + '/' + log_id).end();
                     }
                  });
              });

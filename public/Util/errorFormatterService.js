@@ -15,7 +15,7 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
         }
         else
         {
-          if(errorStr != null errorStr.code != null)
+          if(errorStr != null && errorStr.code != null)
           {
             errorStr = dataField["code"]
             if(errorStr === "ER_DUP_ENTRY")
@@ -29,8 +29,8 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
           }
           else
           {
+            console.log("ERROR: " + JSON.stringify(errorJSON));
             errorStr = "Unkown error. Please contact us through pomelotech@pomelo.com."
-            console.log("ERROR: " + JSON.stringify(err));
           }
         }
         return errorStr
