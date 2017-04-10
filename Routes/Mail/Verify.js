@@ -18,83 +18,88 @@ router.get('/', function(req, res) {
 // Activate account of technician after creating
 // Need email and hash in link
 // type 1
-router.get('/account/:email/:hash', function(req, res) {
+router.get('/confirmEmail', function(req, res) {
   console.log('Verify email for registration');
 
-  let email = req.params.email;
-  let hash = req.params.hash;
-  let check_query =
-    ' SELECT 1 FROM EmailVerification WHERE hash=? AND email=? AND type=1';
-  let enable_query = ' UPDATE Technicians SET status=1 ' +
-                     ' WHERE log_id=(SELECT id_log FROM Logins WHERE email=? LIMIT 1) ';
-  let delete_hash_query = ' DELETE FROM EmailVerification where hash=? ';
+  if (!req.query.hasOwnProperty('email') || !req.query.hasOwnProperty('hash'))
+    res.status(400).json({error: 'Link doesn\'t exist'});
+  else {
+    let email = req.query.email;
+    let hash = req.query.hash;
+    let check_query =
+      ' SELECT 1 FROM EmailVerification WHERE hash=? AND email=? AND type=1';
+    let enable_query = ' UPDATE Technicians SET status=1 ' +
+                       ' WHERE log_id=(SELECT id_log FROM Logins WHERE email=? LIMIT 1) ';
+    let delete_hash_query = ' DELETE FROM EmailVerification where hash=? ';
 
-  connections.getConnection(res, function(cnn) {
-    async.waterfall([
-      function(callback) { // check hash
-        cnn.query(check_query, [hash, email], callback);
-      },
-      function(result, fields, callback) { // update tech
-        if (result.length > 0)
-          cnn.query(enable_query, email, callback);
-        else
-          callback({success: 0, response: 'Link doens\'t exist'});
-      },
-      function(result, fields, callback) { // delete hash
-        cnn.query(delete_hash_query, hash, callback);
-      }
-      ], function(err, result) {
-        if (err) {
-          console.log('Can\'t verify');
-          res.status(400).json(err);
-        } else {
-          res.status(200).json({success: 1, email: email});
+    connections.getConnection(res, function(cnn) {
+      async.waterfall([
+        function(callback) { // check hash
+          cnn.query(check_query, [hash, email], callback);
+        },
+        function(result, fields, callback) { // update tech
+          if (result.length > 0)
+            cnn.query(enable_query, email, callback);
+          else
+            callback({success: 0, response: 'Link doens\'t exist'});
+        },
+        function(result, fields, callback) { // delete hash
+          cnn.query(delete_hash_query, hash, callback);
         }
+        ], function(err, result) {
+          if (err) {
+            console.log('Can\'t verify');
+            res.status(400).json(err);
+          } else {
+            res.status(200).json({success: 1, email: email});
+            //res.redirect('/#/forgotPassword')
+          }
+      });
+      cnn.release();
     });
-    cnn.release();
-  });
+  }
 });
 
 // Verify link for reset password
 // type 2
-router.get('/resetPassword/:email/:hash', function(req, res) {
+router.get('/resetPassword', function(req, res) {
   console.log('In verify reset password');
-  let email = req.params.email;
-  let hash = req.params.hash;
+  if (!req.query.hasOwnProperty('email') || !req.query.hasOwnProperty('hash'))
+    res.status(400).json({error: 'Link doesn\'t exist'});
+  else {
+    let email = req.query.email;
+    let hash = req.query.hash;
 
-  let check_hash_query = ' SELECT 1 FROM EmailVerification WHERE hash=? AND email=? AND type=2';
+    let check_hash_query = ' SELECT 1 FROM EmailVerification WHERE hash=? AND email=? AND type=2';
 
-  connections.getConnection(res, function(cnn) {
-    async.waterfall([
-      function(callback) {
-        cnn.query(check_hash_query, [hash, email], callback);
-      },
-      function(result, fields, callback) {
-        if (result.length > 0)
-          callback(null, result, null);
-        else
-          callback({success: 0, response: 'Link doesn\'t exist'})
-      }
-    ], function(err, result) {
-      if (err) {
-        console.log(err);
-        res.status(400).json(err);
-      } else {
-        res.status(200).json({success: 1, email: email, hash: hash});
-      }
+    connections.getConnection(res, function(cnn) {
+      async.waterfall([
+        function(callback) {
+          cnn.query(check_hash_query, [hash, email], callback);
+        },
+        function(result, fields, callback) {
+          if (result.length > 0)
+            callback(null, result, null);
+          else
+            callback({success: 0, response: 'Link doesn\'t exist'})
+        }
+      ], function(err, result) {
+        if (err) {
+          console.log(err);
+          res.status(400).json(err);
+        } else {
+          res.status(200).json({success: 1, email: email, hash: hash});
+        }
+      });
     });
-  });
+  }
 });
 
 // Review service
 // Need serHisId and has
 // Need to test with other query for larger dataset
 // type 3
-router.get('/review/:serHisId/:email/:hash', function(req, res) {
-  let serHisId = req.params.serHisId;
-  let email = req.params.email;
-  let hash = req.params.hash;
-
+router.get('/review', function(req, res) {
   let check_hash_query =
     ' SELECT 1 FROM EmailVerification WHERE hash=? AND email=? AND type=3';
   let get_info_for_review_query =
@@ -124,29 +129,37 @@ router.get('/review/:serHisId/:email/:hash', function(req, res) {
     '       ) FINALCUS ' +
     ' INNER JOIN Customers CUS ON FINALCUS.cus_id = CUS.id_cus';
 
-  connections.getConnection(res, function(cnn) {
-    async.waterfall([
-      function(callback) { // check hash
-        cnn.query(check_hash_query, [hash, email], callback);
-      },
-      function(result, fields, callback) {
-        if (result.length > 0)
-          cnn.query(get_info_for_review_query, serHisId, callback);
-        else
-          callback({success: 0, reponse: 'Link doesn\'t exists'});
-      }
-    ], function(err, result) {
-      if (err) {
-        console.log(err);
-        res.status(400).json(err);
-      } else {
-        result[0].success = 1;
-        result[0].hash = hash;
-        res.status(200).json(result[0]);
-      }
+  if (!req.query.hasOwnProperty('email') || !req.query.hasOwnProperty('hash')
+    || !req.query.hasOwnProperty('serHisId'))
+    res.status(400).json({error: 'Link doesn\'t exist'});
+  else {
+    let serHisId = req.query.serHisId;
+    let email = req.query.email;
+    let hash = req.query.hash;
+    connections.getConnection(res, function(cnn) {
+      async.waterfall([
+        function(callback) { // check hash
+          cnn.query(check_hash_query, [hash, email], callback);
+        },
+        function(result, fields, callback) {
+          if (result.length > 0)
+            cnn.query(get_info_for_review_query, serHisId, callback);
+          else
+            callback({success: 0, reponse: 'Link doesn\'t exists'});
+        }
+      ], function(err, result) {
+        if (err) {
+          console.log(err);
+          res.status(400).json(err);
+        } else {
+          result[0].success = 1;
+          result[0].hash = hash;
+          res.status(200).json(result[0]);
+        }
+      });
+      cnn.release();
     });
-    cnn.release();
-  });
+  }
 });
 
 module.exports = router;

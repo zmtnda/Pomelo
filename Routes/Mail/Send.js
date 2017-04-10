@@ -26,7 +26,7 @@ router.get('/', function(req, res) {
 
 // Send email for account verification
 // Need email and passwordHash of customer
-router.post('/account', function(req, res) {
+router.post('/confirmEmail', function(req, res) {
   console.log('Send email for acc verification');
   let vld = req.validator;
   var body = req.body;
@@ -35,7 +35,7 @@ router.post('/account', function(req, res) {
     ' SELECT L.email, T.status FROM Logins L INNER JOIN Technicians T ON L.id_log = T.log_id AND L.email = ?';
 
   let title = '[Pomelo] Please verify your email address.';
-  var link = 'http://'+ req.get('host')+ '/Verify/account/';
+  var link = 'http://'+ req.get('host')+ '/Verify/confirmEmail?';
   let hash = getHash();
 
     if(vld.hasFields(body, ['email'])) {
@@ -59,7 +59,7 @@ router.post('/account', function(req, res) {
             res.status(400).json(error);
           } else {
             console.log('Sending email for acc verification');
-            link = link + body.email + '/' + hash;
+            link = link + `email=${body.email}&hash=${hash}`;
             var content = `<b>Please verify your account</b><br><a href=${link}>${link}</a>`;
             mail(res, body.email, title, content);
           }
@@ -79,7 +79,7 @@ router.post('/resetPassword', function(req, res) {
   let check_email_query = ' SELECT 1 FROM Logins WHERE email=? ';
 
   let title = '[Pomelo] Reset Your Password.';
-  var link = 'http://'+ req.get('host')+ '/Verify/resetPassword/';
+  var link = 'http://'+ req.get('host')+ '/Verify/resetPassword?';
   let hash = getHash();
 
   if(vld.hasFields(body, ['email'])) {
@@ -100,7 +100,7 @@ router.post('/resetPassword', function(req, res) {
           res.status(200).json(err);
         } else {
           console.log('Sending email for reset password');
-          link = link + body.email + '/' + hash;
+          link = link + `email=${body.email}&hash=${hash}`;
           var content = `<b>Please click link to reset your password</b><br><a href=${link}>${link}</a>`;
           mail(res, body.email, title, content);
         }
@@ -111,6 +111,7 @@ router.post('/resetPassword', function(req, res) {
 
 // Send mail for review when technician change status to completedDate
 // Need serHisId
+// Need technician permisson, need tec_id later to check for match
 router.post('/review', function(req, res) {
   console.log('Email for review technician');
   let vld = req.validator;
@@ -124,7 +125,7 @@ router.post('/review', function(req, res) {
     ' ON SH.cus_id=C.id_cus ';
   let insert_verification_query = ' INSERT INTO EmailVerification VALUES (?,?,3,NOW()) ';
 
-  var link = 'http://'+ req.get('host')+ '/Verify/review/';
+  var link = 'http://'+ req.get('host')+ '/Verify/review?';
   let title = '[Pomelo] Please review your service.';
   let hash = getHash();
 
@@ -151,7 +152,7 @@ router.post('/review', function(req, res) {
            res.status(400).json(err);
          } else {
            console.log('Sending email for review');
-           link = link + body.serHisId + '/' + body.email +'/' + hash;
+           link = link + `email=${body.email}&serHisId=${body.serHisId}&hash=${hash}`;
            var content = `<b>Please Review the service</b><br><a href=${link}>${link}</a>`;
             mail(res, body.email , title, content);
          }
@@ -177,7 +178,7 @@ function mail(res, receiver, title, body) {
    // setup email data with unicode symbols
    var mailOptions = {
       from: '"Pomelo 👻" <noreply.nnguy101@gmail.com>', // sender address
-      to: receiver, // change to receiver later
+      to: "nnguy101@gmail.com", // change to receiver later
       subject: title, // Subject line
       html: body// html body
    };
