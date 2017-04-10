@@ -99,7 +99,6 @@ router.post('/:catId/manu', function(req, res) {
   var admin = req.session && req.session.isAdmin();
   var body = req.body;
 	var catId = req.params.catId;
-	var check_exist_manId_query = ' SELECT id_man FROM Manufacturers WHERE id_man = ? ';
 	var check_exist_manName_query =
 		' SELECT id_man FROM Manufacturers WHERE ' +
 		' LCASE(manufacturer) = LCASE(?) GROUP BY id_man ';
@@ -108,61 +107,38 @@ router.post('/:catId/manu', function(req, res) {
 		' INSERT INTO CategoriesManufacturers (cat_id, man_id) VALUES (?, ?) ';
 	var insert_Man_query = ' INSERT INTO Manufacturers (manufacturer) VALUES (?) ';
 
-	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newManufacturer', 'manId'])) {
+	if(vld.check(admin, Tags.noPermission) && vld.hasFields(body, ['newManufacturer'])) {
 		connections.getConnection(res, function(cnn) {
-			if (body.manId > 0) { // existing manId
-				async.waterfall([
-					function(callback) { // check for exist manId
-						cnn.query(check_exist_manId_query, [body.manId], callback);
-					},
-					function(result, fields, callback) {
-						if (result.length > 0) // check exist cat man
-							cnn.query(check_exist_catMan_query, [catId, body.manId], callback);
-						else
-							callback({success: 0, response: `ManId '${body.manId}' does not exist`});
-					},
-					function(result, fields, callback) {
-						if (result.length == 0) //create new catMan
-							cnn.query(insert_CM_query, [catId, body.manId], callback);
-						else
-							callback({success: 1, response: `CatMan already exist`});
+			async.waterfall([
+				function(callback) { // new manu -> check for existing manu name
+						cnn.query(check_exist_manName_query, [body.newManufacturer], callback);
+				},
+				function(result, fields, callback) {
+					if (result.length == 0) // insert new manufacturer
+						cnn.query(insert_Man_query, [body.newManufacturer], callback);
+					else { // already there, check existing catMan
+						console.log("hmm?");
+						body.id_man = result[0].id_man;
+						cnn.query(check_exist_catMan_query, [catId, result[0].id_man], callback);
 					}
-				], function(err, result) {
-					if (err)
-						res.status(400).json(err);
-					else {
-						result.success = 1;
-						res.status(200).json(result);
-					}
-				});
-			} else { // new Manufacturer
-				async.waterfall([
-					function(callback) { // new manu -> check for existing manu name
-							cnn.query(check_exist_manName_query, [body.newManufacturer], callback);
-					},
-					function(result, fields, callback) {
-						if (result.length == 0) // insert new manufacturer
-							cnn.query(insert_Man_query, [body.newManufacturer], callback);
-						else // already there, check existing catMan
-							cnn.query(check_exist_catMan_query, [catId, body.manId], callback);
-					},
-					function(result, fields, callback) {
-						if (result.hasOwnProperty('insertId')) // with new manu
-							cnn.query(insert_CM_query, [catId, result.insertId], callback);
-						else if (result.length > 0) // insert with exsting manId
-							cnn.query(insert_CM_query, [catId, result[0].id_man], callback);
-						else
-							callback({success: 0, response: `CatMan already exists`}, null);
-					}
-				], function(err, result) {
-					if (err)
-						res.status(400).json(err);
-					else {
-						result.success = 1;
-						res.status(200).json(result);
-					}
-				});
-			}
+				},
+				function(result, fields, callback) {
+					console.log("helllo " + result);
+					if (result.hasOwnProperty('insertId')) // with new manu
+						cnn.query(insert_CM_query, [catId, result.insertId], callback);
+					else if (result.length == 0) // insert with exsting manId
+						cnn.query(insert_CM_query, [catId, body.id_man], callback);
+					else
+						callback({success: 0, response: `CatMan already exists`}, null);
+				}
+			], function(err, result) {
+				if (err)
+					res.status(400).json(err);
+				else {
+					result.success = 1;
+					res.status(200).json(result);
+				}
+			});
 			cnn.release();
 		});
 	}
