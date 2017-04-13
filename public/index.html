@@ -27,7 +27,8 @@
   <link rel="stylesheet" href="css/Technician/issueGuidance.css" type="text/css"/>
   <link rel="stylesheet" href="css/Customer/cust.css" type="text/css"/>
   <link rel="stylesheet" href="css/Admin/admin.css" type="text/css"/>
-  <link rel="stylesheet" href="Util/css/register.css" type="text/css"/>
+  <link rel="stylesheet" href="css/Util/register.css" type="text/css"/>
+  <link rel="stylesheet" href="css/Util/dialog.css" type="text/css"/>
 
   <script src="pomeloApp.js"></script>
 
@@ -35,7 +36,7 @@
   <script src="Home/homeController.js"></script>
   <script src="Filter/buttonFilter.js"></script>
   <script src="Customer/customerController.js"></script>
-  <script src="Customer/customerGuidance/customerGuidanceController.js"></script>
+  <script src="Customer/CustomerGuidance/customerGuidanceController.js"></script>
   <script src="Technician/IssueGuidance/issueGuidanceController.js"></script>
   <script src="Technician/Orders/ordersController.js"></script>
   <script src="Technician/Services/servicesController.js"></script>
@@ -49,6 +50,10 @@
   <script src="Util/Register/registerController.js"></script>
   <script src="Util/PasswordVerify/PassVerifyPop.js"></script>
   <script src="Util/PasswordVerify/PassVerifyController.js"></script>
+  <script src="Util/ChangePassword/changePasswordPop.js"></script>
+  <script src="Util/ChangePassword/changePasswordController.js"></script>
+  <script src="Util/ChangeEmail/ChangeEmailPop.js"></script>
+  <script src="Util/ChangeEmail/ChangeEmailController.js"></script>
   <script src="Util/Dialog/dialogService.js"></script>
 
   <!--Register services: -->
@@ -90,7 +95,7 @@
               <li role="presentation"><a href="#" ng-click="goToAbout()">About Us</a></li>
               <li role="presentation"><a ng-click="goToOpinion()">Give Us Your Opinion</a></li>
               <li role="presentation"><a href="#">Terms and Conditions</a></li>
-              <li ng-if="inSession" uib-dropdown>
+              <!-- <li ng-if="inSession" uib-dropdown>
                 <a id="single-button" uib-dropdown-toggle ng-disabled="disabled">
                   Account <span class="caret"></span>
                 </a>
@@ -100,8 +105,8 @@
                   <li class="divider"></li>
                   <li role="menuitem" ng-click="logout()"><a href="#">Logout</a></li>
                 </ul>
-              </li>
-              <!-- <li role="presentation" ng-if="inSession" ng-click="logout()"><a href="#">Logout</a></li> -->
+              </li> -->
+              <li role="presentation" ng-if="inSession" ng-click="logout()"><a href="#">Logout</a></li>
             </ul>
           </div>
         </div>

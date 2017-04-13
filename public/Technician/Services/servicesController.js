@@ -7,4 +7,22 @@ app.controller('servicesController', ['$scope', '$location','$state','logService
           scope.listServices = response.data;
       }).
     catch(function(err){noDlg.show(scope, err, "Error")});
+
+    scope.goToissueGudiance = function()
+    {
+      timeout(function() {
+        state.go('issueGudiance');
+      })
+    }
+
+    scope.onChoosingItemBase = function(idSertech)
+    {
+      console.log("CHOOSING ITEM BASED");
+      scope.listServices[idSertech]["servType"] = 0;
+    }
+
+    scope.onChoosingHourBase = function(idSertech)
+    {
+      scope.listServices[idSertech]["servType"] = 1;
+    }
 }]);

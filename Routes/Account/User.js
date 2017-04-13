@@ -3,6 +3,7 @@ var connections = require('../Connections.js');
 var Tags = require('../Validator.js').Tags;
 var router = Express.Router({caseSensitive: true});
 var async = require('async');
+var emailCheck = require('email-check');
 router.baseURL = '/User';
 
 var formatDate = ', DATE_FORMAT(whenCompleted, \'\%b \%d \%Y \%h\:\%i \%p\') as formatDate';
@@ -94,47 +95,70 @@ router.post('/', function(req, res) {
     body.passwordHash = "*";                       // Blockig password
   body.whenRegistered = new Date();
 
-   if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'passwordHash', 'role', 'hourlyRate', 'city', 'zip'])
-      && vld.chain(body["email"], Tags.missingField)
-      .chain(body["firstName"], Tags.missingField) // z : we might not need this since hasFields
-      .chain(body["lastName"], Tags.missingField) // z : called chain on each
-      .chain(body["passwordHash"], Tags.missingField)
-      .check(body.role >= 0 && body.role <=2, Tags.badValue, ["role"])) {
-         connections.getConnection(res, function(cnn) {
-           bcrypt.genSalt(saltRounds, function(err, salt) {
-             bcrypt.hash(body.passwordHash, salt, function(err, hash) {
-               // Store hash in your password DB.
-               body.passwordSalt = salt;
-               body.passwordHash = hash;
-               var log_id = 0;
-               var attrLoginTable = {email: body.email, passwordHash: body.passwordHash,
-                 role: body.role, whenRegistered: body.whenRegistered};
-                 cnn.query('INSERT INTO Logins SET ?', attrLoginTable, function(err, result) {
-                    if(err) {
-                       res.status(400).json(err);
-                    } else {
-                      log_id = result.insertId;
-                      console.log("success login insert and id_lod = " + log_id);
-                      var attrTechTable = {log_id: log_id, firstName: body.firstName, lastName: body.lastName,
-                        hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '0'};
-                        // console.log(JSON.stringify(attrTechTable));
-                      cnn.query('INSERT INTO Technicians SET ?', attrTechTable, function(err, result) {
-                        if(err) {
-                          console.log("fail technician insert");
-                           res.status(400).json(err);
-                        } else {
-                          console.log("success technician insert");
-                        }
-                      });
-                       res.location(router.baseURL + '/' + log_id).end();
-                    }
-                 });
-             });
-           });
+  if(vld.hasFields(body, ['email', 'firstName', 'lastName', 'passwordHash', 'role', 'hourlyRate', 'city', 'zip'])
+  && vld.check(body.role >= 0 && body.role <=2, Tags.badValue, ["role"])) {
+    emailCheck(body.email) // check if email is real
+      .then(result =>
+        connections.getConnection(res, function(cnn) {
+          async.waterfall([
+            function(callback) { // get salt
+              bcrypt.genSalt(saltRounds, callback);
+            },
+            function(salt, callback) { // get hash
+              bcrypt.hash(body.passwordHash, salt, callback);
+            },
+            function(passwordHash, callback) { // insert login
+              var attrLoginTable = {email: body.email, passwordHash: passwordHash,
+                role: body.role, whenRegistered: body.whenRegistered};
+              cnn.query('INSERT INTO Logins SET ?', attrLoginTable, callback);
+            },
+            function(result, fields, callback) { // insert tech
+              body.log_id = result.insertId;
+              var attrTechTable = {log_id: result.insertId, firstName: body.firstName, lastName: body.lastName,
+                hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '0'};
+              cnn.query('INSERT INTO Technicians SET ?', attrTechTable, callback);
+            }
+          ], function(err, result) {
+            if (err) {
+              console.log(err);
+              res.status(400).json(err);
+            } else {
+              res.location(router.baseURL + '/' + body.log_id).end();
+            }
+          });
           cnn.release();
-         });
-   }
+        })
+      )
+      .catch(err => res.status(400).json({success: 0, response: `Email ${body.email} doesn't exist`}));
+  }
 });
+
+// Check if the email already used on the ServicesOffer
+router.post('/validateEmail', (req, res) => {
+  let vld = req.validator;
+  let body = req.body;
+  let query = ' SELECT 1 FROM Logins WHERE email=? ';
+
+  if (vld.hasFields(body, ['email'])) {
+    emailCheck(body.email)
+      .then(result =>
+        connections.getConnection(res, cnn => {
+          cnn.query(query, body.email, (err, result) => {
+            if (err) {
+              console.log(err);
+              res.status(400).json(err);
+            } else if (result.length > 0)
+              res.status(200).json({valid: 0, reponse: `Email ${body.email} already used`});
+            else
+              res.status(200).json({valid: 1, response: 'You can use this email'});
+          });
+          cnn.release();
+        })
+      )
+      .catch(err => res.status(400).json({valid: 0, response: `Email ${body.email} doesn't exist`}));
+  }
+});
+
 
 // Begin '/User/:id' functions
 

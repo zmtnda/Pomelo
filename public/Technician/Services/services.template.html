@@ -1,4 +1,3 @@
-<link href="css/Technician/freelancer.min.css" rel="stylesheet" type="text/css">
 <div id="page-top" class="index">
 <div class = "thumbnail">
   <h2>My Services</h2>
@@ -12,6 +11,7 @@
              <th>Issue</th>
              <th>Service Type</th>
              <th>Estimated Amount</th>
+             <!-- <th>Delete Service</th> -->
            </tr>
          </thead>
          <tbody>
@@ -20,12 +20,22 @@
               <td>{{ser.manufacturer}}</td>
               <td>{{ser.model}}</td>
               <td>{{ser.issue}}</td>
-              <td ng-if="ser.servType === 0">Item Based</td>
-              <td ng-if="ser.servType === 1">Time Based</td>
-              <td>{{ser.estAmount}}</td>
+              <td ng-if="ser.servType === 0">Item Based ($/service)</td>
+              <td ng-if="ser.servType === 1">Time Based ($/hour)</td>
+              <!-- <td>{{ser.estAmount}}</td> -->
+              <td>
+                <span>
+                  <input type="number" name="input" style="width: 37%" ng-model="ser.estAmount">
+                  <button type="button" class="btn btn-sm btn-success" style="width: 38%" ng-click="updatePrice()">Update</button>
+                  <button type="button" class="btn btn-danger" style="width: 20%" ng-click="deleteService()">x</button>
+                </span>
+              </td>
+
             </tr>
           </tbody>
      </table>
+     <button type="button" class="btn btn-lg btn-light" ng-click="goToTechnician()">Back</button>
+     <button type="button" class="btn btn-lg btn-success btn-light" ng-click="goToissueGudiance()">Provide more services</button>
   </div>
 </div>
 </div>

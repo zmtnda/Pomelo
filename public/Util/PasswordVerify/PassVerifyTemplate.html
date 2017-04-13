@@ -3,13 +3,18 @@
         <form method="post">
             <table align="center" width="70%" border="0">
                 <h5>Verify your password</h5>
+
                 <tr>
-                    <td><input type="password" name="pass" ng-model="user.password" placeholder="Your Password*" required /></td>
+                    <td>
+                      <div ng-form='pass'>
+                        <input type="password" name="pass" ng-model="user.password" placeholder="Your Password*" required />
+                      </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>
+                      <button ng-disabled="!pass.$valid" class="btn btn-success" type="submit" name="btn-signup" ng-click="verifyPass()">Verify Password</button>
                       <button class="btn btn-warning" type="submit" name="btn-signup" ng-click="$close()">Cancel</button>
-                      <button class="btn btn-success" type="submit" name="btn-signup" ng-click="verifyPass()">Verify Password</button>
                     </td>
                 </tr>
             </table>
