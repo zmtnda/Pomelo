@@ -11,6 +11,11 @@
   width: 100%;
 }
 
+#ngView{
+  margin-top:10px;
+  height: 100%;
+}
+
 /* The following classes are added automatically to an elements that is being added to or took out the scope.*/
 .ng-enter{
   transition: 0.3s linear all;

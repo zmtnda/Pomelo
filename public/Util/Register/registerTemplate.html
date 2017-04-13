@@ -68,7 +68,8 @@
               </tr>
 
               <tr>
-                  <td><button class="btn btn-lg button-submit-sign-up" name="btn-signup" ng-if="user.confirmationEmail === user.email && user.confirmationPassword === user.password" ng-click="postUser()">Sign Me Up</button>
+                  <td> <button uib-popover="{{dynamicPopover.content}}" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-default">Dynamic Popover</button>
+                    <button class="btn btn-lg button-submit-sign-up" name="btn-signup" ng-if="user.confirmationEmail === user.email && user.confirmationPassword === user.password" ng-click="postUser()">Sign Me Up</button>
                       <button class="btn btn-lg btn-warning button-submit-sign-up" name="btn-signup" ng-click="$close()">Cancel</button></td>
               </tr>
           </table>

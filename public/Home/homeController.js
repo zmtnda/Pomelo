@@ -1,5 +1,20 @@
-app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', '$timeout',
-  function(scope, state, rscope,goSer, logSer, regPopSer, timeout) {
+app.controller("forgotPasswordControoler", ['$scope', "$http", "notifyDlg", function(scope, http, notifyDlg){
+
+  scope.emailInput = undefined;
+  scope.errMessage = undefined;
+
+  scope.onClickSend = function (email)
+  {
+    http.get("Send/resetPassword", {"email": email})
+    .catch(function (err) {
+      scope.errMessage = "Unknown error during sending your email. Please contact us at pomelotech@pomelotech.com"
+      console.log("Reset Emaill Error. " + JSON.stringify(err));
+    })
+  }
+}])
+
+app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', '$timeout', "$uibModal",
+  function(scope, state, rscope,goSer, logSer, regPopSer, timeout, uibM) {
     scope.user = {};
 
     scope.retnHm = function(){
@@ -31,9 +46,13 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
 
    scope.goToForgotPassword = function()
    {
-     timeout(function() {
-       state.go('forgotPassword');
-     })
+     return uibM.open({
+        animation: false,
+        controller: "forgotPasswordControoler", /*controller injection has to be here; otherwise, uibModalInstance wouldn't be resolved.*/
+        templateUrl: 'Util/Register/forgotPassword.template.html',
+        scope: scope,
+        size: 'lg'
+     }).result;
    }
 
    scope.goToTechnician = function(){
