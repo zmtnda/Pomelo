@@ -7,4 +7,11 @@ app.controller('ordersController', ['$scope', '$location','$state','logService',
           scope.listOrders = response.data;
         }).
         catch(function(err){noDlg.show(scope, err, "Error")});
+
+        scope.goToissueGudiance = function()
+        {
+          timeout(function() {
+            state.go('issueGudiance');
+          })
+        }
 }]);
