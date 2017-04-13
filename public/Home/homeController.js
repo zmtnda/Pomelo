@@ -1,4 +1,5 @@
-app.controller("forgotPasswordControoler", ['$scope', "$http", "notifyDlg", "errorMessageFormatter", function(scope, http, notifyDl, emf){
+app.controller("forgotPasswordControoler", ['$scope', "$http", "errorMessageFormatter",
+  function(scope, http, emf){
 
   scope.emailInput = undefined;
   scope.errMessage = undefined;
