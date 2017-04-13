@@ -10,7 +10,7 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
 
         if(Array.isArray(dataField))
         {
-          console.log(JSON.stringify(errorJSON));
+          console.log("In errorMessageFormatter " + JSON.stringify(errorJSON));
           errorStr = "You are missing field(s)."
         }
         else
@@ -39,5 +39,11 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
           }
         }
         return errorStr
+      }
+
+      this.checkEmailByRegex = function(email)
+      {
+        var reg = /^([A-Za-z0-9_\-\.]){1,}\@([A-Za-z0-9_\-\.]){1,}\.([A-Za-z]{2,4}){1,2}$/;
+        return reg.test(email)
       }
 }]);
