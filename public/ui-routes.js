@@ -44,11 +44,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
          templateUrl: 'Opinion/opinion.template.html',
         //  controller: '',
       })
-      .state('forgotPassword', {
-         url: '/forgotPassword',
-         templateUrl: 'Util/Register/forgotPassword.template.html',
-        //  controller: '',
-      })
       .state('customerGudiance', {
          url: '/customer/CustomerGuidance',
          templateUrl: 'Customer/CustomerGuidance/customerGuidance.template.html',
