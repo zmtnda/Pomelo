@@ -33,17 +33,6 @@
     }
     */
 
-    var checkEmailByRegex = function(email)
-    {
-      var reg = /^([A-Za-z0-9_\-\.]){1,}\@([A-Za-z0-9_\-\.]){1,}\.([A-Za-z]{2,4}){1,2}$/;
-      if (!reg.test(email))
-      {
-        scope.parsedError = "Invalid email format."
-        return false
-      }
-      return true
-    }
-
     scope.postUser = function()
     {
       scope.hasClickedSignUp = true
@@ -57,9 +46,13 @@
         scope.validCityLength = scope.user.city.length <= 20
         scope.validZipLength = scope.user.zip.toString().length <= 20
         scope.validLength = scope.validEmailLength && scope.validPasswordLength && scope.validNameLength && scope.validCityLength && scope.validZipLength
-        scope.validEmailFormat = checkEmailByRegex(scope.user.email)
+        scope.validEmailFormat = emf.checkEmailByRegex(scope.user.email)
 
-        if(scope.validLength && scope.validEmailFormat)
+        if (scope.validEmailFormat)
+        {
+          scope.parsedError = "Invalid email format."
+        }
+        else if(scope.validLength && scope.validEmailFormat)
         {
           logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
             scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)

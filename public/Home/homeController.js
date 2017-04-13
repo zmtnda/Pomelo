@@ -1,15 +1,26 @@
-app.controller("forgotPasswordControoler", ['$scope', "$http", "notifyDlg", function(scope, http, notifyDlg){
+app.controller("forgotPasswordControoler", ['$scope', "$http", "notifyDlg", "errorMessageFormatter", function(scope, http, notifyDl, emf){
 
   scope.emailInput = undefined;
   scope.errMessage = undefined;
 
   scope.onClickSend = function (email)
   {
-    http.get("Send/resetPassword", {"email": email})
-    .catch(function (err) {
-      scope.errMessage = "Unknown error during sending your email. Please contact us at pomelotech@pomelotech.com"
-      console.log("Reset Emaill Error. " + JSON.stringify(err));
-    })
+    if(!emf.checkEmailByRegex(scope.emailInput))
+    {
+      scope.errMessage = "Invalid email."
+    }
+    else if (!scope.emailInput) {
+      scope.errMessage = "You haven't entered an email."
+    }
+    else
+    {
+      http.post("Send/resetPassword", {"email": email})
+      .catch(function (err)
+      {
+        scope.errMessage = emf.formatErrorCodeAndErrorArray(err);
+        console.log("Reset Emaill Error. " + JSON.stringify(err));
+      })
+    }
   }
 }])
 
