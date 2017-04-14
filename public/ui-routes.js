@@ -22,6 +22,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       .state("emailSuccess", {
         url: '/emailSuccess',
         templateUrl: 'Email/emailSuccess.template.html',
+        controller: 'emailSuccessController'
       })
       .state('about', {
          url: '/about',
