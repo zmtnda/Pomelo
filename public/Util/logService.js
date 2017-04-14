@@ -10,7 +10,7 @@ function(rscope, http, state, nDlg, route, persisService) {
         firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP})
         .then(function(){
           console.log("in add user: " + emailP)
-          return http.post("Send/account", {"email": emailP})// "success": 1/ 0 "response": already activated/ doesn't exist
+          return http.post("Send/confirmEmail", {"email": emailP})// "success": 1/ 0 "response": already activated/ doesn't exist
         })
         .then(function(res){
           if (res.success) {

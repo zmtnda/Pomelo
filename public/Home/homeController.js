@@ -1,5 +1,5 @@
-app.controller("forgotPasswordControoler", ['$scope', "$http", "errorMessageFormatter",
-  function(scope, http, emf){
+app.controller("forgotPasswordControoler", ['$scope', "$http", "errorMessageFormatter", "$uibModalInstance",
+  function(scope, http, emf, uibIns){
 
   scope.emailInput = undefined;
   scope.errMessage = undefined;
@@ -16,6 +16,11 @@ app.controller("forgotPasswordControoler", ['$scope', "$http", "errorMessageForm
     else
     {
       http.post("Send/resetPassword", {"email": email})
+      .then(function(res){
+        // Close the dialog
+        uibIns.close("Cancel")
+        console.log("GET:  " + JSON.stringify(res))
+      })
       .catch(function (err)
       {
         scope.errMessage = emf.formatErrorCodeAndErrorArray(err);

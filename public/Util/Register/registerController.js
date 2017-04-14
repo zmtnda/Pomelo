@@ -33,7 +33,7 @@
                             scope.validCityLength && scope.validZipLength
         scope.validEmailFormat = emf.checkEmailByRegex(scope.user.email)
 
-        if (scope.validEmailFormat)
+        if (!scope.validEmailFormat)
         {
           scope.parsedError = "Invalid email format."
         }
