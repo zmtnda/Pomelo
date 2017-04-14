@@ -35,8 +35,15 @@ router.post('/confirmEmail', function(req, res) {
     ' SELECT L.email, T.status FROM Logins L INNER JOIN Technicians T ON L.id_log = T.log_id AND L.email = ?';
 
   let title = '[Pomelo] Please verify your email address.';
-  var link = 'http://'+ req.get('host')+ '/Verify/confirmEmail?';
+  var link = 'http://'+ req.get('host');
   let hash = getHash();
+
+    if(req.get('host').includes("localhost")){
+      link += '/#/emailSuccess?'
+    }
+    else {
+      line += '/emailSuccess?'
+    }
 
     if(vld.hasFields(body, ['email'])) {
       connections.getConnection(res, function(cnn) {
