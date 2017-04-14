@@ -35,43 +35,38 @@ router.post('/confirmEmail', function(req, res) {
     ' SELECT L.email, T.status FROM Logins L INNER JOIN Technicians T ON L.id_log = T.log_id AND L.email = ?';
 
   let title = '[Pomelo] Please verify your email address.';
-  var link = 'http://'+ req.get('host');
+  var link = 'http://' + req.get('host') + '/Verify/confirmEmail?';
   let hash = getHash();
 
-    if(req.get('host').includes("localhost")){
-      link += '/#'
-    }
-    link += '/emailSuccess?'
-
-    if(vld.hasFields(body, ['email'])) {
-      connections.getConnection(res, function(cnn) {
-        async.waterfall([
-          function(callback) { //check if email exists
-            cnn.query(check_email_query, body.email, callback);
-          },
-          function(result, fields, callback) {
-            console.log(`In check email - ${JSON.stringify(result)}`);
-            if (result.length > 0 && result[0].status == 0) //insert hash
-              cnn.query(insert_verification_query, [hash, body.email], callback);
-            else if (result.length > 0 && result[0].status != 0)
-              callback({success: 0, response: `Email ${body.email} already activated.`}, null);
-            else
-              callback({success: 0, response: `Email ${body.email} doesn't exists.`}, null);
-          }
-        ], function(error, result) {
-          if (error) {
-            console.log(`Error sending mail for ${body.email}`);
-            res.status(400).json(error);
-          } else {
-            console.log('Sending email for acc verification');
-            link = link + `email=${body.email}&hash=${hash}`;
-            var content = `<b>Please verify your account</b><br><a href=${link}>${link}</a>`;
-            mail(res, body.email, title, content);
-          }
-        });
-         cnn.release();
+  if(vld.hasFields(body, ['email'])) {
+    connections.getConnection(res, function(cnn) {
+      async.waterfall([
+        function(callback) { //check if email exists
+          cnn.query(check_email_query, body.email, callback);
+        },
+        function(result, fields, callback) {
+          console.log(`In check email - ${JSON.stringify(result)}`);
+          if (result.length > 0 && result[0].status == 0) //insert hash
+            cnn.query(insert_verification_query, [hash, body.email], callback);
+          else if (result.length > 0 && result[0].status != 0)
+            callback({success: 0, response: `Email ${body.email} already activated.`}, null);
+          else
+            callback({success: 0, response: `Email ${body.email} doesn't exists.`}, null);
+        }
+      ], function(error, result) {
+        if (error) {
+          console.log(`Error sending mail for ${body.email}`);
+          res.status(400).json(error);
+        } else {
+          console.log('Sending email for acc verification');
+          link = link + `email=${body.email}&hash=${hash}`;
+          var content = `<b>Please verify your account</b><br><a href=${link}>${link}</a>`;
+          mail(res, body.email, title, content);
+        }
       });
-   }
+      cnn.release();
+  });
+ }
 });
 
 // Forgot password, send link to reset password
