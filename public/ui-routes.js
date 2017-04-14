@@ -20,7 +20,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
          controller: 'customerController',
       })
       .state("emailSuccess", {
-        url: '/emailSuccess',
+        url: 'Verify/emailSuccess',
         templateUrl: 'Email/emailSuccess.template.html',
       })
       .state('about', {
@@ -46,6 +46,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
       .state('opinion', {
          url: '/opinion',
          templateUrl: 'Opinion/opinion.template.html',
+        //  controller: '',
+      })
+      .state('forgotPassword', {
+         url: '/register/forgotPassword',
+         templateUrl: 'Util/Register/forgotPassword.template.html',
         //  controller: '',
       })
       .state('customerGudiance', {

@@ -39,11 +39,9 @@ router.post('/confirmEmail', function(req, res) {
   let hash = getHash();
 
     if(req.get('host').includes("localhost")){
-      link += '/#/emailSuccess?'
+      link += '/#'
     }
-    else {
-      line += '/emailSuccess?'
-    }
+    link += '/emailSuccess?'
 
     if(vld.hasFields(body, ['email'])) {
       connections.getConnection(res, function(cnn) {

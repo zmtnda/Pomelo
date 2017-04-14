@@ -66,7 +66,7 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
      return uibM.open({
         animation: false,
         controller: "forgotPasswordControoler", /*controller injection has to be here; otherwise, uibModalInstance wouldn't be resolved.*/
-        templateUrl: 'Util/Register/forgotPassword.template.html',
+        templateUrl: 'Util/Register/forgotPassword.pop.html',
         scope: scope,
         size: 'lg'
      }).result;
