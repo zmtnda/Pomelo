@@ -20,7 +20,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
          controller: 'customerController',
       })
       .state("emailSuccess", {
-        url: 'Verify/emailSuccess',
+        url: '/emailSuccess',
         templateUrl: 'Email/emailSuccess.template.html',
       })
       .state('about', {
