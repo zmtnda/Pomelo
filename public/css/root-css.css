@@ -11,6 +11,10 @@
   width: 100%;
 }
 
+.centeredByPadding{
+  padding-top:20%;
+}
+
 #ngView{
   margin-top:10px;
   height: 100%;
