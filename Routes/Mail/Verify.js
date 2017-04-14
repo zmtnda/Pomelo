@@ -51,8 +51,7 @@ router.get('/confirmEmail', function(req, res) {
             console.log('Can\'t verify');
             res.status(400).json(err);
           } else {
-            res.status(200).json({success: 1, email: email});
-            //res.redirect('/#/forgotPassword')
+            res.redirect(`/#/emailSuccess?email=${email}&hash=${hash}`);
           }
       });
       cnn.release();
@@ -88,7 +87,7 @@ router.get('/resetPassword', function(req, res) {
           console.log(err);
           res.status(400).json(err);
         } else {
-          res.status(200).json({success: 1, email: email, hash: hash});
+          res.redirect(`/#/register/forgotPassword?email=${email}&hash=${hash}`);
         }
       });
     });
