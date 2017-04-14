@@ -29,8 +29,7 @@
         scope.validNameLength = scope.user.firstName.length <= 45 && scope.user.lastName.length <= 45
         scope.validCityLength = scope.user.city.length <= 20
         scope.validZipLength = scope.user.zip.toString().length <= 20
-        scope.validLength = scope.validEmailLength && scope.validPasswordLength && scope.validNameLength &&
-                            scope.validCityLength && scope.validZipLength
+        scope.validLength = emf.hasMetLengths(scope.user.email, scope.user.password, scope.user.firstName, scope.user.lastName, scope.user.city, scope.user.zip.toString())
         scope.validEmailFormat = emf.checkEmailByRegex(scope.user.email)
 
         if (!scope.validEmailFormat)
@@ -43,6 +42,7 @@
                          scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
           .then(function()
           {
+            console.log("CLOSE REGISTER POP-UP")
             uibIns.close("Cancel")
           })
           .then (function()

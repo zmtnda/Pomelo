@@ -51,7 +51,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       .state('forgotPassword', {
          url: '/register/forgotPassword',
          templateUrl: 'Util/Register/forgotPassword.template.html',
-        //  controller: '',
+         controller: 'forgotPasswordController',
       })
       .state('customerGudiance', {
          url: '/customer/CustomerGuidance',

@@ -41,6 +41,15 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
         return errorStr
       }
 
+      this.hasMetLengths = function(email, password, firstName, lastName, city, zip)
+      {
+        if(city === null && zip === null)
+        {
+          return email.length <= 128 && password.toString().length <= 32
+        }
+        return email.length <= 128 && password.toString().length <= 32 && firstName.length <= 45 && lastName.length <= 45 && city.length <= 20 && zip.toString().length <= 20
+      }
+
       this.checkEmailByRegex = function(email)
       {
         var reg = /^([A-Za-z0-9_\-\.]){1,}\@([A-Za-z0-9_\-\.]){1,}\.([A-Za-z]{2,4}){1,2}$/;
