@@ -1,12 +1,10 @@
-app.controller('emailSuccessController', ['$rootScope','$scope', '$state','$timeout',
- function(rscope, scope, state, timeout) {
-
+app.controller('emailSuccessController', ['$scope', '$state','$timeout',
+ function(scope, state, timeout) {
      scope.redirect = function()
      {
          timeout(function() {
            state.go('home');
-         }, 3000)
-         console.log("redirect")
+         }, 2000)
       }
       scope.redirect();
 }])

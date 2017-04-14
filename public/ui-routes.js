@@ -24,6 +24,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
         templateUrl: 'Email/emailSuccess.template.html',
         controller: 'emailSuccessController'
       })
+      .state("/404Page", {
+        url: '/404Page',
+        templateUrl: '404Page/404Page.template.html',
+      })
       .state('about', {
          url: '/about',
          templateUrl: 'About/about.html',
