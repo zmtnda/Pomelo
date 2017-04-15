@@ -19,15 +19,9 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
     scope.manus = undefined
     scope.issues = undefined
 
-    scope.showMap = function()
+    scope.onClickNext = function()
     {
       scope.hasGone = true
-    }
-
-    scope.showCategory = function(){
-      scope.hasMapped = true
-      scope.hasGone = false
-
     }
 
     scope.onClickCategory = function(selectedCate){
