@@ -40,6 +40,12 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
       })
     }
 
+    scope.TechnicianListing = function(){
+      timeout(function() {
+        state.go('technicianListing');
+      })
+    }
+
    scope.login = function(){
      logSer.login(scope.user.email, scope.user.password);
    }

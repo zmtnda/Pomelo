@@ -1,0 +1,18 @@
+<div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1">
+    <div class="thumbnail" ng-repeat="user in users | orderBy:'id'">
+            <!-- id: {{user.id}}<br/> -->
+            <b>Email</b>: {{user.email}}<br/>
+            <b>Role:</b> <span ng-switch="{{user.role}}">
+                      <span ng-switch-when="1">Technician</span>
+                      <span ng-switch-when="2">Admin</span>
+                  </span><br/>
+            <b>First Name:</b> {{user.firstName}}<br/>
+            <b>Last Name:</b> {{user.lastName}}<br/>
+            <b>Hourly Rate:</b> {{user.hourlyRate}}<br/>
+            <b>City:</b> {{user.city}}<br/>
+            <b>Zip Code:</b> {{user.zip}}<br/>
+
+            <!-- <button class="btn btn-danger btn-sm pull-right" type-"button" ng-click="deleteUser(user.id)">Delete</button> -->
+            <!-- FOR FUTURE<button class="btn btn-warning" type-"button" ng-click="modifyUser()">MODIFY</button> -->
+    </div>
+</div>
