@@ -6,6 +6,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       category: undefined,
       manufacturer: undefined,
       model: undefined,
+      zipCode: undefined
     }
 
     scope.hasGone = false
@@ -19,6 +20,9 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
     scope.models = undefined
     scope.manus = undefined
     scope.issues = undefined
+
+    scope.nextMessage = "Next"
+    scope.guidanceMessage = "Find technicians in your city"
 
     scope.onClickNext = function()
     {
@@ -59,6 +63,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
 
     scope.onClickPrevious = function()
     {
+      scope.nextMessage = "Next"
       if(scope.hasClickedIssue)
       {
         scope.hasClickedIssue = false
@@ -101,6 +106,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
 
     scope.onClickIssue = function(selectedIssue)
     {
-
+      scope.nextMessage = "Find technicians!!"
+      scope.customerData.issue = selectedIssue
     }
   }]);
