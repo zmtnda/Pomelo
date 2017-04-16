@@ -16,16 +16,16 @@
 		('Platinum', 'url');
 
 	-- Insert data for login --
-	insert into `Logins` (`email`, `passwordSalt`, `passwordHash`, `role`, `whenRegistered`) values
-		('admin@pomelo.com', '$2a$10$ewWJ0dmjgHYT6hdAzCSem.' ,'$2a$10$ewWJ0dmjgHYT6hdAzCSem.6THkdBnkh1gAa1QOpGxzjG3L8kuSVq6', 2, NOW()),
-		('tech1@pomelo.com', '$2a$10$U4DwDhzPEgQbWJ6OCO1tVu', '$2a$10$U4DwDhzPEgQbWJ6OCO1tVumEcF7njvmQgERpPrLKPjrIqq2Y9Zxxa', 1, NOW()),
-		('tech2@pomelo.com', '$2a$10$3gXUMRKrLya6GD7OfaCeme', '$2a$10$3gXUMRKrLya6GD7OfaCeme63Vkg5oZApaPpEyeJJRDe6HzHE2e6qW', 1, NOW()),
-		('tech3@pomelo.com', '$2a$10$nVvbCL0BdtwBuVKvDAs2ye', '$2a$10$nVvbCL0BdtwBuVKvDAs2ye7JkA6mu3nPNIypti9OaHp1S6xvtK4SK', 1, NOW()),
-		('tech4@pomelo.com', '$2a$10$Ldk2dzZ73ZhAG/5RP13s6.', '$2a$10$Ldk2dzZ73ZhAG/5RP13s6.0166A.3/FX3hUHTUaioeLko9SXDNVoS', 1, NOW()),
-		('tech5@pomelo.com', '$2a$10$JIarV7MpOLSSXPEG0c0al.', '$2a$10$JIarV7MpOLSSXPEG0c0al.77MYf.gCs32S2ChKAm2ow7f6oBF6K92', 1, NOW()),
-		('tech6@pomelo.com', '$2a$10$WIzIKiqfSr7KwQJmv1Ny8.', '$2a$10$WIzIKiqfSr7KwQJmv1Ny8.w3f9Qj86zL/Dr5N5A8wX6PBtKSshagS', 1, NOW()),
-		('tech7@pomelo.com', '$2a$10$dtKt65ZAhNT2b.z0IJltPO', '$2a$10$dtKt65ZAhNT2b.z0IJltPOwmIwu3pWHXCFpirF5iVejsVM8/LdO92', 1, NOW()),
-		('tech8@pomelo.com', '$2a$10$Kgipz/F.7FUUn2ZN.ZzNsO', '$2a$10$Kgipz/F.7FUUn2ZN.ZzNsO1FYZKLhSRsSIDbRcleS/EJsfs3rM34u', 1, NOW());
+	insert into `Logins` (`email`, `passwordHash`, `role`, `whenRegistered`) values
+		('admin@pomelo.com', '$2a$10$ewWJ0dmjgHYT6hdAzCSem.6THkdBnkh1gAa1QOpGxzjG3L8kuSVq6', 2, NOW()),
+		('tech1@pomelo.com', '$2a$10$U4DwDhzPEgQbWJ6OCO1tVumEcF7njvmQgERpPrLKPjrIqq2Y9Zxxa', 1, NOW()),
+		('tech2@pomelo.com', '$2a$10$3gXUMRKrLya6GD7OfaCeme63Vkg5oZApaPpEyeJJRDe6HzHE2e6qW', 1, NOW()),
+		('tech3@pomelo.com', '$2a$10$nVvbCL0BdtwBuVKvDAs2ye7JkA6mu3nPNIypti9OaHp1S6xvtK4SK', 1, NOW()),
+		('tech4@pomelo.com', '$2a$10$Ldk2dzZ73ZhAG/5RP13s6.0166A.3/FX3hUHTUaioeLko9SXDNVoS', 1, NOW()),
+		('tech5@pomelo.com', '$2a$10$JIarV7MpOLSSXPEG0c0al.77MYf.gCs32S2ChKAm2ow7f6oBF6K92', 1, NOW()),
+		('tech6@pomelo.com', '$2a$10$WIzIKiqfSr7KwQJmv1Ny8.w3f9Qj86zL/Dr5N5A8wX6PBtKSshagS', 1, NOW()),
+		('tech7@pomelo.com', '$2a$10$dtKt65ZAhNT2b.z0IJltPOwmIwu3pWHXCFpirF5iVejsVM8/LdO92', 1, NOW()),
+		('tech8@pomelo.com', '$2a$10$Kgipz/F.7FUUn2ZN.ZzNsO1FYZKLhSRsSIDbRcleS/EJsfs3rM34u', 1, NOW());
 
 
 
@@ -41,16 +41,6 @@
 		(7, 'Tech_6', 'Zin2', 55.0, 'San Luis Obispo', 93403, 4.5, 3, 1),
 		(8, 'Tech_7', 'Zee2', 45.0, 'San Luis Obispo', 93406, 4.5, 3, 1),
 		(9, 'Tech_8', 'Tun', 25.5, 'Santa Maria', 93454, 2.5, 4, 1);
-		-- insert into `Technicians` (`log_id`, `firstName`, `lastName`, `hourlyRate`,
-		-- 	`City`, `Zip`, `ratings`, `bad_id`, `status`) values
-		-- 	(2, 'Tech_1', 'Byakugan', 46.5, 'SLO', 93401, 3.5, 2, 1),
-		-- 	(3, 'Tech_2', 'Uhara', 30.0, 'Santa Clara', 95050, 4.2, 3, 1),
-		-- 	(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 1),
-		-- 	(5, 'Tech_4', 'Zin', 50.0, 'San Luis Obispo', 93405, 4.5, 3, 1),
-		-- 	(6, 'Tech_5', 'Zee', 30.0, 'San Luis Obispo', 93405, 4.5, 3, 0),
-		-- 	(7, 'Tech_6', 'Zin2', 55.0, 'San Luis Obispo', 93403, 4.5, 3, 1),
-		-- 	(8, 'Tech_7', 'Zee2', 45.0, 'San Luis Obispo', 93406, 4.5, 3, 1),
-		-- 	(9, 'Tech_8', 'Tun', 25.5, 'Santa Maria', 93454, 2.5, 4, 1);
 
 	-- insert into certification --
 	insert into `Certifications` (`tec_id`, `certificationName`, `institution`, `yearObtained`) values
@@ -153,11 +143,11 @@
 
 	-- insert data into ServiceHistory --
 	insert into `ServicesHistory` (`serTec_id`, `cus_id`, `description`, `amount`, `status`,
-		`orderedDate`, `completedDate`, `serHisHash`, `isReview`) values
-		(1, 1, 'My Dell Desktop deosn\'t turn on, please help!', 200.50, 3, '2016-02-22', now(), '2141d3fdd6f99137fb38519024297026a7013172f0d354e0e15ab51d8e435b9c82062fc0a94c5392', 1),
-		(2, 1, 'Upgrade Ram PLS', 149.99, 4, '2017-01-10', '2017-01-12', '3339ad85b5f07f2b1812a4cd8d462765b95e126692788ccafa41ca1c8255e88265291c6fc2198039', 1),
-		(20, 2, 'ipad mini 2 can\'t connect to WIFI', 69.99, 3, '2016-04-21', '2016-04-25', 'be91a97c78af5b2867c8e9085c5d92091713290744e9f63e2330a229ebe83868c4030bc494e26430', 1),
-		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15', '67a9cf34830567ca2955279cf0aa63840f61c26841d9f5addefb443b87599426ab5aedec94ccd341', 0);
+		`orderedDate`, `completedDate`, `isReview`) values
+		(1, 1, 'My Dell Desktop deosn\'t turn on, please help!', 200.50, 3, '2016-02-22', now(), 1),
+		(2, 1, 'Upgrade Ram PLS', 149.99, 4, '2017-01-10', '2017-01-12', 1),
+		(20, 2, 'ipad mini 2 can\'t connect to WIFI', 69.99, 3, '2016-04-21', '2016-04-25', 1),
+		(19, 2, 'xps13 bad keyboard', 239.99, 3, '2017-01-12', '2017-01-15', 0);
 
 	-- insert data into review --
 	insert into `Reviews` (`serHis_id`, `cus_id`, `tec_id`, `stars`, `comment`) values

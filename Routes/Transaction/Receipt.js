@@ -51,11 +51,11 @@ router.get('/:serHisId', function(req, res) {
 // AU must be technician or Admin
 router.get('/:tecId/technician', function(req, res) {
    var vld = req.validator;
-   var tec_id = req.params.tecId;
+   var tec_id = req.session.tec_id;
    var formatDate = ', DATE_FORMAT(orderedDate, \'\%b \%d \%Y \%h\:\%i \%p\') as orderedDate '
                  + ', DATE_FORMAT(completedDate, \'\%b \%d \%Y \%h\:\%i \%p\') as completedDate ';
    //   qry = 'SELECT x.*, y.*, z.serviceName, v.status, v.amount ' + formatDate +
-   var selectQry = ' SELECT email, category, manufacturer, model, issue, '
+   var selectQry = ' SELECT id_serHis, serTec_id, cus_id, email, category, manufacturer, model, issue, '
                  + ' description, amount, T4.status ' + formatDate
                  + ' FROM ServicesOfferedByTech T1 '
                  + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
@@ -68,7 +68,7 @@ router.get('/:tecId/technician', function(req, res) {
                  + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
                  + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
                  + ' ) T3 ON T1.modIss_id = T3.id_modIss AND T1.tec_id = ? '
-                 + ' INNER JOIN (SELECT serTec_id, email, description, amount, '
+                 + ' INNER JOIN (SELECT id_serHis, serTec_id, cus_id, email, description, amount, '
                  + ' status, orderedDate, completedDate '
                  + ' FROM ServicesHistory T1 '
                  + ' INNER JOIN Customers T2 ON T1.cus_id = T2.id_cus '
@@ -83,7 +83,7 @@ router.get('/:tecId/technician', function(req, res) {
             console.log("Error geting serHis: " + tec_id);
             res.status(400).json(err);
          }else {
-            console.log("Get info serHis successful");
+            console.log("Get info serHis successful" + tec_id);
             res.json(result);
          }
       });
@@ -124,5 +124,31 @@ router.post('/', function(req, res) {
       });
    }
 });
+// modify SerivcesHistory table
+//
+router.put('/:serHisId/issue', function(req, res) {
+  var vld = req.validator;
+  var body = req.body;
+  var logId = req.session.id;
+	var pkey = req.params.serHisId;
 
+  var selectQry = ' UPDATE ServicesHistory SET ? WHERE id_serHis = ? '
+
+  if (vld.checkPrsOK(logId)) {
+    connections.getConnection(res, function(cnn) {
+      console.log("body " + JSON.stringify(body));
+      console.log("pkey " + pkey);
+      console.log("logId " + logId);
+			cnn.query( selectQry, [body, pkey], function(err, result){
+				if(err){
+					res.status(400).json(err);
+				}
+				else{
+					res.json({success: 1});
+				}
+			});
+      cnn.release();
+		});
+  }
+});
 module.exports = router;

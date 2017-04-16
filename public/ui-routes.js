@@ -2,8 +2,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
    function($stateProvider, $router) {
       //redirect to home if path is not matched
       $router.otherwise("/");
-      
+
       $stateProvider
+      .state('upload', {
+        url: '/upload',
+        templateUrl: 'TestUpload/upload.template.html',
+        controller: 'uploadController',
+      })
       .state('home',  {
          url: '/',
          templateUrl: 'Home/home.template.html',
@@ -19,10 +24,62 @@ app.config(['$stateProvider', '$urlRouterProvider',
          templateUrl: 'Customer/customer.template.html',
          controller: 'customerController',
       })
+      .state("emailSuccess", {
+        url: '/emailSuccess',
+        templateUrl: 'Email/emailSuccess.template.html',
+        controller: 'emailSuccessController'
+      })
+      .state("/404Page", {
+        url: '/404Page',
+        templateUrl: '404Page/404Page.template.html',
+      })
       .state('about', {
          url: '/about',
          templateUrl: 'About/about.html',
         //  controller: '',
+      })
+      .state('orders', {
+         url: '/technician/orders',
+         templateUrl: 'Technician/Orders/Orders.template.html',
+         controller: 'ordersController',
+      })
+      .state('services', {
+         url: '/technician/services',
+         templateUrl: 'Technician/services/services.template.html',
+         controller: 'servicesController',
+       })
+       .state('technicianListing', {
+          url: '/customer/technicianListing',
+          templateUrl: 'Customer/TechnicianListing/TechnicianListingTemplate.html',
+          controller: 'technicianListingController',
+        })
+       .state('updateAccount', {
+          url: '/technician/updateAccount',
+          templateUrl: 'Technician/UpdateAccount/UpdateAccount.template.html',
+          controller: 'updateAccountController',
+        })
+      .state('opinion', {
+         url: '/opinion',
+         templateUrl: 'Opinion/opinion.template.html',
+        //  controller: '',
+      })
+      .state('forgotPassword', {
+         url: '/register/forgotPassword',
+         templateUrl: 'Util/Register/forgotPassword.template.html',
+         controller: 'forgotPasswordController',
+      })
+      .state('customerGudiance', {
+         url: '/customer/CustomerGuidance',
+         templateUrl: 'Customer/CustomerGuidance/customerGuidance.template.html',
+         controller: 'customerGuidanceController',
+         resolve: {
+           cates: ['$q', '$http', '$stateParams', function($q, http, prms){
+             return http.get('Cate/')
+             .then(function(response){
+               return $q.resolve(response.data)
+             })
+           }]
+         }
       })
       .state('issueGudiance', {
          url: '/technician/IssueGuidance',
@@ -34,19 +91,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
              .then(function(response){
                return $q.resolve(response.data)
              })
-           }],
-           manus: ['$q', '$http', '$stateParams', function($q, http, prms){
-             return http.get('Cate/')
-             .then(function(response){
-               return $q.resolve(response.data)
-             })
            }]
          }
       })
-      .state('awaitingListing', {
-         url: '/technician/awaitingListing',
-         templateUrl: 'Technician/AwaitingListPage/awaitingListPage.template.html',
-         controller: 'awaitingListPageController',
+      .state('transcationHistory', {
+         url: '/technician/transcationHistory',
+         templateUrl: 'Technician/TranscationHistoryPage/transcationHistoryPage.template.html',
+         controller: 'transcationHistoryPageController',
          resolve:{
            userListing: ['$q', '$http', '$rootScope', function($q, http, rscope){
              return http.get('Receipt/'+ rscope.loggedUser.tec_id +'/technician')

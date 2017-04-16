@@ -1,3 +1,4 @@
+<<<<<<< HEAD
      <header id="top" class="header">
          <div class="text-vertical-center">
              <h1><font color="black">Pomelo Tech</font></h1>
@@ -7,29 +8,42 @@
            <h3><button class="btn btn-lg button-vertical-center" ng-click="addUser()">Sign Up as Technician</button></h3>
          </div>
 
+=======
+>>>>>>> 0c3bf56ff536f31f37396ef0eaef46c82dc3705f
 
-     </header>
+   <div id="top" class="header container" style="overflow:hidden; width: 100% !important;">
+       <div style="width: 100% !important;" class="text-vertical-center">
+           <h1><font color="black">Pomelo Tech</font></h1>
+           <h3>
+             <font color="black">"Smartoo people, having fun, looking good" - Dr. Turner"</font>
+           </h3>
+         <h3>
+           <button class="btn btn-lg button-vertical-center" ng-click="TechnicianListing()">List Technicians</button>
+           <button class="btn btn-lg button-vertical-center" ng-click="addUser()">Sign Up as Technician</button>
+         <button class="btn btn-lg button-vertical-center" ng-click="customerGuidance()">Find a technician</button></h3>
+       </div>
+   </div>
 
-          <!-- Call to Action -->
-         <aside class="call-to-action bg-primary">
-              <div class="container">
-                    <form ng-if="!inSession" class="form-signin">
-                    <fieldset class="form-group">
-                      <h2 class="form-signin-heading">Login In</h2>
-                      <label for="inputEmail" class="sr-only">Email address</label>
-                      <input type="email" class="form-control" placeholder="Enter email" ng-model="user.email">
-                    </fieldset>
-                    <fieldset class="form-group">
-                      <label for="inputPassword" class="sr-only">Password</label>
-                      <input type="password" class="form-control" onkeydown = "if (event.keyCode == 13)
-                                  document.getElementById('submit').click()" placeholder="Password" ng-model="user.password">
-                    </fieldset>
-
-                  </form>
-                  <button ng-if="!inSession" type="button"  id="submit" class="btn btn-lg btn-light" ng-click="login()">Login</button>
-                  <button ng-if="!inSession" class="btn btn-lg btn-dark" ng-click="addUser()">Sign Up</button>
-              </div>
-          </aside>
+    <!-- Call to Action -->
+   <aside class="call-to-action bg-primary" ng-if="!inSession" style="overflow:hidden; width: 100% !important;">
+        <div class="container">
+              <form class="form-signin">
+              <fieldset class="form-group">
+                <h2 class="form-signin-heading">Login In</h2>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input type="email" class="form-control" placeholder="Enter email" ng-model="user.email">
+              </fieldset>
+              <fieldset class="form-group">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" class="form-control" onkeydown = "if (event.keyCode == 13)
+                            document.getElementById('submit').click()" placeholder="Password" ng-model="user.password">
+              </fieldset>
+            </form>
+            <button  type="button"  id="submit" class="btn btn-lg btn-light" ng-click="login()">Login</button>
+            <button class="btn btn-lg btn-dark" ng-click="addUser()">Sign Up</button>
+            <a style="color: #337ab7;" ng-click="goToForgotPassword()">Forgot Password</a>
+        </div>
+    </aside>
 
      <!-- About -->
      <section id="about" class="about">
@@ -52,7 +66,6 @@
              <div class="row text-center">
                  <div class="col-lg-10 col-lg-offset-1">
                      <h2>Our Services</h2>
-                     <hr class="small">
                      <div class="row">
                          <div class="col-md-3 col-sm-6">
                              <div class="service-item">

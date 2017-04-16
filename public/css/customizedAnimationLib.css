@@ -1,0 +1,41 @@
+
+.growHover:hover{
+  box-shadow: 0 0 5px grey;
+  transition-duration: 0.3s;
+  transition-property: box-shadow;
+}
+
+.moveLeftHover:hover{
+  transition: 0.3s linear all;
+  transform: translateX(-10px);
+}
+
+.moveRightHover:hover{
+  transition: 0.3s linear all;
+  transform: translateX(10px);
+}
+
+/* The following classes are added automatically to an elements that is being added to or took out the scope.*/
+.ng-enter{
+  transition: 0.3s linear all;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/*At the end of entering*/
+.ng-enter.ng-enter-active{
+  transform: translateY(0px);
+  opacity: 1;
+}
+
+/*At the start of leaving*/
+.ng-leave{
+  transition: 9s liner all;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ng-leave.ng-leave-active{
+  transform: translateZ(-100%);
+  opacity: 0;
+}

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html ng-app="mainApp" ng-controller="homeController" style="width:100%;">
 
+  <head>
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  </head>
+
   <!-- <link rel="stylesheet" href="css/index.css"> -->
 
   <!--angularjs linking: -->
@@ -10,6 +14,9 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-cookies.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.js"></script>
 
   <!-- Style for the home page:  -->
   <link href="css/home/css/stylish-portfolio.css" rel="stylesheet">
@@ -18,36 +25,54 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/customizedAnimationLib.css" type="text/css"/>
+  <link rel="stylesheet" href="css/bootstrap.css" type="text/css"/>
+  <link rel="stylesheet" href="css/bootstrap.min.css"/>
   <link rel="stylesheet" href="css/root-css.css" type="text/css"/>
+  <link rel="stylesheet" href="css/Util/dialog.css" type="text/css"/>
   <link rel="stylesheet" href="css/Technician/issueGuidance.css" type="text/css"/>
+  <link rel="stylesheet" href="css/Technician/technicianProfile.css" type="text/css"/>
   <link rel="stylesheet" href="css/Customer/cust.css" type="text/css"/>
-  <link rel="stylesheet" href="Util/cssFiles/regTmp.css" type="text/css"/>
-
+  <link rel="stylesheet" href="css/Admin/admin.css" type="text/css"/>
+  <link rel="stylesheet" href="css/Util/register.css" type="text/css"/>
+  <link rel="stylesheet" href="css/Util/dialog.css" type="text/css"/>
+  
   <script src="pomeloApp.js"></script>
 
   <!--Add all states-->
   <script src="Home/homeController.js"></script>
   <script src="Filter/buttonFilter.js"></script>
   <script src="Customer/customerController.js"></script>
-  <script src="Technician/IssueGuidance/issueGuidanceCustomDirective.js"></script>
+  <script src="Email/emailSuccessController.js"></script>
+  <script src="Customer/CustomerGuidance/customerGuidanceController.js"></script>
+  <script src="Customer/TechnicianListing/technicianListingController.js"></script>
   <script src="Technician/IssueGuidance/issueGuidanceController.js"></script>
-  <script src="Technician/AwaitingListPage/awaitingListPageController.js"></script>
+  <script src="Technician/Orders/ordersController.js"></script>
+  <script src="Technician/Services/servicesController.js"></script>
+  <script src="Technician/UpdateAccount/UpdateAccountController.js"></script>
+  <script src="Technician/TranscationHistoryPage/transcationHistoryPageController.js"></script>
   <script src="Technician/technicianController.js"></script>
   <script src="Admin/adminController.js"></script>
-  <script src="Admin/addServicePop.js"></script>
-  <script src="Admin/addServiceController.js"></script>
+  <script src="TestUpload/uploadController.js"></script>
 
   <!--Helpers' templates-->
   <script src="Util/Register/registerPop.js"></script>
   <script src="Util/Register/registerController.js"></script>
+  <script src="Util/Register/forgotPasswordController.js"></script>
+  <script src="Util/Register/forgotPasswordPopController.js"></script>
+  <script src="Util/PasswordVerify/PassVerifyPop.js"></script>
+  <script src="Util/PasswordVerify/PassVerifyController.js"></script>
+  <script src="Util/ChangePassword/changePasswordPop.js"></script>
+  <script src="Util/ChangePassword/changePasswordController.js"></script>
+  <script src="Util/ChangeEmail/ChangeEmailPop.js"></script>
+  <script src="Util/ChangeEmail/ChangeEmailController.js"></script>
   <script src="Util/Dialog/dialogService.js"></script>
 
   <!--Register services: -->
-  <script src="Util/logService.js"></script>
   <script src="Util/userPersistenceService.js"></script>
   <script src="Util/goToServices.js"></script>
   <script src="Util/errorFormatterService.js"></script>
+  <script src="Util/logService.js"></script>
 
   <script src="ui-routes.js"></script>
 
@@ -80,8 +105,19 @@
               <li class="active" ng-if="!inSession" role="presentation" ng-click="retnHm()"><a href="#">Home</a></li>
               <li class="active" ng-if="inSession" role="presentation" ng-click="goToTechnician()"><a href="#">Profile Page</a></li>
               <li role="presentation"><a href="#" ng-click="goToAbout()">About Us</a></li>
-              <li role="presentation"><a href="https://docs.google.com/forms/d/1N1yCBjDKHL5MWz1AoMRSwKthJza7xi7KPRRWh2k6fYo/viewform?embedded=true">Give Us Your Opinion</a></li>
-              <li role="presentation"><a href="#">Terms and Conditions</a></li><!--TODO-->
+              <li role="presentation"><a ng-click="goToOpinion()">Give Us Your Opinion</a></li>
+              <li role="presentation"><a href="#">Terms and Conditions</a></li>
+              <!-- <li ng-if="inSession" uib-dropdown>
+                <a id="single-button" uib-dropdown-toggle ng-disabled="disabled">
+                  Account <span class="caret"></span>
+                </a>
+                <ul uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                  <li role="menuitem"><a href="#">Change Email</a></li>
+                  <li role="menuitem"><a href="#">Change Password</a></li>
+                  <li class="divider"></li>
+                  <li role="menuitem" ng-click="logout()"><a href="#">Logout</a></li>
+                </ul>
+              </li> -->
               <li role="presentation" ng-if="inSession" ng-click="logout()"><a href="#">Logout</a></li>
             </ul>
           </div>
@@ -90,5 +126,5 @@
     </div>
   </header>
   <!--The ui-view directive tells $state where to place your templates.-->
-  <div style="margin-top:10px;" ui-view></div>
+  <div id="ngView" ui-view></div>
 </html>

@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+
 /*ii*/
 var bodyParser = require('body-parser');
 var Session = require('./Routes/Session.js');
@@ -51,6 +52,7 @@ app.use('/Receipt', require('./Routes/Transaction/Receipt'));
 app.use('/Verify', require('./Routes/Mail/Verify'));
 app.use('/Send', require('./Routes/Mail/Send'));
 app.use('/Review', require('./Routes/Review/Review'));
+app.use('/Upload', require('./Routes/Upload/Upload'));
 
 // Clear all content from the database,
 // reset all autoincrement IDs to 1,

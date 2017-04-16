@@ -11,27 +11,18 @@
   width: 100%;
 }
 
-/* The following classes are added automatically to an elements that is being added to or took out the scope.*/
-.ng-enter{
-  transition: 0.3s linear all;
-  opacity: 0;
-  transform: translateY(30px);
+.centeredByPadding{
+  padding-top:20%;
 }
 
-/*At the end of entering*/
-.ng-enter.ng-enter-active{
-  transform: translateY(0px);
-  opacity: 1;
+#ngView{
+  margin-top:10px;
+  height: 100%;
 }
 
-/*At the start of leaving*/
-.ng-leave{
-  transition: 9s liner all;
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.ng-leave.ng-leave-active{
-  transform: translateZ(-100%);
-  opacity: 0;
+.vertical-align{
+    display: flex;
+    flex-direction: row; /*Defines the main-axis along which flex items are put in.*/
+    justify-content: center; /*define alignment along the main axis*/
+    align-items: center;/*define the alignment along the cross axis*/
 }

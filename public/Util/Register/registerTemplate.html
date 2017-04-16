@@ -1,53 +1,81 @@
 <center>
     <div id="login-form">
-        <form method="post">
-            <table align="center" width="90%" border="0">
-                <tr><br>
-                    <td>
-                        <a>Please select one*</a>
-                        <select type ="userType" name="type" ng-model="user.role">
-                            <option selected="selected" class = "elType" id = "technician" value=1 name="Technician">Technician</option>
-                            <option disabled="disabled" class = "elType" id = "customer" name="Customer" value=0 selected>Customer (Feature available in later release)</option>
-                        </select>
-                    </td>
-                </tr>
+      <form>
+          <table align="center" width="90%" border="0">
+              <tr><br>
+                  <td><a>Please select one*</a>
+                      <select type ="userType" name="type" ng-model="user.role">
+                          <option selected="selected" class = "elType" id = "technician" value=1 name="Technician">Technician</option>
+                          <option disabled="disabled" class = "elType" id = "customer" name="Customer" value=0 selected>Customer (Feature available in later release)</option>
+                      </select></td>
+              </tr>
 
-                <tr>
-                    <td><input type="email" name="email" ng-model="user.email" placeholder="Your Email*" required /></td>
-                </tr>
+              <tr>
+                  <td><input name="email" ng-model="user.email" placeholder="Your Email*"/>
+                      <div class="text-danger" ng-if="!user.email && hasClickedSignUp"><h5>Missing</h5></div>
+                      <div class="text-danger" ng-if="!validEmailLength"><h5>Your email has to be less than or equal to 128 characters</h5></div></td>
+              </tr>
 
-                <tr>
-                    <td><input type="password" name="pass" ng-model="user.password" placeholder="Your Password*" required /></td>
-                </tr>
+              <tr ng-if="user.email">
+                  <td><input name="email" ng-model="user.confirmationEmail" placeholder="Please confirm your email*"/>
+                      <div class="text-danger" ng-if="!user.confirmationEmail && hasClickedSignUp"><h5>Missing</h5></div>
+                      <div class="text-danger" ng-if="user.confirmationEmail !== user.email"><h5>Emails don't match</h5></div></td>
+              </tr>
 
-                <tr>
-                    <td><input type="text" name="first_name" ng-model="user.firstName" placeholder="First Name*" required /></td>
-                </tr>
+              <tr>
+                  <td><input type="password" name="pass" ng-model="user.password" placeholder="Your Password*"/>
+                      <div class="text-danger" ng-if="!user.password && hasClickedSignUp"><h5>Missing</h5></div></td>
+              </tr>
 
-                <tr>
-                    <td><input type="text" name="last_name" ng-model="user.lastName" placeholder="Last Name*" required /></td>
-                </tr>
+              <tr ng-if="user.password">
+                  <td><input type="password" name="pass" ng-model="user.confirmationPassword" placeholder="Please confirm your password*"/>
+                      <div class="text-danger" ng-if="!user.confirmationPassword && hasClickedSignUp"><h5>Missing</h5></div>
+                      <div class="text-danger" ng-if="user.confirmationPassword !== user.password"><h5>Passwords don't match</h5></div>
+                      <div class="text-danger" ng-if="!validPasswordLength"><h5>Your password has to be less than or equal to 32 characters</h5></div></td>
+              </tr>
 
-                <tr>
-                    <td><input type="number" name="HourlyRate" ng-model="user.hourlyRate" placeholder="Service Rate* (Default rate: $25/hour)" required /></td>
-                </tr>
+              <tr>
+                  <td><input name="first_name" ng-model="user.firstName" placeholder="First Name*"/>
+                      <div class="text-danger" ng-if="!user.firstName && hasClickedSignUp"><h5>Missing</h5></div></td>
+              </tr>
 
-                <tr>
-                    <td><input type="text" name="city" ng-model="user.city" placeholder="City*" required /></td>
-                </tr>
+              <tr>
+                  <td><input name="last_name" ng-model="user.lastName" placeholder="Last Name*"/>
+                      <div class="text-danger" ng-if="!user.lastName && hasClickedSignUp"><h5>Missing</h5></div>
+                      <div class="text-danger" ng-if="!validNameLength"><h5>Your first and last names have to less than or equal to 32 characters</h5></div></td>
+              </tr>
 
-                <tr>
-                    <td><input type="number" name="zip" ng-model="user.zip" placeholder="Zip code*" required /></td>
-                </tr>
+              <tr>
+                  <td><input name="HourlyRate" ng-model="user.hourlyRate" placeholder="Service Rate* (Default rate: $25/hour)"/>
+                      <div class="text-danger" ng-if="!user.hourlyRate && hasClickedSignUp"><h5>Missing</h5></div></td>
+              </tr>
 
-                <tr>
-                    <td>
-                      <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="postUser()">Sign Me Up</button>
-                      <button class="btn btn-lg button-submit-sign-up" type="submit" name="btn-signup" ng-click="$close()">Cancel</button>
-                    </td>
-                </tr>
-            </table>
-            <br>
-        </form>
+              <tr>
+                  <td><input name="city" ng-model="user.city" placeholder="City*"/>
+                      <div class="text-danger" ng-if="!user.city && hasClickedSignUp"><h5>Missing</h5></div>
+                      <div class="text-danger" ng-if="!validCityLength"><h5>The city's name has to be less than or equal to 20</h5></div></td>
+              </tr>
+
+              <tr>
+                  <td><input name="zip" ng-model="user.zip" placeholder="Zip code*"/>
+                      <div class="text-danger" ng-if="!user.zip && hasClickedSignUp"><h5>Missing</h5></div>
+                      <div class="text-danger" ng-if="!validZipLength"><h5>The zip code has to be less than or equal to 20</h5></div></td>
+              </tr>
+
+              <tr class="text-danger" ng-if="hasClickedSignUp">
+                  <td><div ng-if="waitingResponse"><img src="img/loading.gif"><img></div>
+                      <div ng-if="!user.email || !user.password || !user.role || !user.firstName || !user.lastName || !user.hourlyRate || !user.city || !user.zip"><h5>You're missing some fields</h5></div>
+                      <div ng-if="parsedError"><h5>{{parsedError}}</h5></div></td>
+              </tr>
+
+              <tr>
+                  <td> <!-- <button uib-popover="{{dynamicPopover.content}}" popover-title="{{dynamicPopover.title}}" type="button" class="btn btn-default">Dynamic Popover</button> -->
+                      <button class="btn btn-lg button-submit-sign-up" name="btn-signup" ng-if="user.confirmationEmail === user.email && user.confirmationPassword === user.password" ng-click="postUser()">Sign Me Up</button>
+                      <button class="btn btn-lg btn-warning button-submit-sign-up" name="btn-signup" ng-click="$close()">Cancel</button>
+                  </td>
+              </tr>
+          </table>
+          <br>
+      </form>
     </div>
 </center>

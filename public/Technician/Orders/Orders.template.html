@@ -1,0 +1,45 @@
+<div id="page-top" class="index">
+<div class = "thumbnail">
+  <div class="col-md-10 col-md-offset-1">
+  <h2>My orders</h2>
+  <div class="table-responsive" style="width:100%; overflow:auto;">
+       <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
+         <thead>
+           <tr>
+             <th>Customer Email</th>
+             <th>Category</th>
+             <th>Manufacturer</th>
+             <th>Model</th>
+             <th>Issue</th>
+             <th>Description</th>
+             <th>Amount</th>
+             <th>Status</th>
+             <th>Ordered Date</th>
+             <th>Completed Date</th>
+           </tr>
+         </thead>
+         <tbody>
+            <tr ng-repeat="ord in listOrders">
+              <td>{{ord.email}}</td>
+              <td>{{ord.category}}</td>
+              <td>{{ord.manufacturer}}</td>
+              <td>{{ord.model}}</td>
+              <td>{{ord.issue}}</td>
+              <td>{{ord.description}}</td>
+              <td>{{ord.amount}}</td>
+              <td ng-if="ord.status === 0">Pending</td>
+              <td ng-if="ord.status === 1">In Progress</td>
+              <td ng-if="ord.status === 2">Completed</td>
+              <td ng-if="ord.status === 3">Closed</td>
+              <td>{{ord.orderedDate}}</td>
+              <td>{{ord.completedDate}}</td>
+            </tr>
+          </tbody>
+     </table>
+     <button type="button" class="btn btn-lg btn-light" ng-click="goToTechnician()">Back</button>
+     <button type="button" class="btn btn-lg btn-success btn-light" ng-click="goToissueGudiance()">Provide more services</button>
+  </div>
+</div>
+</div>
+</div>
+</div>

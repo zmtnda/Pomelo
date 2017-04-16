@@ -7,7 +7,16 @@ function(rscope, http, state, nDlg, route, persisService) {
 		this.addUser = function(emailP, passwordP, roleP, fNameP, lNameP, hRateP, cityP, zipP)
 		{
 			return http.post("User/", {email: emailP, passwordHash: passwordP, role: roleP,
-        firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP});
+        firstName: fNameP, lastName: lNameP, hourlyRate: hRateP, city: cityP, zip: zipP})
+        .then(function(){
+          console.log("in add user: " + emailP)
+          return http.post("Send/confirmEmail", {"email": emailP})// "success": 1/ 0 "response": already activated/ doesn't exist
+        })
+        .then(function(res){
+          if (res.success) {
+            // pop up: please verify the email.
+          }
+        })
 		}
 
     this.logout = function(){
@@ -35,8 +44,6 @@ function(rscope, http, state, nDlg, route, persisService) {
           return http.get("Ssns/" + location[location.length - 1]);
         })
         .then(function(response){
-        console.log("???" + JSON.stringify(result.data));
-
           rscope.loggedUser.id = result.data.id_log;
           rscope.loggedUser.email = emailParam;
           rscope.loggedUser.password = passwordParam;
@@ -44,6 +51,10 @@ function(rscope, http, state, nDlg, route, persisService) {
           rscope.loggedUser.tec_id = result.data.id_tec;
           rscope.loggedUser.firstName = result.data.firstName;
           rscope.loggedUser.lastName = result.data.lastName;
+          rscope.loggedUser.hourlyRate = result.data.hourlyRate;
+          rscope.loggedUser.city = result.data.city;
+          rscope.loggedUser.zip = result.data.zip;
+
           rscope.inSession = true;
           persisService.setInSession(true);
           persisService.setCookieData(emailParam, passwordParam);
@@ -58,7 +69,6 @@ function(rscope, http, state, nDlg, route, persisService) {
            }
         })
         .catch(function(err){
-           console.log("what ? ? "+ JSON.stringify(err));
             for (var key in rscope.loggedUser)
                 rscope.loggedUser.key = null;
             rscope.inSession = null;

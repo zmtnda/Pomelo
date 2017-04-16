@@ -10,24 +10,52 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
 
         if(Array.isArray(dataField))
         {
-          console.log(JSON.stringify(errorJSON));
-          dataField.forEach(function(ea){
-            if(ea["tag"] === "missingField")
-              tagError = "You are missing "
-            // Separate by camel case
-            errorStr = errorStr.concat(tagError + ": " + ea["params"][0] + '\n\n')
-          })
+          console.log("In errorMessageFormatter " + JSON.stringify(errorJSON));
+          errorStr = "You are missing field(s)."
         }
         else
         {
-          errorStr = dataField["code"]
-          if(errorStr === "ER_DUP_ENTRY")
-            errorStr = "This email has been used."
-          else {
-            errorStr = "Unkown error. Please contact us."
+          if(errorStr != null && errorStr.code != null)
+          {
+            errorStr = dataField["code"]
+            if(errorStr === "ER_DUP_ENTRY")
+            {
+              errorStr = "This email has been used."
+            }
+            else if(errorStr === "EENVELOPE")
+            {
+              errorStr = "This email doesn't exist."
+            }
+          }
+          else if(dataField.success === 0)// Check if the email actually exist in email providers.
+          {
+            console.log("ERROR: " + JSON.stringify(errorJSON));
+            errorStr = dataField.response;
+          }
+          else
+          {
+            console.log("ERROR: " + JSON.stringify(errorJSON));
+            errorStr = "Unkown error. Please contact us through pomelotech@pomelo.com."
           }
         }
-
         return errorStr
+      }
+
+      this.hasMetLengths = function(email, password, firstName, lastName, city, zip)
+      {
+        if(!city && !zip)
+        {
+          return email.length <= 128 && password.toString().length <= 32
+        }
+        else {
+          return email.length <= 128 && password.toString().length <= 32 && firstName.length <= 45 && lastName.length <= 45 && city.length <= 20 && zip.toString().length <= 20
+        }
+
+      }
+
+      this.checkEmailByRegex = function(email)
+      {
+        var reg = /^([A-Za-z0-9_\-\.]){1,}\@([A-Za-z0-9_\-\.]){1,}\.([A-Za-z]{2,4}){1,2}$/;
+        return reg.test(email)
       }
 }]);
