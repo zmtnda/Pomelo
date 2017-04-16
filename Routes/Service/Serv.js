@@ -7,36 +7,29 @@ router.baseURL = '/Serv';
 var formatDate = ', DATE_FORMAT(timestamp, \'\%b \%d \%Y \%h\:\%i \%p\') as formatDate';
 
 // Begin '/Serv/' functions
-
-
-
 /* Add a new service for the technician
 * Front end will make sure all the required params are attached with JSON
 * Valid only if technician himself
 * Valid only if the serivce is not already offered
-* which mean no duplicate modIss_id
+* which mean no duplicate modIss_id and catMan_id pair
 */
 
 router.post('/:tecId', function(req, res) {
   var vld = req.validator;
+  var tecId = req.session.tec_id;
   var qryParams = [];
+  var selectParams = [];
+  var dupModIssIds = [];
+  var updateParams = [];
   var modIssids =  req.body.offer.modIss_Id;
   var catManids =  req.body.offer.catMan_Id;
   var map = {};
-
-  //saving the initial state
-  for( var i = 0; i < modIssids.length; i++){
-    map[modIssids[i]] = new Array();
-    map[modIssids[i]].push(req.params.tecId);
-    map[modIssids[i]].push(modIssids[i]);
-    map[modIssids[i]].push(catManids[i]);
-    map[modIssids[i]].push(req.body.offer.servType[i]);
-    map[modIssids[i]].push(req.body.offer.amount[i]);
-    map[modIssids[i]].push(1);
-  }
-
+  var updateQuery = ' UPDATE ServicesOfferedByTech SET tec_id = ?, modIss_id = ?, catMan_id = ?, '
+                  + ' servType = ?, estAmount = ?, status = ? WHERE id_serTec = ? AND modIss_id = ? '
+  
   if(vld.checkTech()){
     connections.getConnection(res, function(cnn) {
+<<<<<<< Updated upstream
       var selectParams = [];
       for( var i = 0; i < modIssids.length; i++){
         qryParams.push('(?,?)');
@@ -76,36 +69,116 @@ router.post('/:tecId', function(req, res) {
           if (index > -1){
             dupModIssIds.push(results[i]);
             modIssids.splice(index, 1);
+=======
+      async.waterfall([
+        function(callback){
+          //map saves the initial state
+          for( var i = 0; i < modIssids.length; i++){
+            map[modIssids[i]] = new Array();
+            map[modIssids[i]].push(tecId);
+            map[modIssids[i]].push(modIssids[i]);
+            map[modIssids[i]].push(catManids[i]);
+            map[modIssids[i]].push(req.body.offer.servType[i]);
+            map[modIssids[i]].push(req.body.offer.amount[i]);
+            map[modIssids[i]].push(1);
           }
-        }
-        for( var i = 0; i < modIssids.length; i++){
-          qryParams.push('(?,?,?,?,?,?)');
-          for (var j = 0; j < 6; j++){
-            insertParams.push(map[modIssids[i]][j]);
+          for( var i = 0; i < modIssids.length; i++){
+            qryParams.push('(?,?,?)');
+            selectParams.push(tecId);
+            selectParams.push(modIssids[i]);
+            selectParams.push(catManids[i]);
           }
-          //insertParams.push(map[modIssids[i]]);
-          // console.log("map[modIssids[i] " + map[modIssids[i]]);
-        }
-        //insertParams.length  must be > 0
-        // bcoz of "if (results.length == modIssids.length)""
-        if (vld.check(insertParams.length > 0 , Tags.dupService)){
-          var insertQuery = ' INSERT INTO ServicesOfferedByTech (tec_id, modIss_id, '
-                          + 'catMan_id, servType, estAmount, status) VALUES '
-                          + qryParams.join(',');
-          cnn.query(insertQuery, insertParams, function(err, results) {
-            if(err) {
+                      console.log("tecId = " + tecId + "\nselectParams " + selectParams);
+
+          callback(null);
+        },
+        function(callback){
+          var selectQuery = ' SELECT id_serTec, modIss_id FROM ServicesOfferedByTech WHERE '
+      							+ ' (tec_Id , modIss_id, catMan_Id ) IN (' + qryParams.join(',') + ')'
+                    + ' ORDER BY modIss_id ';
+          cnn.query(selectQuery, selectParams, callback);
+        },
+        function(results, fields, callback){
+            // qryParams = [];
+            for( var i = 0; i < results.length; i++){
+              var index = modIssids.indexOf(results[i].modIss_id);
+              if (index > -1){
+                // qryParams.push('(?,?,?,?,?,?)');
+                dupModIssIds.push(results[i]);
+                // //adding entry that are already in the table that may be deactivated
+                // //we will overwrite the existing value with the new value
+                // for (var j = 0; j < 6; j++){
+                // updateParams.push(map[modIssids[i]][j]);
+                // }
+                //remove the item from the modIssids array
+                modIssids.splice(index, 1);
+              }
+            } 
+            for( var i = 0; i < dupModIssIds.length; i++){
+              // qryParams.push('(?,?,?,?,?,?)');
+              for (var j = 0; j < 6; j++){
+                updateParams.push(map[dupModIssIds[i].modIss_id][j]);
+              }
+            } 
+            console.log("dupModIssIds " + JSON.stringify(dupModIssIds));
+            console.log("updateParams " + updateParams);
+            console.log("modIssids " + JSON.stringify(modIssids));
+
+          callback(null);
+        },
+        function(callback){
+          if (updateParams.length > 0){
+                        console.log("Updating query " + updateQuery);
+                        console.log("dupModIssIds.id_serTec " + dupModIssIds.id_serTec);
+            cnn.query(updateQuery, updateParams, dupModIssIds.id_serTec, dupModIssIds.modIss_id, callback);
+          }
+          else
+            callback(null, 0, 0);
+        },
+        function(rows, fields, callback){
+                                  console.log("Updating return");
+
+          if (rows > 0)
+            console.log("updated rows = "+  rows);
+          qryParams = [];
+          for( var i = 0; i < modIssids.length; i++){
+              qryParams.push('(?,?,?,?,?,?)');
+              for (var j = 0; j < 6; j++){
+                insertParams.push(map[modIssids[i]][j]);
+              }
+>>>>>>> Stashed changes
+          }
+            callback(null);
+        },
+        function(callback){
+          if (insertParams.length > 0){
+            cnn.query(insertQuery, insertParams, callback);
+          //    function(err, results) {
+          //     if(err) {
+          //     res.status(400).json(err); // closes reponse
+          //     } else{
+          //     //expecting a return of array of services jsut inserted
+          //     if (dupModIssIds.length > 0){
+          //       res.json(dupModIssIds);}
+          //     else{
+          //       res.location(router.baseURL + '/' + results.affectedRows).end();}
+          //     }});
+          }
+        }], function(err, results){
+          if (err){
+            console.log("there is error checking duplicate " + JSON.stringify(err));
             res.status(400).json(err); // closes reponse
-            } else{
-            //expecting a return of array of services jsut inserted
-            if (dupModIssIds.length > 0){
-              res.json(dupModIssIds);}
+          } else if (dupModIssIds.length > 0){
+            //overwrite rows of those records
+              res.json(dupModIssIds);
+            }
             else{
-              res.location(router.baseURL + '/' + results.affectedRows).end();}
-            }});
-      }}});
-      cnn.release();
-    });
-  }});
+              res.location(router.baseURL + '/' + results.affectedRows).end();
+            }
+        });
+			cnn.release();
+  })}});
+      
   // Retrieve all the Services in the database.
   // AU must be admin.
   router.get('/all', function(req, res) {
@@ -126,7 +199,7 @@ router.post('/:tecId', function(req, res) {
                 + ' ) T3 ON T1.modIss_id = T3.id_modIss '
                 + ' ORDER BY tec_id ';
 
-  if(vld.checkPrsOK(LogUser)){
+  if(vld.checkAdmin(LogUser)){
   	connections.getConnection(res, function(cnn) {
   		cnn.query(selectQry, LogUser, function(err, result){
   			if(err){
@@ -140,6 +213,30 @@ router.post('/:tecId', function(req, res) {
   	});
   }});
 
+// modify SerivcesOfferedByTech table
+router.put('/:serTecId/issue', function(req, res) {
+  var vld = req.validator;
+  var body = req.body;
+  var tecId = req.session.tec_id;
+  var logId = req.session.id;
+	var pkey = req.params.serTecId;
+  /*Though id_serTec is PK also check tec_id to make sure to get the right data*/
+  var selectQry = ' UPDATE ServicesOfferedByTech SET ? WHERE id_serTec = ? AND tec_id = ? '
+
+  if (vld.checkPrsOK(logId)) {
+    connections.getConnection(res, function(cnn) {
+			cnn.query( selectQry, [body, pkey, tecId], function(err, result){
+				if(err){
+					res.status(400).json(err);
+				}
+				else{
+					res.json({success: 1});
+				}
+			});
+      cnn.release();
+		});
+  }
+});
 // Retrieve all the Services in the database.
 // AU must be technician himself.
 router.get('/:tecId/all', function(req, res) {
@@ -148,7 +245,11 @@ router.get('/:tecId/all', function(req, res) {
   var userId = req.session.id;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
+=======
+  var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount, status '
+>>>>>>> Stashed changes
 =======
   var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount, status '
 >>>>>>> Stashed changes
@@ -163,8 +264,7 @@ router.get('/:tecId/all', function(req, res) {
                 + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
                 + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
                 + ' ) T3 ON T1.modIss_id = T3.id_modIss '
-                + ' WHERE tec_id = ? '
-                + ' ORDER BY tec_id ';
+                + ' WHERE tec_id = ? ';
 	if(vld.checkPrsOK(userId)){
 		connections.getConnection(res, function(cnn) {
 			cnn.query(selectQry, LogUser, function(err, result){
@@ -179,32 +279,31 @@ router.get('/:tecId/all', function(req, res) {
 		});
 }});
 
-// Retrieve all the technician and associated services
-// based on the service chosen
-// AU must be admin
-router.get('/:servId/Services', function(req, res) {
+// Customer Retrieve all the technicians for the issue
+// No AU required
+router.get('/:issId/Issues', function(req, res) {
 	var vld = req.validator;
 	var user = req.session;
-	var servId = req.params.servId;
-  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
-                + ' FROM ServicesOfferedByTech T1 '
-                + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
-                + ' FROM CategoriesManufacturers T1 '
-                + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
-                + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
-                + ' ) T2 ON T1.catMan_id = T2.id_catMan '
-                + ' INNER JOIN (SELECT id_modIss, model, issue '
-                + ' FROM ModelsIssues T1 '
-                + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
-                + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
-                + ' ) T3 ON T1.modIss_id = T3.id_modIss '
-                + ' WHERE (catMan_id , modIss_id ) '
-                + ' IN (' + qryParams.join(',') + ')'
-                + ' ORDER BY modIss_id ';
-	console.log("get from ServicesOffer");
-	if(vld.check(user, Tags.noPermission)){
+	var issId = req.params.issId;
+    var selectQry = ' SELECT tech.firstName, tech.lastName, tech.hourlyRate, '
+                  + ' tech.city, tech.ratings, tech.bad_id, category, manufacturer, '
+                  + ' model, issue, servType, estAmount '
+                  + ' FROM ServicesOfferedByTech T1 '
+                  + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
+                  + ' FROM CategoriesManufacturers T1 '
+                  + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
+                  + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
+                  + ' ) T2 ON T1.catMan_id = T2.id_catMan '
+                  + ' INNER JOIN (SELECT id_modIss, model, issue '
+                  + ' FROM ModelsIssues T1 '
+                  + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
+                  + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
+                  + ' AND T3.id_iss = ? '
+                  + ' ) T3 ON T1.modIss_id = T3.id_modIss '
+                  + ' INNER JOIN Technicians tech ON T1.tec_id = tech.id_tec '
+                  + ' ORDER BY tech.ratings DESC';
 		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT *' + formatDate + ' FROM ServicesOffer WHERE serviceId = ? ', servId,
+			cnn.query(selectQry, issId,
 			function(err, result){
 				if(!err){
 					res.json(result);
@@ -216,233 +315,8 @@ router.get('/:servId/Services', function(req, res) {
 				}
 			});
 		});
-	}
-});
-// Begin '/Serv/:techId' functions.
 
-// Retrieve all the services provided by Serv owner or admin.
-// Returns
-//       Services     - URI of the services being offer,
-//			serviceName	 - services technician offer
-//			amount		 - the amount of services
-//       userId       - ID of the User making the Serv
-//       status       - 0 for open, 1 pending, 2 closed
-//       timeStamp    - Time of Serv start
-//       technicianId - of the creator of a service
-//
-router.get('/:techId', function(req, res) {
-	var vld = req.validator;
-	var techId = req.session && req.params.techId;
-
-	if(vld.checkPrsOK(techId, Tags.noPermission)){
-		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT *' + formatDate + ' FROM ServicesOffer T1 JOIN Services T2 '
-			+ ' WHERE T1.serviceId = T2.id  AND technicianId = ? ', techId,
-			function(err, result){
-				if(!err){
-					res.json(result);
-					cnn.release();
-				}
-				else{
-					res.status(404).end();
-					cnn.release();
-				}
-			});
-		});
-	}
-});
-// Begin '/Serv/:userId' functions.
-
-// Retrieve all the services requested by user or admin
-// Returns
-//       Services     - URI of the services being offer,
-//			serviceName	 - services technician offer
-//			amount		 - the amount of services
-//       userId       - ID of the User making the Serv
-//       status       - 0 for open, 1 pending, 2 closed
-//       timeStamp    - Time of Serv start
-//       technicianId - of the creator of a service
-//
-router.get('/:userId', function(req, res) {
-	var vld = req.validator;
-	var usrId = req.session && req.params.userId;
-
-	if(vld.checkPrsOK(userId, Tags.noPermission)){
-		connections.getConnection(res, function(cnn) {
-			cnn.query(' SELECT * FROM ServicesOffer T1 JOIN Services T2 '
-			+ ' WHERE T1.serviceId = T2.id  AND userId = ? ', usrId,
-			function(err, result){
-				if(!err){
-					res.json(result);
-					cnn.release();
-				}
-				else{
-					res.status(404).end();
-					cnn.release();
-				}
-			});
-		});
-	}
-});
-// Begin '/Serv/:servId' functions.
-
-// Retrieve Serv-specific info. AU must be Serv owner or admin or customer.
-// Returns
-//       Services     - URI of the challenge being played,
-//       userId       - ID of the User making the Serv
-//       status       - 0 for open, 1 pending, 2 closed
-//       timeStamp    - Time of Serv start
-//       technicianId - of the creator of a service
-//
-router.get('/:servId', function(req, res) {
-   var vld = req.validator;
-	var servId = req.params.servId;
-	var loginId = req.session && req.session.id;
-
-   connections.getConnection(res, function(cnn) {
-      cnn.query('SELECT * FROM ServicesOffer WHERE userId = ? && '
-		+ ' serviceId = ? OR technicianId = ? && serviceId = ? ',
-		[loginId, servId, logginId, servId],
-      function(err, result) {
-         if (!err)
-            res.json(result[0]);
-			else
-				res.status(404).end();
-			cnn.release();
-      });
-   });
 });
 
-//Update Service table status and Create an order history
-//if user order the service and have open ticket for that serivce
-router.put('/:servId/:techId/Order', function(req, res) {
-	var vld = req.validator;
-	var servId = req.session && req.params.servId;
-	var techId = req.params.techId;
 
-		connections.getConnection(res, function(cnn) {
-			//check if such servId exist and get techId
-			cnn.query(' SELECT * FROM ServicesOffer WHERE id = ? AND technicianId = ? ', [servId, techId],
-				function(err, result){
-					console.log("Order servId= " + servId );
-					if(vld.chain(result.length, Tags.notFound).check(!result[0].status == 1, Tags.alreadyTakenService)){
-						//check if service is already taken when status = 1
-						cnn.query(' UPDATE ServicesOffer SET status = ? WHERE id = ? AND technicianId = ? ', [1 ,servId, techId],
-						function(err){
-							if(err){
-								res.status(400).end();
-								console.log("Error Ordering the services");
-							}
-							else{
-								console.log("Successfully updated service=" + JSON.stringify(result[0]));
-								var order = {
-									'userId': req.session.id,
-									'technicianId': result[0].technicianId,
-									'serviceId': result[0].serviceId,
-									'whenCompleted': new Date()
-								};
-								//time to insert a new record in the orderhistory table
-								cnn.query(' INSERT INTO ServiceHistory SET ?', order,
-								function(err){
-									if(err){
-										console.log("Error in Serv/:servId:techId/Order" + JSON.stringify(order));
-										res.status(400).json(err);
-									}
-									else{
-										console.log("Successfully added order history");
-										res.end();
-									}
-										cnn.release();
-								});
-							}
-
-						});
-					}
-					else
-						cnn.release();
-				});
-
-	});
-});
-
-// Delete a service specified by <Servld>.
-//	Serv/:servId
-// Delete a service specified by <Servld>. Admin or Service Owner
-// If there is an open ticket for that service only Admin can delete it
-// status 0 for open, 1 pending, 2 closed, 3 cancel
-router.delete('/:servId/:techId/Order', function(req, res) {
-   // function is yet to be implemeneted.
-	var vld = req.validator;
-	var servId = req.params.servId;
-	var loginId = req.session && req.session.id;
-	var techId = req.params.techId;
-	console.log("id = " + servId);
-	connections.getConnection(res, function(cnn) {
-		cnn.query(' SELECT * FROM ServicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
-			function(err, result){
-				if(result.length ){
-					// if(result[0].status == 1){
-						// if(vld.checkAdmin() || loginId){
-						// 	//continue to delete the following query
-						// 	console.log("It is admin after all to delete the pending service Serv/:servId ");
-						// }
-						// else
-						// 	cnn.release();
-					// }
-					//delete it don't require else
-					cnn.query(' DELETE FROM ServicesOffer WHERE serviceId = ? AND technicianId = ? ', [servId, techId],
-						function(err){
-							if (err)
-								console.log("Error deleting Serv/:servId ");
-							res.end();
-							cnn.release();
-						});
-				}
-
-				else{
-					res.status(404).end();
-					cnn.release();
-				}
-
-		});
-	});
-   res.end();
-});
-//delete from service table
-// router.delete('/:servId', function(req, res) {
-//    // function is yet to be implemeneted.
-// 	var vld = req.validator;
-// 	var servId = req.params.servId;
-// 	var loginId = req.session && req.session.id;
-// 	connections.getConnection(res, function(cnn) {
-// 		cnn.query(' SELECT * FROM Services WHERE id = ? ', servId,
-// 			function(err, result){
-// 				if(result.length){
-// 					if(result[0].status == 1){
-// 						if(vld.checkAdmin()){
-// 							//continue to delete the following query
-// 							console.log("It is admin after all to delete the pending service Serv/:servId ");
-// 						}
-// 						else
-// 							cnn.release();
-// 					}
-//
-// 					//delete it don't require else
-// 					cnn.query(' DELETE FROM Services WHERE id = ? ', servId,
-// 						function(err){
-// 							if (err)
-// 								console.log("Error deleting Serv/:servId ");
-// 							res.end();
-// 							cnn.release();
-// 						});
-// 				}
-// 				else{
-// 					res.status(404).end();
-// 					cnn.release();
-// 				}
-//
-// 		});
-// 	});
-//    res.end();
-// });
 module.exports = router;
