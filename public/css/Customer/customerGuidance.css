@@ -12,6 +12,6 @@ body{
 }
 
 
-.buttonFocus:focus{
+.buttonFocus{
   background-color: gray;
 }

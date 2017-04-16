@@ -1,5 +1,5 @@
-app.controller('customerGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', "cates",
-  function(scope, state, logSer, http, rscope, noDlg, goto, cate)
+app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates",
+  function(scope, state, http, cate)
   {
     scope.customerData = {
       issue: undefined,
@@ -81,9 +81,12 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
       }
     }
 
-    scope.onClickCategory = function(selectedCate)
+    scope.onClickCategory = function(selectedCate, selectedId)
     {
       scope.customerData.category = selectedCate
+      console.log("selectID  " + selectedId)
+      var selection = angular.elemenet(document.querySelector(selectedId))
+      selection.addClass('buttonFocus')
     }
 
     scope.onClickManu = function(selectedManu)
