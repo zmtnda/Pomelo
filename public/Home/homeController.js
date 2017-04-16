@@ -1,5 +1,5 @@
 app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', '$timeout', "$uibModal",
-  function(scope, state, rscope,goSer, logSer, regPopSer, timeout, uibM) {
+  function(scope, state, rscope, goSer, logSer, regPopSer, timeout, uibM) {
     scope.user = {};
 
     scope.retnHm = function(){

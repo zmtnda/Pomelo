@@ -1,4 +1,4 @@
-app.controller('awaitingListPageController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'userListing',
+app.controller('transcationHistoryPageController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'userListing',
   function(scope, state, logSer, http, rscope, noDlg, userListing) {
 
     scope.sortValue = ""

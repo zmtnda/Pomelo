@@ -84,10 +84,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
            }]
          }
       })
-      .state('awaitingListing', {
-         url: '/technician/awaitingListing',
-         templateUrl: 'Technician/AwaitingListPage/awaitingListPage.template.html',
-         controller: 'awaitingListPageController',
+      .state('transcationHistory', {
+         url: '/technician/transcationHistory',
+         templateUrl: 'Technician/transcationHistory/transcationHistoryPage.template.html',
+         controller: 'transcationHistoryPageController',
          resolve:{
            userListing: ['$q', '$http', '$rootScope', function($q, http, rscope){
              return http.get('Receipt/'+ rscope.loggedUser.tec_id +'/technician')

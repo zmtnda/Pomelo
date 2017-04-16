@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="css/Customer/customerGuidance.css" type="text/css"/>
+<div class="container">{{customerData.category.category}}  > {{customerData.manufacturer.manufacturer}}</div>
 <div class="container vertical-align" style="height: 100%;">
      <div class="row vertical-align" style="width: 100%">
         <div class="col-md-2 thumbnail text-success moveLeftHover growHover" ng-hide="!hasGone" ng-click="onClickPrevious()">Previous</div>
@@ -11,7 +12,7 @@
         <div class="col-md-8" ng-if="hasGone && !hasClickedCate">
           <div class="container">
             <div class="col-md-offset-2">
-              <div ng-repeat="cate in cates"><h1><button class="growHover label label-default buttonFocus" ng-click="onClickCategory(cate)">{{cate.category}}</button></h1></div>
+              <div ng-repeat="cate in cates"><h1><button class="growHover label label-default " ng-click="onClickCategory(cate)"  ng-attr-id="{{'cate' + $index}}" >{{cate.category}}</button></h1></div>
             </div>
           </div>
         </div>
@@ -19,7 +20,7 @@
         <div class="col-md-8" ng-if="hasClickedCate && !hasClickedManu">
           <div class="container">
             <div class="col-md-offset-2">
-              <div ng-repeat="manu in manus"><h1><button class="growHover label label-default buttonFocus" ng-click="onClickManu(manu)">{{manu.manufacturer}}</button></h1></div>
+              <div ng-repeat="manu in manus"><h1><button class="growHover label label-default" ng-click="onClickManu(manu)"  ng-attr-id="{{'manu' + $index}}">{{manu.manufacturer}}</button></h1></div>
             </div>
           </div>        
         </div>
@@ -27,7 +28,7 @@
         <div class="col-md-8" ng-if="hasClickedManu && !hasClickedModel">
           <div class="container">
             <div class="col-md-offset-2">
-              <div ng-repeat="model in models"><h1><button class="growHover label label-default buttonFocus" ng-click="onClickModel(model)">{{model.model}}</button></h1></div>
+              <div ng-repeat="model in models track by $index"><h1><button class="growHover label label-default" ng-click="onClickModel(model, 'model' + $index)" ng-attr-id="{{'model' + $index}}" >{{model.model}}</button></h1></div>
             </div>
           </div>
         </div>
@@ -35,7 +36,7 @@
         <div class="col-md-8" ng-if="hasClickedModel">
           <div class="container">
             <div class="col-md-offset-2">
-              <div ng-repeat="issue in issues"><h1><button class="growHover label label-default buttonFocus" >{{issue.issue}}</button></h1></div>
+              <div ng-repeat="issue in issues"><h1><button class="growHover label label-default" >{{issue.issue}}</button></h1></div>
             </div>
           </div>
         </div>

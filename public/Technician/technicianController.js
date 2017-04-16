@@ -52,10 +52,10 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
       }
     }
 
-    scope.goToAwaitingPage = function()
+    scope.goToTranscationHistory = function()
     {
       timeout(function() {
-        state.go('awaitingListing');
+        state.go('transcationHistory');
       })
     }
 
