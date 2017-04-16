@@ -44,17 +44,10 @@ router.post('/:tecId', function(req, res) {
         selectParams.push(modIssids[i]);
       }
       var serQuery = ' SELECT modIss_id FROM ServicesOfferedByTech WHERE '
-<<<<<<< Updated upstream
       							+ ' (tec_Id , modIss_id ) IN (' + qryParams.join(',') + ')'
-=======
-      							+ ' (tec_Id , modIss_id, catMan_Id ) IN (' + qryParams.join(',') + ')'
-                    + ' AND status <> 0 '
->>>>>>> Stashed changes
                     + ' ORDER BY modIss_id ';
       cnn.query(serQuery, selectParams, function(err, results) {
       if(err) {
-                console.log("there is error checking duplicate ");
-
         res.status(400).json(err); // closes reponse
       }
       //if results return 0 no duplicate just insert all
@@ -62,12 +55,8 @@ router.post('/:tecId', function(req, res) {
       //if < has some duplicate
       if (results.length == modIssids.length){
         //res.location(router.baseURL + '/' + results).end();
-                        console.log("found duplicate ");
-
         res.json(results);
       } else {
-                        console.log("there is no duplicate ");
-
         var dupModIssIds = [];
         var insertParams = [];
         qryParams = [];
@@ -112,7 +101,7 @@ router.post('/:tecId', function(req, res) {
   var vld = req.validator;
   var LogUser = req.session.id;
 
-  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount, status '
+  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
                 + ' FROM ServicesOfferedByTech T1 '
                 + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
                 + ' FROM CategoriesManufacturers T1 '
@@ -147,11 +136,7 @@ router.get('/:tecId/all', function(req, res) {
 	var LogUser = req.params.tecId;
   var userId = req.session.id;
 
-<<<<<<< Updated upstream
   var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
-=======
-  var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount, status '
->>>>>>> Stashed changes
                 + ' FROM ServicesOfferedByTech T1 '
                 + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
                 + ' FROM CategoriesManufacturers T1 '
