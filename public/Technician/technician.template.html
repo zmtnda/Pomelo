@@ -1,16 +1,9 @@
-<link href="css/Technician/freelancer.min.css" rel="stylesheet" type="text/css">
+<!-- <link href="css/Technician/shop-homepage.css" rel="stylesheet" type="text/css"> -->
 
-<div id="page-top" class="index">
+<!-- <div id="page-top" class="index"> -->
   <!-- Header -->
-  <section class="success" id="about">
-
-            <div class="col-md-offset-1">
-                <img class="img-responsive" src="img/profile.png" alt="">
-
-                    <span class="skills">Android - IOS - User Experience Designer</span>
-                    <hr class="star-light">
-            </div>
-          <br>
+<body class="container">
+  <!-- <section class="success" id="about">
 
           <div class="row">
             <div class="col-md-offset-1">
@@ -22,289 +15,194 @@
                   <button type="button" class="btn btn-warning" style="width: 20%" ng-click="deleteTechnician()">Delete this Account</button>
             </div>
 
-            <br>
-            <div class="col-md-10 col-md-offset-1" style="color:black">
-
-              <div class = "thumbnail" ng-if="isShowListOrders">
-                <h2>My orders</h2>
-                <div class="table-responsive" style="width:100%; overflow:auto;">
-                     <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
-                       <thead>
-                         <tr>
-                           <th>Customer Email</th>
-                           <th>Category</th>
-                           <th>Manufacturer</th>
-                           <th>Model</th>
-                           <th>Issue</th>
-                           <th>Description</th>
-                           <th>Amount</th>
-                           <th>Status</th>
-                           <th>Ordered Date</th>
-                           <th>Completed Date</th>
-                         </tr>
-                       </thead>
-                       <tbody>
-                          <tr ng-repeat="ord in listOrders">
-                            <td>{{ord.email}}</td>
-                            <td>{{ord.category}}</td>
-                            <td>{{ord.manufacturer}}</td>
-                            <td>{{ord.model}}</td>
-                            <td>{{ord.issue}}</td>
-                            <td>{{ord.description}}</td>
-                            <td>{{ord.amount}}</td>
-                            <td ng-if="ord.status === 0">Pending</td>
-                            <td ng-if="ord.status === 1">In Progress</td>
-                            <td ng-if="ord.status === 2">Completed</td>
-                            <td ng-if="ord.status === 3">Closed</td>
-                            <td>{{ord.orderedDate}}</td>
-                            <td>{{ord.completedDate}}</td>
-                          </tr>
-                        </tbody>
-                   </table>
-                </div>
-              </div>
-
-            </div>
-
-              <!-- SHOW ALL SERVICES -->
-            <div class="col-md-10 col-md-offset-1" style="color:black">
-             <div class = "thumbnail" ng-if="isShowListServices">
-               <h2>My Services</h2>
-               <div class="table-responsive" style="width:100%; overflow:auto;">
-                    <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
-                      <thead>
-                        <tr>
-                          <th>Category</th>
-                          <th>Manufacturer</th>
-                          <th>Model</th>
-                          <th>Issue</th>
-                          <th>Service Type</th>
-                          <th>Estimated Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                         <tr ng-repeat="ser in listServices">
-                           <td>{{ser.category}}</td>
-                           <td>{{ser.manufacturer}}</td>
-                           <td>{{ser.model}}</td>
-                           <td>{{ser.issue}}</td>
-                           <td ng-if="ser.servType === 0">Item Based</td>
-                           <td ng-if="ser.servType === 1">Time Based</td>
-                           <td>{{ser.estAmount}}</td>
-                         </tr>
-                       </tbody>
-                      <!--<tbody>
-                        <tr ng-repeat="ser in listServices">
-                          <td>{{ser.category}}</td>
-                          <td>{{ser.manufacturer}}</td>
-                          <td>{{ser.model}}</td>
-                          <td>{{ser.issue}}</td>
-                          <td ng-if="ser.status === 0">Open</td>
-                          <td ng-if="ser.status === 1">Pending</td>
-                          <td ng-if="ser.status === 2">Closed</td>
-                          <td>{{ser.formatDate}}</td>
-                          <td ng-if="ser.status === 1">
-                            <button type="button" class="btn btn-primary" style="width:75%;" ng-click="completeService(ser.id, ser.amount, ser.technicianId)">Complete</button>
-                          </td >
-                          <td ng-if="ser.status === 1">
-                            <button type="button" class="btn btn-primary" style="width:75%;" ng-click="cancelService(ser.id, ser.amount, ser.technicianId)">Cancel</button>
-                          </td>
-                          <td ng-if="ser.status === 0">
-                          </td>
-                          <td ng-if="ser.status === 0">
-                            <button type="button" class="btn btn-primary" style="width:75%;" ng-click="deleteService(ser.id, ser.technicianId)">Delete</button>
-                          </td>
-                        </tr>
-                      </tbody> -->
-                  </table>
-               </div>
-             </div>
            </div>
-        </div>
-  </section>
-
-
-<section id="about">
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-12 text-center">
-              <h2>About Me</h2>
-              <hr class="star-primary">
-          </div>
-          <p>My name is Tech1, I currently have had experience in repair and fix Android phone for over 5 years.</p>
-          <p>My goal is to create wonderful custoner service, with fast repair time, and low price.</p>
-      </div>
-  </div>
-
-</section>
-  <!-- Portfolio Grid Section -->
-  <section id="portfolio">
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-12 text-center">
-                  <h2>Portfolio</h2>
-                  <hr class="star-primary">
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-sm-4 portfolio-item">
-                  <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                      <div class="caption">
-                          <div class="caption-content">
-                              <i class="fa fa-search-plus fa-3x"></i>
-                          </div>
-                      </div>
-                      <img src="img/portfolio/cabin.png" class="img-responsive" alt="">
-                  </a>
-              </div>
-              <div class="col-sm-4 portfolio-item">
-                  <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-                      <div class="caption">
-                          <div class="caption-content">
-                              <i class="fa fa-search-plus fa-3x"></i>
-                          </div>
-                      </div>
-                      <img src="img/portfolio/cake.png" class="img-responsive" alt="">
-                  </a>
-              </div>
-              <div class="col-sm-4 portfolio-item">
-                  <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                      <div class="caption">
-                          <div class="caption-content">
-                              <i class="fa fa-search-plus fa-3x"></i>
-                          </div>
-                      </div>
-                      <img src="img/portfolio/circus.png" class="img-responsive" alt="">
-                  </a>
-              </div>
-              <div class="col-sm-4 portfolio-item">
-                  <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
-                      <div class="caption">
-                          <div class="caption-content">
-                              <i class="fa fa-search-plus fa-3x"></i>
-                          </div>
-                      </div>
-                      <img src="img/portfolio/game.png" class="img-responsive" alt="">
-                  </a>
-              </div>
-              <div class="col-sm-4 portfolio-item">
-                  <a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
-                      <div class="caption">
-                          <div class="caption-content">
-                              <i class="fa fa-search-plus fa-3x"></i>
-                          </div>
-                      </div>
-                      <img src="img/portfolio/safe.png" class="img-responsive" alt="">
-                  </a>
-              </div>
-              <div class="col-sm-4 portfolio-item">
-                  <a href="#portfolioModal6" class="portfolio-link" data-toggle="modal">
-                      <div class="caption">
-                          <div class="caption-content">
-                              <i class="fa fa-search-plus fa-3x"></i>
-                          </div>
-                      </div>
-                      <img src="img/portfolio/submarine.png" class="img-responsive" alt="">
-                  </a>
-              </div>
-          </div>
-      </div>
-  </section>
-
-  <!-- <section data-brackets-id="4060" class="success" id="about">
-          <div data-brackets-id="4061" class="container">
-              <div data-brackets-id="4062" class="row">
-
-              </div>
-        </div>
   </section> -->
+  <div class="container">
+
+          <div class="row">
+
+              <div class="col-md-3">
+                  <p class="lead">Shop Name</p>
+                  <div class="list-group">
+                      <a href="#" class="list-group-item" ng-click="goToissueGudiance()">Provide A Service</a>
+                      <a href="#" class="list-group-item" ng-click="goToAwaitingPage()">Awaiting Offers</a>
+                      <a href="#" class="list-group-item" ng-click="gotoOrders()">My Orders</a>
+                      <a href="#" class="list-group-item" ng-click="goToServices()">My Services</a>
+                      <a href="#" class="list-group-item list-group-item-action list-group-item-warning" ng-click="modifyTechnician()">Update Account</a>
+                      <a href="#" class="list-group-item list-group-item-action list-group-item-danger" ng-click="deleteTechnician()">Delete this Account</a>
+                  </div>
+              </div>
+
+              <div class="col-md-9">
+
+                  <div class="row carousel-holder">
+
+                      <div class="col-md-12">
+                          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                              <ol class="carousel-indicators">
+                                  <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                  <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                  <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                              </ol>
+                              <div class="carousel-inner">
+                                  <div class="item active">
+                                      <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                                  </div>
+                                  <div class="item">
+                                      <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                                  </div>
+                                  <div class="item">
+                                      <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                                  </div>
+                              </div>
+                              <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                                  <span class="glyphicon glyphicon-chevron-left"></span>
+                              </a>
+                              <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                                  <span class="glyphicon glyphicon-chevron-right"></span>
+                              </a>
+                          </div>
+                      </div>
+
+                  </div>
+
+                  <div class="row">
+
+                      <div class="col-sm-4 col-lg-4 col-md-4">
+                          <div class="thumbnail">
+                              <img src="http://placehold.it/320x150" alt="">
+                              <div class="caption">
+                                  <h4 class="pull-right">$24.99</h4>
+                                  <h4><a href="#">First Product</a>
+                                  </h4>
+                                  <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
+                              </div>
+                              <div class="ratings">
+                                  <p class="pull-right">15 reviews</p>
+                                  <p>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-sm-4 col-lg-4 col-md-4">
+                          <div class="thumbnail">
+                              <img src="http://placehold.it/320x150" alt="">
+                              <div class="caption">
+                                  <h4 class="pull-right">$64.99</h4>
+                                  <h4><a href="#">Second Product</a>
+                                  </h4>
+                                  <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              </div>
+                              <div class="ratings">
+                                  <p class="pull-right">12 reviews</p>
+                                  <p>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star-empty"></span>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-sm-4 col-lg-4 col-md-4">
+                          <div class="thumbnail">
+                              <img src="http://placehold.it/320x150" alt="">
+                              <div class="caption">
+                                  <h4 class="pull-right">$74.99</h4>
+                                  <h4><a href="#">Third Product</a>
+                                  </h4>
+                                  <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              </div>
+                              <div class="ratings">
+                                  <p class="pull-right">31 reviews</p>
+                                  <p>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star-empty"></span>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-sm-4 col-lg-4 col-md-4">
+                          <div class="thumbnail">
+                              <img src="http://placehold.it/320x150" alt="">
+                              <div class="caption">
+                                  <h4 class="pull-right">$84.99</h4>
+                                  <h4><a href="#">Fourth Product</a>
+                                  </h4>
+                                  <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              </div>
+                              <div class="ratings">
+                                  <p class="pull-right">6 reviews</p>
+                                  <p>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star-empty"></span>
+                                      <span class="glyphicon glyphicon-star-empty"></span>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-sm-4 col-lg-4 col-md-4">
+                          <div class="thumbnail">
+                              <img src="http://placehold.it/320x150" alt="">
+                              <div class="caption">
+                                  <h4 class="pull-right">$94.99</h4>
+                                  <h4><a href="#">Fifth Product</a>
+                                  </h4>
+                                  <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                              </div>
+                              <div class="ratings">
+                                  <p class="pull-right">18 reviews</p>
+                                  <p>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star"></span>
+                                      <span class="glyphicon glyphicon-star-empty"></span>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-sm-4 col-lg-4 col-md-4">
+                          <h4><a href="#">Like this template?</a>
+                          </h4>
+                          <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
+                          <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
+                      </div>
+
+                  </div>
+
+              </div>
+
+          </div>
+
+      </div>
+
+
 
   <!-- SHOW PROMPTING USER'S NEW INFO-->
-  <section ng-if="isShowPersonalField" id="userUpdate">
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-12 text-center">
-                  <h2>Personal Information</h2>
-                  <hr class="star-primary">
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-lg-8 col-lg-offset-2">
-                  <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
-                  <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                  <form name="sentMessage" id="contactForm" novalidate>
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>First Name</label>
-                              <input type="text" class="form-control" ng-model="user.firstName" placeholder="First Name" id="name" required data-validation-required-message="Please enter your first name.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Last Name</label>
-                              <input type="text" class="form-control" ng-model="user.lastName" placeholder="Last Name" id="name" required data-validation-required-message="Please enter your last name.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
 
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Email Address</label>
-                              <input type="email" class="form-control" placeholder="Email Address" ng-model="user.email" id="email" required data-validation-required-message="Please enter your email address.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
-
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Password</label>
-                              <input type="password" class="form-control" ng-model="user.password" placeholder="Password" id="email" required data-validation-required-message="Please enter your password.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
-
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Hourly Rate</label>
-                              <input type="number" class="form-control" ng-model="user.hourlyRate" placeholder="Hourly Rate" id="hourlyRate" required data-validation-required-message="Please enter your Hourly Rate.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
-
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>City</label>
-                              <input type="text" class="form-control" placeholder="City" ng-model="user.city" id="city" required data-validation-required-message="Please enter your city.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
-
-                      <div class="row control-group">
-                          <div class="form-group col-xs-12 floating-label-form-group controls">
-                              <label>Zip Code</label>
-                              <input type="number" class="form-control" placeholder="Zip code" ng-model="user.zip" id="zip" required data-validation-required-message="Please enter your zip code.">
-                              <p class="help-block text-danger"></p>
-                          </div>
-                      </div>
-
-                      <br>
-                      <div id="success"></div>
-                      <div class="row">
-                          <div class="form-group col-xs-12">
-                              <button type="submit" ng-click="postUser()" class="btn btn-success btn-lg">Confirm Changes</button>
-                          </div>
-                      </div>
-                  </form>
-              </div>
-          </div>
-      </div>
-  </section>
 
   <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-  <div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
+  <!-- <div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
       <a class="btn btn-primary" href="#page-top">
           <i class="fa fa-chevron-up"></i>
       </a>
-  </div>
-</div>
+  </div> -->
+<!-- </div> -->
+</body>
