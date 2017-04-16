@@ -13,58 +13,91 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
     scope.hasClickedCate = false
     scope.hasClickedManu = false
     scope.hasClickedModel = false
+    scope.hasClickedIssue = false
 
     scope.cates = cate
     scope.models = undefined
     scope.manus = undefined
     scope.issues = undefined
 
-    scope.showMap = function()
+    scope.onClickNext = function()
     {
-      scope.hasGone = true
+      if(!scope.hasGone)
+      {
+        scope.hasGone = true
+      }
+      else if(!scope.hasClickedCate)
+      {
+        http.get('Cate/' + scope.customerData.category.id_cat + '/manu')
+        .then(function(res){
+          scope.manus = res.data
+          scope.hasClickedCate = true
+        })
+      }
+      else if(!scope.hasClickedManu)
+      {
+        http.get('Cate/' + scope.customerData.category.id_cat + '/' + scope.customerData.manufacturer.manId + '/model')
+        .then(function(res){
+          scope.models = res.data
+          scope.hasClickedManu = true
+        })
+      }
+      else if(!scope.hasClickedModel)
+      {
+        http.get('Cate/' + scope.customerData.model.modelId + '/issues')
+        .then(function(res){
+          scope.issues = res.data
+          scope.hasClickedModel = true
+        })
+      }
+      else if(!scope.hasClickedIssue)
+      {
+
+
+      }
     }
 
-    scope.showCategory = function(){
-      scope.hasMapped = true
-      scope.hasGone = false
-
+    scope.onClickPrevious = function()
+    {
+      if(scope.hasClickedIssue)
+      {
+        scope.hasClickedIssue = false
+      }
+      if(scope.hasClickedModel)
+      {
+        scope.hasClickedModel = false
+      }
+      else if(scope.hasClickedManu)
+      {
+        scope.hasClickedManu = false
+      }
+      else if(scope.hasClickedCate)
+      {
+        scope.hasClickedCate = false
+      }
+      else if(scope.hasGone)
+      {
+        scope.hasGone = false
+      }
     }
 
-    scope.onClickCategory = function(selectedCate){
-      http.get('Cate/' + selectedCate.id_cat + '/manu')
-      .then(function(res){
-        scope.manus = res.data
-        scope.customerData.category = selectedCate
-        scope.hasClickedCate = true
-      })
+    scope.onClickCategory = function(selectedCate)
+    {
+      scope.customerData.category = selectedCate
     }
 
-    scope.onClickManu = function(selectedManu){
-      http.get('Cate/' + scope.customerData.category.id_cat + '/' + selectedManu.manId + '/model')
-      .then(function(res){
-        scope.models = res.data
-        scope.customerData.manufacturer = selectedManu
-        scope.hasClickedManu = true
-      })
+    scope.onClickManu = function(selectedManu)
+    {
+      scope.customerData.manufacturer = selectedManu
     }
 
-    scope.onClickModel = function(selectedModel){
-      http.get('Cate/' + selectedModel.modelId + '/issues')
-      .then(function(res){
-        scope.issues = res.data
-        scope.customerData.model = selectedModel
-        scope.hasClickedModel = true
-      })
+    scope.onClickModel = function(selectedModel)
+    {
+      scope.customerData.model = selectedModel
     }
 
-    scope.onClickIssue = function(selectedModel){
-      /*http.get('Cate/' + selectedModel.modelId + '/issue')
-      .then(function(res){
-        scope.issues = res.data
-        scope.customerData.model = selectedModel
-        scope.hasClickedModel = true
-      })*/
+    scope.onClickIssue = function(selectedIssue)
+    {
+
     }
-
-
   }]);
