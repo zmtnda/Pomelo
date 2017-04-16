@@ -19,6 +19,7 @@ router.post('/:tecId', function(req, res) {
   var tecId = req.session.tec_id;
   var qryParams = [];
   var selectParams = [];
+  var insertParams = [];
   var dupModIssIds = [];
   var updateParams = [];
   var modIssids =  req.body.offer.modIss_Id;
@@ -78,18 +79,19 @@ router.post('/:tecId', function(req, res) {
               for (var j = 0; j < 6; j++){
                 updateParams.push(map[dupModIssIds[i].modIss_id][j]);
               }
+              updateParams.push(dupModIssIds[i].id_serTec);
+              updateParams.push(dupModIssIds[i].modIss_id);
             } 
             console.log("dupModIssIds " + JSON.stringify(dupModIssIds));
             console.log("updateParams " + updateParams);
             console.log("modIssids " + JSON.stringify(modIssids));
-
           callback(null);
         },
         function(callback){
           if (updateParams.length > 0){
                         console.log("Updating query " + updateQuery);
-                        console.log("dupModIssIds.id_serTec " + dupModIssIds.id_serTec);
-            cnn.query(updateQuery, updateParams, dupModIssIds.id_serTec, dupModIssIds.modIss_id, callback);
+                        console.log("dupModIssIds" + JSON.stringify(dupModIssIds));
+            cnn.query(updateQuery, updateParams, callback);
           }
           else
             callback(null, 0, 0);
@@ -105,25 +107,20 @@ router.post('/:tecId', function(req, res) {
                 insertParams.push(map[modIssids[i]][j]);
               }
           }
-            callback(null);
+          console.log("insertParams "+  insertParams);
+          callback(null);
         },
         function(callback){
           if (insertParams.length > 0){
+            var insertQuery = ' INSERT INTO ServicesOfferedByTech (tec_id, modIss_id, '
+                           + 'catMan_id, servType, estAmount, status) VALUES '
+                           + qryParams.join(',');
             cnn.query(insertQuery, insertParams, callback);
-          //    function(err, results) {
-          //     if(err) {
-          //     res.status(400).json(err); // closes reponse
-          //     } else{
-          //     //expecting a return of array of services jsut inserted
-          //     if (dupModIssIds.length > 0){
-          //       res.json(dupModIssIds);}
-          //     else{
-          //       res.location(router.baseURL + '/' + results.affectedRows).end();}
-          //     }});
-          }
+        }
+        else
+          callback(null);
         }], function(err, results){
           if (err){
-            console.log("there is error checking duplicate " + JSON.stringify(err));
             res.status(400).json(err); // closes reponse
           } else if (dupModIssIds.length > 0){
             //overwrite rows of those records
