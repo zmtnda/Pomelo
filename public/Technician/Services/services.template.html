@@ -1,17 +1,21 @@
 <div id="page-top" class="index">
 <div class = "thumbnail">
+  <div class="col-md-10 col-md-offset-1">
+    
   <h2>My Services</h2>
+ 
   <div class="table-responsive" style="width:100%; overflow:auto;">
        <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
          <thead>
            <tr>
-             <th>Category</th>
-             <th>Manufacturer</th>
-             <th>Model</th>
-             <th>Issue</th>
-             <th>Service Type</th>
-             <th>Estimated Amount</th>
-             <!-- <th>Delete Service</th> -->
+             <th style="width: 8%">Category</th>
+             <th style="width: 10%">Manufacturer</th>
+             <th style="width: 10%">Model</th>
+             <th style="width: 15%">Issue</th>
+             <th style="width: 17%">Service Type</th>
+             <th style="width: 7%">Estimated Amount</th>
+             <th style="width: 5%">Enabled</th>
+             <th style="width: 10%">Confirm Changes</th> 
            </tr>
          </thead>
          <tbody>
@@ -31,11 +35,13 @@
               </td>
               <!-- <td>{{ser.estAmount}}</td> -->
               <td>
-                <span>
-                  <input type="number" name="input" style="width: 37%" ng-model="ser.estAmount">
-                  <button type="button" class="btn btn-sm btn-success" style="width: 38%" ng-click="updatePrice()">Update</button>
-                  <button type="button" class="btn btn-danger" style="width: 20%" ng-click="deleteService()">x</button>
-                </span>
+                  <input type="number" name="input" style="width: 100%" ng-model="ser.estAmount">
+              </td>
+              <td>
+                <input type="checkbox">
+              </td>
+              <td>
+                <button type="button" class="btn btn-sm btn-success" style="width: 100%" ng-click="updatePrice()">Update</button>
               </td>
 
             </tr>
@@ -43,6 +49,7 @@
      </table>
      <button type="button" class="btn btn-lg btn-light" ng-click="goToTechnician()">Back</button>
      <button type="button" class="btn btn-lg btn-success btn-light" ng-click="goToissueGudiance()">Provide more services</button>
+  </div>
   </div>
 </div>
 </div>
