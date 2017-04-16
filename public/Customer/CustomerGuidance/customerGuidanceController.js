@@ -89,9 +89,6 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
     scope.onClickCategory = function(selectedCate, selectedId)
     {
       scope.customerData.category = selectedCate
-      console.log("selectID  " + selectedId)
-      var selection = angular.elemenet(document.querySelector(selectedId))
-      selection.addClass('buttonFocus')
     }
 
     scope.onClickManu = function(selectedManu)
