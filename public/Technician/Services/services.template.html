@@ -20,8 +20,15 @@
               <td>{{ser.manufacturer}}</td>
               <td>{{ser.model}}</td>
               <td>{{ser.issue}}</td>
-              <td ng-if="ser.servType === 0">Item Based ($/service)</td>
-              <td ng-if="ser.servType === 1">Time Based ($/hour)</td>
+              <!-- <td ng-if="ser.servType === 0">Item Based ($/service)</td>
+              <td ng-if="ser.servType === 1">Time Based ($/hour)</td> -->
+              <td>
+                <select
+                  ng-model="ser.servType">
+                  <option ng-selected="ser.servType === 0">Item Based ($/service)</option>
+                  <option ng-selected="ser.servType === 1">Time Based ($/hour)</option>
+                </select>
+              </td>
               <!-- <td>{{ser.estAmount}}</td> -->
               <td>
                 <span>

@@ -135,6 +135,7 @@ router.put('/:serTecId/issue', function(req, res) {
   var tecId = req.session.tec_id;
   var logId = req.session.id;
 	var pkey = req.params.serTecId;
+  /*Though id_serTec is PK also check tec_id to make sure to get the right data*/
   var selectQry = ' UPDATE ServicesOfferedByTech SET ? WHERE id_serTec = ? AND tec_id = ? '
 
   if (vld.checkPrsOK(logId)) {

@@ -1,43 +1,53 @@
 <link rel="stylesheet" href="css/Customer/customerGuidance.css" type="text/css"/>
-<body class="container" ng-style="toggleBackground">
-     <!-- <li class = "previous disabled"><a>&larr; Back</a></li>
-     <span ng-if="customerData.category">{{customerData.category.category}} > </span>
-     <span ng-if="customerData.manufacturer">{{customerData.manufacturer.manufacturer}} > </span>
-     <span ng-if="customerData.model">{{customerData.model.model}} > </span>
-     <span ng-if="customerData.issue">{{customerData.issue.issue}} > </span>
-     <li class = "next"><a>Next &rarr;</a></li>-->
+<div class="container vertical-align" style="height: 100%;">
+     <div class="row vertical-align" style="width: 100%">
+        <div class="col-md-2 thumbnail text-success moveLeftHover growHover" ng-hide="!hasGone" ng-click="onClickPrevious()">Previous</div>
 
-    <button type="button" class="btn btn-danger" ng-click="showCategory()">Go to category(for testing)</button>
-    <div class="col-lg-4 col-md-offset-4" id="centeredBox" ng-if="!hasGone && !hasMapped">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Please enter your zip code...">
-        <span class="input-group-btn">
-          <button class="btn btn-success" ng-click="showMap()" type="button">Go!</button>
-        </span>
-      </div>
-    </div>
+        <div class="col-md-8" ng-if="!hasGone">
+          <input type="text" class="form-control" placeholder="Please enter your zip code...">
+          </br>
+        </div>
 
-    <iframe ng-if="hasGone" width="100%" height="100%" style="padding-top:10px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3477.654539657165!2d-120.66486252917552!3d35.30519539043805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b4054c3551%3A0x98b3b48a29d99103!2sCalifornia+Polytechnic+State+University!5e0!3m2!1sen!2sus!4v1481095087621"></iframe>
-      <br />
-      <small>
-          <a href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3477.654539657165!2d-120.66486252917552!3d35.30519539043805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b4054c3551%3A0x98b3b48a29d99103!2sCalifornia+Polytechnic+State+University!5e0!3m2!1sen!2sus!4v1481095087621"></a>
-      </small>
-    </iframe>
+        <div class="col-md-8" ng-if="hasGone && !hasClickedCate">
+          <div class="container">
+            <div class="col-md-offset-2">
+              <div ng-repeat="cate in cates"><h1><button class="growHover label label-default buttonFocus" ng-click="onClickCategory(cate)">{{cate.category}}</button></h1></div>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-md-4 col-md-offset-4" id="centeredBoxForCate" ng-if="hasMapped && !hasClickedCate">
-      <div ng-repeat="cate in cates"><h1><button class="label label-default" ng-click="onClickCategory(cate)">{{cate.category}}</button></h1></div>
-    </div>
+        <div class="col-md-8" ng-if="hasClickedCate && !hasClickedManu">
+          <div class="container">
+            <div class="col-md-offset-2">
+              <div ng-repeat="manu in manus"><h1><button class="growHover label label-default buttonFocus" ng-click="onClickManu(manu)">{{manu.manufacturer}}</button></h1></div>
+            </div>
+          </div>        
+        </div>
 
-    <div class="col-md-4 col-md-offset-4" id="centeredBoxForCate" ng-if="hasClickedCate && !hasClickedManu">
-      <div ng-repeat="manu in manus"><h1><button class="label label-default" ng-click="onClickManu(manu)">{{manu.manufacturer}}</button></h1></div>
-    </div>
+        <div class="col-md-8" ng-if="hasClickedManu && !hasClickedModel">
+          <div class="container">
+            <div class="col-md-offset-2">
+              <div ng-repeat="model in models"><h1><button class="growHover label label-default buttonFocus" ng-click="onClickModel(model)">{{model.model}}</button></h1></div>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-md-4 col-md-offset-4" id="centeredBoxForCate" ng-if="hasClickedManu && !hasClickedModel">
-      <div ng-repeat="model in models"><h1><button class="label label-default" ng-click="onClickModel(model)">{{model.model}}</button></h1></div>
-    </div>
+        <div class="col-md-8" ng-if="hasClickedModel">
+          <div class="container">
+            <div class="col-md-offset-2">
+              <div ng-repeat="issue in issues"><h1><button class="growHover label label-default buttonFocus" >{{issue.issue}}</button></h1></div>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-md-4 col-md-offset-4" id="centeredBoxForCate" ng-if="hasClickedModel">
-      <div ng-repeat="issue in issues"><h1><button class="label label-default">{{issue.issue}}</button></h1></div>
-    </div>
+        <div class="col-md-2 thumbnail text-success moveRightHover growHover" ng-click="onClickNext()">Next</div>
+     </div>
+</div>
 
-</body>
+
+<!-- <iframe ng-if="hasGone" width="100%" height="100%" style="padding-top:10px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3477.654539657165!2d-120.66486252917552!3d35.30519539043805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b4054c3551%3A0x98b3b48a29d99103!2sCalifornia+Polytechnic+State+University!5e0!3m2!1sen!2sus!4v1481095087621"></iframe>
+  <br />
+  <small>
+      <a href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3477.654539657165!2d-120.66486252917552!3d35.30519539043805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b4054c3551%3A0x98b3b48a29d99103!2sCalifornia+Polytechnic+State+University!5e0!3m2!1sen!2sus!4v1481095087621"></a>
+  </small>
+</iframe> -->

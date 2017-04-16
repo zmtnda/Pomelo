@@ -1,35 +1,3 @@
-app.controller("forgotPasswordControoler", ['$scope', "$http", "errorMessageFormatter", "$uibModalInstance",
-  function(scope, http, emf, uibIns){
-
-  scope.emailInput = undefined;
-  scope.errMessage = undefined;
-
-  scope.onClickSend = function (email)
-  {
-    if(!emf.checkEmailByRegex(scope.emailInput))
-    {
-      scope.errMessage = "Invalid email."
-    }
-    else if (!scope.emailInput) {
-      scope.errMessage = "You haven't entered an email."
-    }
-    else
-    {
-      http.post("Send/resetPassword", {"email": email})
-      .then(function(res){
-        // Close the dialog
-        uibIns.close("Cancel")
-        console.log("GET:  " + JSON.stringify(res))
-      })
-      .catch(function (err)
-      {
-        scope.errMessage = emf.formatErrorCodeAndErrorArray(err);
-        console.log("Reset Emaill Error. " + JSON.stringify(err));
-      })
-    }
-  }
-}])
-
 app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices','logService', 'registerPopService', '$timeout', "$uibModal",
   function(scope, state, rscope,goSer, logSer, regPopSer, timeout, uibM) {
     scope.user = {};
@@ -37,6 +5,12 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
     scope.retnHm = function(){
       timeout(function() {
         state.go('home');
+      })
+    }
+
+    scope.TechnicianListing = function(){
+      timeout(function() {
+        state.go('technicianListing');
       })
     }
 
@@ -65,7 +39,7 @@ app.controller('homeController', ['$scope', '$state', '$rootScope','goToServices
    {
      return uibM.open({
         animation: false,
-        controller: "forgotPasswordControoler", /*controller injection has to be here; otherwise, uibModalInstance wouldn't be resolved.*/
+        controller: "forgotPasswordPopController", /*controller injection has to be here; otherwise, uibModalInstance wouldn't be resolved.*/
         templateUrl: 'Util/Register/forgotPassword.pop.html',
         scope: scope,
         size: 'lg'

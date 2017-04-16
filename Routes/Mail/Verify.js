@@ -51,7 +51,7 @@ router.get('/confirmEmail', function(req, res) {
         ], function(err, result) {
           if (err) {
             console.log('Can\'t verify');
-            res.status(400).json(err);
+            res.redirect('/#/404Page')
           } else {
             res.redirect(`/#/emailSuccess?email=${email}&hash=${hash}`);
           }
@@ -87,7 +87,7 @@ router.get('/resetPassword', function(req, res) {
       ], function(err, result) {
         if (err) {
           console.log(err);
-          res.status(400).json(err);
+          res.redirect('/#/404Page')
         } else {
           res.redirect(`/#/register/forgotPassword?email=${email}&hash=${hash}`);
         }
