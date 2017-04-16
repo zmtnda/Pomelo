@@ -91,7 +91,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
       })
       .state('transcationHistory', {
          url: '/technician/transcationHistory',
-         templateUrl: 'Technician/transcationHistory/transcationHistoryPage.template.html',
+         templateUrl: 'Technician/TranscationHistoryPage/transcationHistoryPage.template.html',
          controller: 'transcationHistoryPageController',
          resolve:{
            userListing: ['$q', '$http', '$rootScope', function($q, http, rscope){
