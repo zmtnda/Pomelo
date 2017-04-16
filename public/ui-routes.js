@@ -4,6 +4,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
       $router.otherwise("/");
 
       $stateProvider
+      .state('upload', {
+        url: '/upload',
+        templateUrl: 'TestUpload/upload.template.html',
+        controller: 'uploadController',
+      })
       .state('home',  {
          url: '/',
          templateUrl: 'Home/home.template.html',
