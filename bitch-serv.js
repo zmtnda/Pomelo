@@ -30,7 +30,6 @@ router.post('/:tecId', function(req, res) {
   if(vld.checkTech()){
     connections.getConnection(res, function(cnn) {
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
       var selectParams = [];
       for( var i = 0; i < modIssids.length; i++){
         qryParams.push('(?,?)');
@@ -165,101 +164,6 @@ router.post('/:tecId', function(req, res) {
           //       res.location(router.baseURL + '/' + results.affectedRows).end();}
           //     }});
           }
-=======
-      async.waterfall([
-        function(callback){
-          //map saves the initial state
-          for( var i = 0; i < modIssids.length; i++){
-            map[modIssids[i]] = new Array();
-            map[modIssids[i]].push(tecId);
-            map[modIssids[i]].push(modIssids[i]);
-            map[modIssids[i]].push(catManids[i]);
-            map[modIssids[i]].push(req.body.offer.servType[i]);
-            map[modIssids[i]].push(req.body.offer.amount[i]);
-            map[modIssids[i]].push(1);
-          }
-          for( var i = 0; i < modIssids.length; i++){
-            qryParams.push('(?,?,?)');
-            selectParams.push(tecId);
-            selectParams.push(modIssids[i]);
-            selectParams.push(catManids[i]);
-          }
-                      console.log("tecId = " + tecId + "\nselectParams " + selectParams);
-
-          callback(null);
-        },
-        function(callback){
-          var selectQuery = ' SELECT id_serTec, modIss_id FROM ServicesOfferedByTech WHERE '
-      							+ ' (tec_Id , modIss_id, catMan_Id ) IN (' + qryParams.join(',') + ')'
-                    + ' ORDER BY modIss_id ';
-          cnn.query(selectQuery, selectParams, callback);
-        },
-        function(results, fields, callback){
-            // qryParams = [];
-            for( var i = 0; i < results.length; i++){
-              var index = modIssids.indexOf(results[i].modIss_id);
-              if (index > -1){
-                // qryParams.push('(?,?,?,?,?,?)');
-                dupModIssIds.push(results[i]);
-                // //adding entry that are already in the table that may be deactivated
-                // //we will overwrite the existing value with the new value
-                // for (var j = 0; j < 6; j++){
-                // updateParams.push(map[modIssids[i]][j]);
-                // }
-                //remove the item from the modIssids array
-                modIssids.splice(index, 1);
-              }
-            } 
-            for( var i = 0; i < dupModIssIds.length; i++){
-              // qryParams.push('(?,?,?,?,?,?)');
-              for (var j = 0; j < 6; j++){
-                updateParams.push(map[dupModIssIds[i].modIss_id][j]);
-              }
-            } 
-            console.log("dupModIssIds " + JSON.stringify(dupModIssIds));
-            console.log("updateParams " + updateParams);
-            console.log("modIssids " + JSON.stringify(modIssids));
-
-          callback(null);
-        },
-        function(callback){
-          if (updateParams.length > 0){
-                        console.log("Updating query " + updateQuery);
-                        console.log("dupModIssIds.id_serTec " + dupModIssIds.id_serTec);
-            cnn.query(updateQuery, updateParams, dupModIssIds.id_serTec, dupModIssIds.modIss_id, callback);
-          }
-          else
-            callback(null, 0, 0);
-        },
-        function(rows, fields, callback){
-                                  console.log("Updating return");
-
-          if (rows > 0)
-            console.log("updated rows = "+  rows);
-          qryParams = [];
-          for( var i = 0; i < modIssids.length; i++){
-              qryParams.push('(?,?,?,?,?,?)');
-              for (var j = 0; j < 6; j++){
-                insertParams.push(map[modIssids[i]][j]);
-              }
-          }
-            callback(null);
-        },
-        function(callback){
-          if (insertParams.length > 0){
-            cnn.query(insertQuery, insertParams, callback);
-          //    function(err, results) {
-          //     if(err) {
-          //     res.status(400).json(err); // closes reponse
-          //     } else{
-          //     //expecting a return of array of services jsut inserted
-          //     if (dupModIssIds.length > 0){
-          //       res.json(dupModIssIds);}
-          //     else{
-          //       res.location(router.baseURL + '/' + results.affectedRows).end();}
-          //     }});
-          }
->>>>>>> Stashed changes
         }], function(err, results){
           if (err){
             console.log("there is error checking duplicate " + JSON.stringify(err));
@@ -342,11 +246,7 @@ router.get('/:tecId/all', function(req, res) {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
   var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
-=======
-  var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount, status '
->>>>>>> Stashed changes
 =======
   var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount, status '
 >>>>>>> Stashed changes
