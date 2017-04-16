@@ -38,3 +38,9 @@ jspm_packages
 
 Routes/connection.json
 exampleConnection.json
+
+# vscode
+.vscode/
+
+# mac
+**/.DS_Store
