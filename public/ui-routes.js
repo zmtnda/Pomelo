@@ -52,6 +52,9 @@ app.config(['$stateProvider', '$urlRouterProvider',
           url: '/customer/technicianListing',
           templateUrl: 'Customer/TechnicianListing/TechnicianListingTemplate.html',
           controller: 'technicianListingController',
+          data: {
+            customerData: undefined
+          }
         })
        .state('updateAccount', {
           url: '/technician/updateAccount',
