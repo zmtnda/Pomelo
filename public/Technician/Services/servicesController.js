@@ -36,7 +36,10 @@ app.controller('servicesController', ['$scope', '$location','$state','logService
       console.log("UPDATE IS: " + JSON.stringify(scope.update));
       http.put("Serv/" + id_serTec + "/issue", scope.update)
       .then(function(response){
+        noDlg.show(rscope, "Service updated sucessfully.");
+
         console.log("response.data: " + JSON.stringify(response));
-      })
+      }).
+      catch(function(err){noDlg.show(scope, err, "Error")});
     }
 }]);
