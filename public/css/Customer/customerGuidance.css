@@ -5,15 +5,39 @@ body{
 
 }
 
+.horizontal-align{
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+
+.customerContainer{
+  width: 100%;
+  height: 100%;
+}
+
+.cus-veritcal-align{
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .progressLabel{
   display: inline-block;
-  padding-left: 30px;
+  padding-left: 100px;
 }
 
-.buttonFocus{
-  background-color: gray;
+#row1{
+  text-align: center;
+  position: absolute;
+  top: 60px;
 }
 
+#row2{
+  text-align: center;
+  position: absolute;
+  padding: 100px;
+}
 /*.thumbnail{
   display: table;
   text-align: center;
