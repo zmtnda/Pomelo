@@ -5,6 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+<<<<<<< HEAD
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}/main.js"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Port",
+            "address": "localhost",
+            "port": 5858
+=======
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
@@ -16,6 +29,7 @@
             "request": "launch",
             "name": "Start Listening",
             "program": "${workspaceRoot}\\main.js"
+>>>>>>> 0c3bf56ff536f31f37396ef0eaef46c82dc3705f
         }
     ]
 }

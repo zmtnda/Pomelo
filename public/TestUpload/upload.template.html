@@ -1,0 +1,13 @@
+<center>
+  <div id="upload-form">
+    <!--<form name="upload" enctype="multipart/form-data" data-ng-submit="addFile()">
+      <input type="file" id="fileselect" name="images" file-model = "images" multiple="multiple" onchange="angular.element(this).scope().uploadedFile(this)"/>
+    </form>
+    <progress id="progress" max="100" value="0"></progress>
+    <button class="btn" id="submit" ng-click="uploadFiles()">Upload</button>-->
+    <form name="upload" class="form" data-ng-submit="addFile()">
+      <input type="file" name="file" multiple onchange="angular.element(this).scope().uploadedFile(this)" />
+      <button type="submit">Upload </button>
+    </form>
+  </div>
+</center>

@@ -4,6 +4,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
       $router.otherwise("/");
 
       $stateProvider
+      .state('upload', {
+        url: '/upload',
+        templateUrl: 'TestUpload/upload.template.html',
+        controller: 'uploadController',
+      })
       .state('home',  {
          url: '/',
          templateUrl: 'Home/home.template.html',
@@ -47,6 +52,9 @@ app.config(['$stateProvider', '$urlRouterProvider',
           url: '/customer/technicianListing',
           templateUrl: 'Customer/TechnicianListing/TechnicianListingTemplate.html',
           controller: 'technicianListingController',
+          data: {
+            customerData: undefined
+          }
         })
        .state('updateAccount', {
           url: '/technician/updateAccount',
@@ -89,10 +97,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
            }]
          }
       })
-      .state('awaitingListing', {
-         url: '/technician/awaitingListing',
-         templateUrl: 'Technician/AwaitingListPage/awaitingListPage.template.html',
-         controller: 'awaitingListPageController',
+      .state('transcationHistory', {
+         url: '/technician/transcationHistory',
+         templateUrl: 'Technician/TranscationHistoryPage/transcationHistoryPage.template.html',
+         controller: 'transcationHistoryPageController',
          resolve:{
            userListing: ['$q', '$http', '$rootScope', function($q, http, rscope){
              return http.get('Receipt/'+ rscope.loggedUser.tec_id +'/technician')

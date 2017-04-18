@@ -13,9 +13,9 @@
    </div>
 
     <!-- Call to Action -->
-   <aside class="call-to-action bg-primary" style="overflow:hidden; width: 100% !important;">
+   <aside class="call-to-action bg-primary" ng-if="!inSession" style="overflow:hidden; width: 100% !important;">
         <div class="container">
-              <form ng-if="!inSession" class="form-signin">
+              <form class="form-signin">
               <fieldset class="form-group">
                 <h2 class="form-signin-heading">Login In</h2>
                 <label for="inputEmail" class="sr-only">Email address</label>
@@ -27,8 +27,8 @@
                             document.getElementById('submit').click()" placeholder="Password" ng-model="user.password">
               </fieldset>
             </form>
-            <button ng-if="!inSession" type="button"  id="submit" class="btn btn-lg btn-light" ng-click="login()">Login</button>
-            <button ng-if="!inSession" class="btn btn-lg btn-dark" ng-click="addUser()">Sign Up</button>
+            <button  type="button"  id="submit" class="btn btn-lg btn-light" ng-click="login()">Login</button>
+            <button class="btn btn-lg btn-dark" ng-click="addUser()">Sign Up</button>
             <a style="color: #337ab7;" ng-click="goToForgotPassword()">Forgot Password</a>
         </div>
     </aside>

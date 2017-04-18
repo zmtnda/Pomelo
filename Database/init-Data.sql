@@ -121,7 +121,7 @@
 	insert into `ServicesOfferedByTech` (`tec_id`, `modIss_id`,
 		 `catMan_id`, `servType`, `estAmount`, `status`) values
 		(1, 1, 3, 0, 50.99, 1),
-		(1, 2, 3, 1, 46.50, 1),
+		(1, 2, 3, 1, 46.50, 0),
 		(1, 3, 3, 0, 60.99, 1),
 		(1, 4, 3, 0, 50.99, 1),
 		(1, 5, 3, 1, 46.50, 1),

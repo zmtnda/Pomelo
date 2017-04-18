@@ -1,14 +1,15 @@
-app.controller('customerGuidanceController', ['$scope', '$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', "cates",
-  function(scope, state, logSer, http, rscope, noDlg, goto, cate)
+app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates",
+  function(scope, state, http, cate)
   {
     scope.customerData = {
       issue: undefined,
       category: undefined,
       manufacturer: undefined,
       model: undefined,
+      zipCode: undefined
     }
 
-    scope.hasGone = false
+    scope.hasEnterZipCode = false
     scope.hasMapped = false
     scope.hasClickedCate = false
     scope.hasClickedManu = false
@@ -20,11 +21,14 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
     scope.manus = undefined
     scope.issues = undefined
 
+    scope.nextMessage = "Next"
+    scope.guidanceMessage = "Find technicians in your city"
+
     scope.onClickNext = function()
     {
-      if(!scope.hasGone)
+      if(!scope.hasEnterZipCode)
       {
-        scope.hasGone = true
+        scope.hasEnterZipCode = true
       }
       else if(!scope.hasClickedCate)
       {
@@ -52,36 +56,41 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
       }
       else if(!scope.hasClickedIssue)
       {
-
-
+        state.get("technicianListing").data.customerData = scope.customerData
+        state.go("technicianListing")
       }
     }
 
     scope.onClickPrevious = function()
     {
+      scope.nextMessage = "Next"
       if(scope.hasClickedIssue)
       {
         scope.hasClickedIssue = false
       }
       if(scope.hasClickedModel)
       {
+        scope.customerData.issue = undefined
         scope.hasClickedModel = false
       }
       else if(scope.hasClickedManu)
       {
+        scope.customerData.model = undefined
         scope.hasClickedManu = false
       }
       else if(scope.hasClickedCate)
       {
+        scope.customerData.manufacturer = undefined
         scope.hasClickedCate = false
       }
-      else if(scope.hasGone)
+      else if(scope.hasEnterZipCode)
       {
-        scope.hasGone = false
+        scope.customerData.category = undefined
+        scope.hasEnterZipCode = false
       }
     }
 
-    scope.onClickCategory = function(selectedCate)
+    scope.onClickCategory = function(selectedCate, selectedId)
     {
       scope.customerData.category = selectedCate
     }
@@ -98,6 +107,8 @@ app.controller('customerGuidanceController', ['$scope', '$state','logService', '
 
     scope.onClickIssue = function(selectedIssue)
     {
-
+      scope.nextMessage = "Find technicians!!"
+      scope.customerData.issue = selectedIssue
     }
+
   }]);
