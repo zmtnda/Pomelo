@@ -7,12 +7,12 @@
 
 .moveLeftHover:hover{
   transition: 0.3s linear all;
-  transform: translateX(-10px);
+  transform: translateX(-5px);
 }
 
 .moveRightHover:hover{
   transition: 0.3s linear all;
-  transform: translateX(10px);
+  transform: translateX(5px);
 }
 
 /* The following classes are added automatically to an elements that is being added to or took out the scope.*/
