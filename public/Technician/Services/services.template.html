@@ -1,9 +1,9 @@
 <div id="page-top" class="index">
 <div class = "thumbnail">
   <div class="col-md-10 col-md-offset-1">
-    
+
   <h2>My Services</h2>
- 
+
   <div class="table-responsive" style="width:100%; overflow:auto;">
        <table class="table table-striped" border = "0" cellpadding = "0" cellspacing = "2">
          <thead>
@@ -15,7 +15,7 @@
              <th style="width: 17%">Service Type</th>
              <th style="width: 7%">Estimated Amount</th>
              <th style="width: 5%">Enabled</th>
-             <th style="width: 10%">Confirm Changes</th> 
+             <th style="width: 10%">Confirm Changes</th>
            </tr>
          </thead>
          <tbody>
@@ -28,9 +28,9 @@
               <td ng-if="ser.servType === 1">Time Based ($/hour)</td> -->
               <td>
                 <select
-                  ng-model="ser.servType">
-                  <option ng-selected="ser.servType === 0">Item Based ($/service)</option>
-                  <option ng-selected="ser.servType === 1">Time Based ($/hour)</option>
+                  >
+                  <option ng-model="ser.servType" ng-selected="ser.servType === 0">Item Based ($/service)</option>
+                  <option ng-model="ser.servType" ng-selected="ser.servType === 1">Time Based ($/hour)</option>
                 </select>
               </td>
               <!-- <td>{{ser.estAmount}}</td> -->
@@ -38,10 +38,11 @@
                   <input type="number" name="input" style="width: 100%" ng-model="ser.estAmount">
               </td>
               <td>
-                <input type="checkbox">
+                <input type="checkbox" ng-model="ser.status" ng-true-value="1" ng-false-value="0">
               </td>
               <td>
-                <button type="button" class="btn btn-sm btn-success" style="width: 100%" ng-click="updatePrice()">Update</button>
+                <button type="button" class="btn btn-sm btn-success" style="width: 100%"
+                  ng-click="updateService(ser.id_serTec, ser.status, ser.estAmount, ser.servType)">Update</button>
               </td>
 
             </tr>

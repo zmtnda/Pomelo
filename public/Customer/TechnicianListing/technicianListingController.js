@@ -1,6 +1,13 @@
-app.controller('technicianListingController', ['$scope', '$location','$state', 'users', 'logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout',
-  function(scope, location, state, users, logSer, http, rscope, noDlg, goto, timeout) {
+app.controller('technicianListingController', ['$scope', '$location', '$state',  '$http', '$rootScope', 'notifyDlg', '$timeout',
+  function(scope, location, state, http, rscope, noDlg, timeout) {
 
-    scope.users = users;
+    /*
+    Access selections:
+
+    (function(){
+      console.log(JSON.stringify(state.current.data.customerData))
+    })()
+    
+    */
 
 }]);
