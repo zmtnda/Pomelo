@@ -189,10 +189,10 @@ function mail(res, receiver, title, body) {
         console.log(error);
         res.status(400).json(error);
       }
-      console.log('Message %s sent: %s', info.messageId, info.response);
-      console.log('Accepted: ' + info.accepted);
-      console.log('Rejected: ' + info.rejected);
-      console.log('Pending: ' + info.pending);
+//      console.log('Message %s sent: %s', info.messageId, info.response);
+//      console.log('Accepted: ' + info.accepted);
+//      console.log('Rejected: ' + info.rejected);
+//      console.log('Pending: ' + info.pending);
       res.json({success: 1, sent: 1})
    });
 }
