@@ -43,6 +43,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
          templateUrl: 'Technician/Orders/Orders.template.html',
          controller: 'ordersController',
       })
+      .state('processingSearch', {
+         url: '/Customer/processingSearch',
+         templateUrl: 'Customer/ProcessingSearch/processingSearch.template.html',
+         controller: 'processingSearchController',
+       })
       .state('services', {
          url: '/technician/services',
          templateUrl: 'Technician/services/services.template.html',

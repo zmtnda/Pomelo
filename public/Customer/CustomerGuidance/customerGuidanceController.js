@@ -1,5 +1,5 @@
-app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates",
-  function(scope, state, http, cate)
+app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates", 'notifyDlg',
+  function(scope, state, http, cate, notifyDlg)
   {
     scope.customerData = {
       issue: undefined,
@@ -24,41 +24,66 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
     scope.nextMessage = "Next"
     scope.guidanceMessage = "Find technicians in your city"
 
+    var checkIfEmpty = function(str)
+    {
+      if(!str)
+      {
+        notifyDlg.show(scope, "You haven't entered an input.", "Error!", 'md');
+        return false;
+      }
+      return true;
+    }
+
     scope.onClickNext = function()
     {
       if(!scope.hasEnterZipCode)
       {
-        scope.guidanceMessage = "Please select the category of your device."
-        scope.hasEnterZipCode = true
+        if(checkIfEmpty(scope.customerData.zipCode))
+        {
+          scope.guidanceMessage = "Please select the category of your device."
+          scope.hasEnterZipCode = true
+        }
       }
       else if(!scope.hasClickedCate)
       {
-        http.get('Cate/' + scope.customerData.category.id_cat + '/manu')
-        .then(function(res){
-          scope.manus = res.data
-          scope.hasClickedCate = true
-        })
+        if(checkIfEmpty(scope.customerData.category))
+        {
+          http.get('Cate/' + scope.customerData.category.id_cat + '/manu')
+          .then(function(res){
+            scope.manus = res.data
+            scope.hasClickedCate = true
+          })
+        }
       }
       else if(!scope.hasClickedManu)
       {
-        http.get('Cate/' + scope.customerData.category.id_cat + '/' + scope.customerData.manufacturer.manId + '/model')
-        .then(function(res){
-          scope.models = res.data
-          scope.hasClickedManu = true
-        })
+        if(checkIfEmpty(scope.customerData.manufacturer))
+        {
+          http.get('Cate/' + scope.customerData.category.id_cat + '/' + scope.customerData.manufacturer.manId + '/model')
+          .then(function(res){
+            scope.models = res.data
+            scope.hasClickedManu = true
+          })
+        }
       }
       else if(!scope.hasClickedModel)
       {
-        http.get('Cate/' + scope.customerData.model.modelId + '/issues')
-        .then(function(res){
-          scope.issues = res.data
-          scope.hasClickedModel = true
-        })
+        if(checkIfEmpty(scope.customerData.model))
+        {
+          http.get('Cate/' + scope.customerData.model.modelId + '/issues')
+          .then(function(res){
+            scope.issues = res.data
+            scope.hasClickedModel = true
+          })
+        }
       }
       else if(!scope.hasClickedIssue)
       {
-        state.get("technicianListing").data.customerData = scope.customerData
-        state.go("technicianListing")
+        if(checkIfEmpty(scope.customerData.issue))
+        {
+          state.get("processingSearch").data.customerData = scope.customerData
+          state.go("processingSearch")
+        }
       }
     }
 

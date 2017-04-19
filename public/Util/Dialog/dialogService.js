@@ -7,7 +7,7 @@ app.service("notifyDlg", ["$uibModal", function(uibM) {
   			 scp.submitted = 0;
            return uibM.open({
               animation: false,
-              backdrop: false,
+              backdrop: true,
               templateUrl: "Util/Dialog/dialogTemplate.html",
               scope: scp,
               size: siz || 'sm'
