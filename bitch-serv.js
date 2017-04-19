@@ -29,47 +29,6 @@ router.post('/:tecId', function(req, res) {
   
   if(vld.checkTech()){
     connections.getConnection(res, function(cnn) {
-<<<<<<< Updated upstream
-      var selectParams = [];
-      for( var i = 0; i < modIssids.length; i++){
-        qryParams.push('(?,?)');
-        selectParams.push(req.params.tecId);
-        selectParams.push(modIssids[i]);
-      }
-      var serQuery = ' SELECT modIss_id FROM ServicesOfferedByTech WHERE '
-<<<<<<< Updated upstream
-      							+ ' (tec_Id , modIss_id ) IN (' + qryParams.join(',') + ')'
-=======
-      							+ ' (tec_Id , modIss_id, catMan_Id ) IN (' + qryParams.join(',') + ')'
-                    + ' AND status <> 0 '
->>>>>>> Stashed changes
-                    + ' ORDER BY modIss_id ';
-      cnn.query(serQuery, selectParams, function(err, results) {
-      if(err) {
-                console.log("there is error checking duplicate ");
-
-        res.status(400).json(err); // closes reponse
-      }
-      //if results return 0 no duplicate just insert all
-      //if results are same row as the leignth of modiss it's all duplicate
-      //if < has some duplicate
-      if (results.length == modIssids.length){
-        //res.location(router.baseURL + '/' + results).end();
-                        console.log("found duplicate ");
-
-        res.json(results);
-      } else {
-                        console.log("there is no duplicate ");
-
-        var dupModIssIds = [];
-        var insertParams = [];
-        qryParams = [];
-        for( var i = 0; i < results.length; i++){
-          var index = modIssids.indexOf(results[i].modIss_id);
-          if (index > -1){
-            dupModIssIds.push(results[i]);
-            modIssids.splice(index, 1);
-=======
       async.waterfall([
         function(callback){
           //map saves the initial state
@@ -136,8 +95,7 @@ router.post('/:tecId', function(req, res) {
             callback(null, 0, 0);
         },
         function(rows, fields, callback){
-                                  console.log("Updating return");
-
+            console.log("Updating return");
           if (rows > 0)
             console.log("updated rows = "+  rows);
           qryParams = [];
@@ -146,7 +104,6 @@ router.post('/:tecId', function(req, res) {
               for (var j = 0; j < 6; j++){
                 insertParams.push(map[modIssids[i]][j]);
               }
->>>>>>> Stashed changes
           }
             callback(null);
         },
@@ -243,16 +200,7 @@ router.get('/:tecId/all', function(req, res) {
 	var vld = req.validator;
 	var LogUser = req.params.tecId;
   var userId = req.session.id;
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  var selectQry = ' SELECT category, manufacturer, model, issue, servType, estAmount '
-=======
   var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount, status '
->>>>>>> Stashed changes
-=======
-  var selectQry = ' SELECT id_serTec, category, manufacturer, model, issue, servType, estAmount, status '
->>>>>>> Stashed changes
                 + ' FROM ServicesOfferedByTech T1 '
                 + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
                 + ' FROM CategoriesManufacturers T1 '
