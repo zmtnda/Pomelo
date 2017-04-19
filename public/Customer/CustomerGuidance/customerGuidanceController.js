@@ -28,6 +28,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
     {
       if(!scope.hasEnterZipCode)
       {
+        scope.guidanceMessage = "Please select the category of your device."
         scope.hasEnterZipCode = true
       }
       else if(!scope.hasClickedCate)
@@ -107,6 +108,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
 
     scope.onClickIssue = function(selectedIssue)
     {
+      /*add animation for the text changes*/
       scope.nextMessage = "Find technicians!!"
       scope.customerData.issue = selectedIssue
     }
