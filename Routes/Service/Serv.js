@@ -25,8 +25,6 @@ router.post('/:tecId', function(req, res) {
   var modIssids =  req.body.offer.modIss_Id;
   var catManids =  req.body.offer.catMan_Id;
   var map = {};
-  var updateQuery = ' UPDATE ServicesOfferedByTech SET tec_id = ?, modIss_id = ?, catMan_id = ?, '
-                  + ' servType = ?, estAmount = ?, status = ? WHERE id_serTec = ? AND modIss_id = ? '
   
   if(vld.checkTech()){
     connections.getConnection(res, function(cnn) {
@@ -48,8 +46,6 @@ router.post('/:tecId', function(req, res) {
             selectParams.push(modIssids[i]);
             selectParams.push(catManids[i]);
           }
-                      console.log("tecId = " + tecId + "\nselectParams " + selectParams);
-
           callback(null);
         },
         function(callback){
@@ -59,47 +55,33 @@ router.post('/:tecId', function(req, res) {
           cnn.query(selectQuery, selectParams, callback);
         },
         function(results, fields, callback){
-            // qryParams = [];
             for( var i = 0; i < results.length; i++){
               var index = modIssids.indexOf(results[i].modIss_id);
               if (index > -1){
-                // qryParams.push('(?,?,?,?,?,?)');
                 dupModIssIds.push(results[i]);
-                // //adding entry that are already in the table that may be deactivated
-                // //we will overwrite the existing value with the new value
-                // for (var j = 0; j < 6; j++){
-                // updateParams.push(map[modIssids[i]][j]);
-                // }
                 //remove the item from the modIssids array
                 modIssids.splice(index, 1);
               }
             } 
             for( var i = 0; i < dupModIssIds.length; i++){
-              // qryParams.push('(?,?,?,?,?,?)');
               for (var j = 0; j < 6; j++){
                 updateParams.push(map[dupModIssIds[i].modIss_id][j]);
               }
               updateParams.push(dupModIssIds[i].id_serTec);
               updateParams.push(dupModIssIds[i].modIss_id);
             } 
-            console.log("dupModIssIds " + JSON.stringify(dupModIssIds));
-            console.log("updateParams " + updateParams);
-            console.log("modIssids " + JSON.stringify(modIssids));
           callback(null);
         },
         function(callback){
           if (updateParams.length > 0){
-                        console.log("Updating query " + updateQuery);
-                        console.log("dupModIssIds" + JSON.stringify(dupModIssIds));
+            var updateQuery = ' UPDATE ServicesOfferedByTech SET tec_id = ?, modIss_id = ?, catMan_id = ?, '
+                            + ' servType = ?, estAmount = ?, status = ? WHERE id_serTec = ? AND modIss_id = ? '
             cnn.query(updateQuery, updateParams, callback);
           }
           else
             callback(null, 0, 0);
         },
         function(rows, fields, callback){
-            console.log("Updating return");
-          if (rows > 0)
-            console.log("updated rows = "+  rows);
           qryParams = [];
           for( var i = 0; i < modIssids.length; i++){
               qryParams.push('(?,?,?,?,?,?)');
@@ -107,7 +89,6 @@ router.post('/:tecId', function(req, res) {
                 insertParams.push(map[modIssids[i]][j]);
               }
           }
-          console.log("insertParams "+  insertParams);
           callback(null);
         },
         function(callback){
@@ -123,7 +104,7 @@ router.post('/:tecId', function(req, res) {
           if (err){
             res.status(400).json(err); // closes reponse
           } else if (dupModIssIds.length > 0){
-            //overwrite rows of those records
+            //overwrote rows of those records
               res.json(dupModIssIds);
             }
             else{
