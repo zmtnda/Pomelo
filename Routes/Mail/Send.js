@@ -171,7 +171,7 @@ function mail(res, receiver, title, body) {
        service: 'Gmail',
        auth: {
            user: 'noreply.nnguy101@gmail.com',
-           pass: 'noreplypassword'
+           pass: 'slgusxuncaourcat'
        }
    });
 
