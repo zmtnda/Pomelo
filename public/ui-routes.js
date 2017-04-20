@@ -47,6 +47,9 @@ app.config(['$stateProvider', '$urlRouterProvider',
          url: '/Customer/processingSearch',
          templateUrl: 'Customer/ProcessingSearch/processingSearch.template.html',
          controller: 'processingSearchController',
+         data: {
+            customerData: undefined
+          }
        })
       .state('services', {
          url: '/technician/services',
