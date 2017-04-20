@@ -11,6 +11,8 @@ var aws = require("aws-sdk");
 var fs = require("fs");
 router.baseURL = '/Upload';
 
+const S3_BUCKET = 'pomelotech';
+
 aws.config.update({
   accessKeyId: "AKIAJ4PWCJV5YRUG3R7Q",
   secretAccessKey: "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"
@@ -29,32 +31,32 @@ var resizeImg = bluebird.promisify(function(input, size, cb) {
   });
 });
 
-router.post('/profile', (req, res) => {
+router.post('/uploadPic', (req, res) => {
+  var vld = req.validator;
+  var logId = req.session.id;
+
+  if (!vld.checkPrsOK(logId))
+    return;
+
   new multiparty.Form().parse(req, (err, fields, files) => {
     console.log("fields");
     console.log(fields);
-    console.log("files");
-    console.log(files);
-    
+
     if (!files.images)
-      return res.status(400).json({success: 0, respons: 'No files found'});
+      return res.status(400).json({success: 0, response: 'No files found'});
 
     files.images.forEach(file => {
       console.log(file.path, file.originalFilename, file.headers['content-type']);
     });
 
     var username = 'nnguy101@gmail.com';
-    var album = 'pomeloTest';
-    var folder = username + "/" + album + "/";
-    var date = new Date().toISOString();
-    var dateString = date.substr(0, 4) + date.substr(5, 2) + date.substr(8, 2);
+    var album = 'pomeloTest'; // get from fields/metadata
     var operations = files.images.map(file => {
-      var id = crypto.randomBytes(10).toString('hex');
-      var filename = folder + dateString + "_" + id + "_" + file.originalFilename;
-      return bluebird.join(id, file, 
+      var filename = generateFileName(username, album, file.originalFilename);
+      return bluebird.join(file, // need to add thumbs later on
         s3.uploadAsync({
           Key: filename,
-          Bucket: "pomelotech",
+          Bucket: S3_BUCKET,
           ACL:"public-read",
           ContentType: file.headers['content-type'],
           Body: fs.createReadStream(file.path)
@@ -62,12 +64,25 @@ router.post('/profile', (req, res) => {
     });
     bluebird.join(bluebird.all(operations), images => {
       console.log("inside bluebird image");
-      console.log(JSON.stringify(images));
-      return images;
+      // console.log(images);
+
+      var items = images.map(image => {
+        fs.unlink(image[0].path); // delete file on local
+        return {
+          url: image[1].Location,
+          thumb: 'TODO',
+          originalFilename: image[0].originalFilename,
+          position: 'TODO'
+        };
+      });
+
+      console.log("items");
+      console.log(items);
+      return JSON.stringify(items);
     })
     .then(output => {
       console.log("good");
-      res.json(output);
+      res.json({albumName: album, albumId: 'TODO', images: output});
     })
     .catch(err => {
       console.log(err);
@@ -75,6 +90,15 @@ router.post('/profile', (req, res) => {
     })
   });
 });
+
+function generateFileName(username, album, origFileName) {
+  var date = new Date().toISOString();
+  var dateString = date.substr(0, 4) + date.substr(5, 2) + date.substr(8, 2);
+  var id = crypto.randomBytes(10).toString('hex');
+
+  return username + '/' + album + '/' + dateString + '_' + id + '_' + origFileName;
+}
+    
 
 
 module.exports = router;
