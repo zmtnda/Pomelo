@@ -24,6 +24,30 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
     scope.nextMessage = "Next"
     scope.guidanceMessage = "Find technicians in your city"
 
+    var changeState = function(state)
+    {
+      if(state === "cate")
+      {
+          scope.guidanceMessage = "Please select the category of your device."
+      }
+      else if(state === "manu")
+      {
+          scope.guidanceMessage = "Please select the brand of your device."
+      }
+      else if(state === "model")
+      {
+          scope.guidanceMessage = "What is the model of your device."
+      }
+      else if(state === "issue")
+      {
+          scope.guidanceMessage = "Please select the issue you're having."
+      }
+      else
+      {
+          scope.guidanceMessage = "Find technicians in your city"
+      }
+    }
+
     var checkIfEmpty = function(str)
     {
       if(!str)
@@ -40,7 +64,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       {
         if(checkIfEmpty(scope.customerData.zipCode))
         {
-          scope.guidanceMessage = "Please select the category of your device."
+          changeState("cate")
           scope.hasEnterZipCode = true
         }
       }
@@ -48,6 +72,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       {
         if(checkIfEmpty(scope.customerData.category))
         {
+          changeState("manu")
           http.get('Cate/' + scope.customerData.category.id_cat + '/manu')
           .then(function(res){
             scope.manus = res.data
@@ -59,6 +84,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       {
         if(checkIfEmpty(scope.customerData.manufacturer))
         {
+          changeState("model")
           http.get('Cate/' + scope.customerData.category.id_cat + '/' + scope.customerData.manufacturer.manId + '/model')
           .then(function(res){
             scope.models = res.data
@@ -70,6 +96,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       {
         if(checkIfEmpty(scope.customerData.model))
         {
+          changeState("issue")
           http.get('Cate/' + scope.customerData.model.modelId + '/issues')
           .then(function(res){
             scope.issues = res.data
@@ -92,25 +119,30 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       scope.nextMessage = "Next"
       if(scope.hasClickedIssue)
       {
+        changeState("issue")
         scope.hasClickedIssue = false
       }
       if(scope.hasClickedModel)
       {
+        changeState("model")
         scope.customerData.issue = undefined
         scope.hasClickedModel = false
       }
       else if(scope.hasClickedManu)
       {
+        changeState("manu")
         scope.customerData.model = undefined
         scope.hasClickedManu = false
       }
       else if(scope.hasClickedCate)
       {
+        changeState("cate")
         scope.customerData.manufacturer = undefined
         scope.hasClickedCate = false
       }
       else if(scope.hasEnterZipCode)
       {
+        changeState("default")
         scope.customerData.category = undefined
         scope.hasEnterZipCode = false
       }
