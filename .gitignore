@@ -44,3 +44,5 @@ exampleConnection.json
 
 # mac
 **/.DS_Store
+.idea/codeStyleSettings.xml
+.idea/jsLibraryMappings.xml

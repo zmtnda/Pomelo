@@ -15,12 +15,13 @@ app.controller('uploadController', ['$scope', '$location', '$state', '$http', '$
       });
 
       var metaData = {
-        name: 'whatever',
-        type: 'image'
+        description: 'whatever',
+        albumName: 'pomeloTech',
+        albumId: -1 // -1 if new, > 0 if exists
       };
       fd.append("metaData", JSON.stringify(metaData));
 
-      http.post('/Upload/profile', fd, {
+      http.post('/Upload/uploadPic', fd, {
         transformRequest: angular.identity,
         headers: { 'Content-Type': undefined }
       })
