@@ -138,4 +138,17 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       scope.customerData.issue = selectedIssue
     }
 
+    scope.getCateClasses = function(cate){
+      console.log("cate: " + cate)
+      if(cate === "Desktop")
+      {
+        console.log("TRUE");
+        return {
+
+        //"background-image": "url(" + "./img/deviceCollection/001-computer-2.png" + ")"
+       }
+      }
+
+    }
+
   }]);
