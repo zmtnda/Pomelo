@@ -23,6 +23,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
 
     scope.nextMessage = "Next"
     scope.guidanceMessage = "Find technicians in your city"
+    scope.deviceIcon = "img/deviceCollection/";
 
     var changeState = function(state)
     {
@@ -170,15 +171,23 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       scope.customerData.issue = selectedIssue
     }
 
-    scope.getCateClasses = function(cate){
-      console.log("cate: " + cate)
-      if(cate === "Desktop")
+    scope.getCateImage = function(cate){
+      console.log("cate: " + cate.category)
+      if(cate.category === "Desktop")
       {
-        console.log("TRUE");
-        return {
-
-        //"background-image": "url(" + "./img/deviceCollection/001-computer-2.png" + ")"
-       }
+        return "img/deviceCollection/001-computer-2.png"
+      }
+      else if(cate.category === "Laptop")
+      {
+        return "img/deviceCollection/019-laptop.png"
+      }
+      else if(cate.category === "Tablet")
+      {
+        return "img/deviceCollection/002-apple-2.png"
+      }
+      else if(cate.category === "Smart Phone")
+      {
+        return "img/deviceCollection/015-apple.png"
       }
 
     }
