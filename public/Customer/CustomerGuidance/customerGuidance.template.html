@@ -1,41 +1,46 @@
 <link rel="stylesheet" href="css/Customer/customerGuidance.css" type="text/css"/>
 <body class="customContainer">
   <div class="horizontal-align">
-    <div class="row">
-      <h2 class="pull-left">You've selected </h2>
-      <h2 class="progressLabel"><span class="label label-success" ng-if="customerData.zipCode">{{customerData.zipCode}}</span></h2>  
-      <h2 class="progressLabel"><span class="label label-success" ng-if="customerData.category">{{customerData.category.category}}</span></h2>
-      <h2 class="progressLabel"><span class="label label-success" ng-if="customerData.manufacturer">{{customerData.manufacturer.manufacturer}}</span></h2>
-      <h2 class="progressLabel"><span class="label label-success" ng-if="customerData.model">{{customerData.model.model}}</span></h2>
-      <h2 class="progressLabel"><span class="label label-success" ng-if="customerData.issue">{{customerData.issue.issue}}</span></h2>
+    <div class="row" id="row1">
+      <h3 class="pull-left">You've selected </h3>
+      <h3 class="progressLabel" ng-if="customerData.zipCode"><span class="label label-success">{{customerData.zipCode}}</span></h3>  
+      <h3 class="progressLabel" ng-if="customerData.category"><span class="label label-success">{{customerData.category.category}}</span></h3>
+      <h3 class="progressLabel" ng-if="customerData.manufacturer"><span class="label label-success">{{customerData.manufacturer.manufacturer}}</span></h3>
+      <h3 class="progressLabel" ng-if="customerData.model"><span class="label label-success">{{customerData.model.model}}</span></h3>
+      <h3 class="progressLabel" ng-if="customerData.issue"><span class="label label-success">{{customerData.issue.issue}}</span></h3>
     </div>
-    <div class="row page-header"></div>
-    <div class="row">
-      <h2 ng-bind="guidanceMessage"></h2>
-    </div>
-    <div class="cus-veritcal-align">
+    <div class="row cus-veritcal-align">
       <div class="horizontal-align">
-        <div class="col-md-1"></div>
-        <div class="col-md-2 text-success moveLeftHover growHover label label-success" ng-hide="!hasEnterZipCode" ng-click="onClickPrevious()"><h4>Previous</h4></div>
+        <h2 ng-bind="guidanceMessage" style="padding-bottom: 90px;"></h2>
+        <div class="col-md-1" ng-if="hasEnterZipCode"></div>
+        <button class="col-md-2 text-success moveLeftHover growHover btn btn-success" ng-if="hasEnterZipCode" ng-click="onClickPrevious()">
+          Previous</button>
         <div ng-if="!hasEnterZipCode" class="col-md-2"></div>
-        <div class="col-md-6" >
+        <div class="col-md-7" >
           <div class="cus-veritcal-align">
             <div></br></br><input ng-if="!hasEnterZipCode" type="text" class="form-control" ng-model="customerData.zipCode" placeholder="Please enter your zip code..."></div>
             <div ng-if="hasEnterZipCode && !hasClickedCate" >
-              <span class="growHover thumbnail text-success" ng-repeat="cate in cates" ng-click="onClickCategory(cate)" ng-style="getCateClasses(cate.category)">{{cate.category}}</span>
+              <span class="growHover thumbnail text-success" ng-repeat="cate in cates" ng-click="onClickCategory(cate)">
+                <img ng-src="{{getCateImage(cate)}}"></img><p>{{cate.category}}</p></span>
             </div>
             <div ng-if="hasClickedCate && !hasClickedManu"> 
-              <span class="growHover thumbnail text-success" ng-repeat="manu in manus" ng-click="onClickManu(manu)" ng-attr-id="{{'manu' + $index}}">{{manu.manufacturer}}</span>
+              <span class="growHover thumbnail text-success" ng-repeat="manu in manus" ng-click="onClickManu(manu)" ng-attr-id="{{'manu' + $index}}">
+                <p>{{manu.manufacturer}}</p></span>
             </div>
             <div ng-if="hasClickedManu && !hasClickedModel">
-              <span class="growHover thumbnail text-success" ng-repeat="model in models track by $index" ng-click="onClickModel(model, 'model' + $index)" ng-attr-id="{{'model' + $index}}" >{{model.model}}</span>
+              <span class="growHover thumbnail text-success" ng-repeat="model in models track by $index" ng-click="onClickModel(model, 'model' + $index)" ng-attr-id="{{'model' + $index}}" >
+                <p>{{model.model}}</p></span>
             </div>
             <div ng-if="hasClickedModel">
-              <span class="growHover thumbnail text-success" ng-repeat="issue in issues" ng-click="onClickIssue(issue)">{{issue.issue}}</span>
+              <span class="growHover thumbnail text-success" ng-repeat="issue in issues" ng-click="onClickIssue(issue)">
+                <p>{{issue.issue}}</p></span>
             </div>
           </div>
         </div>
-        <div class="col-md-2 text-success moveRightHover growHover label label-success" ng-click="onClickNext()"><h4 ng-bind="nextMessage"></h4></div>
+        <div class="col-md-2">
+          <button class="text-success moveRightHover growHover btn btn-success" ng-click="onClickNext()" ng-bind="nextMessage">
+          </button>
+        </div>
         <div class="col-md-1"></div>
       </div>
     </div>
