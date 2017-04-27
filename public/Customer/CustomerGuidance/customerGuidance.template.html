@@ -21,7 +21,7 @@
             <div>
               </br></br>
               <input ng-if="!hasEnterZipCode" type="text" class="form-control" ng-model="customerData.zipCode" placeholder="Please enter your zip code...">
-              <div ng-if="checkIsValidZipCode(customerData.zipCode)">Invalid Zip Code</div>
+              <div class="text-danger" ng-if="!isValidZip"><h4>Invalid Zip Code</h4></div>
             </div>
             <div ng-if="hasEnterZipCode && !hasClickedCate" >
               <span class="growHover thumbnail text-success" ng-repeat="cate in cates"

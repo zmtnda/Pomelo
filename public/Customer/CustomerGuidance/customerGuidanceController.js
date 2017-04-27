@@ -1,4 +1,4 @@
-app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates", 'notifyDlg', 'errorMessageFormatter'
+app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates", 'notifyDlg', 'errorMessageFormatter',
   function(scope, state, http, cate, notifyDlg, emf)
   {
     scope.customerData = {
@@ -15,6 +15,7 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
     scope.hasClickedManu = false
     scope.hasClickedModel = false
     scope.hasClickedIssue = false
+    scope.isValidZip = true
 
     scope.cates = cate
     scope.models = undefined
@@ -59,10 +60,14 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       return true;
     }
 
-    scope.checkIfValidZipCode = function(zipCode)
+    scope.$watch("customerData.zipCode", function(newVal)
     {
-      emf.checkIfValidZipCode(zipCode);
-    }
+      if(scope.customerData.zipCode != undefined)
+      {
+        console.log(scope.customerData.zipCode)
+        scope.isValidZip =  emf.checkIfValidZipCode(newVal);
+      }
+    })
 
     scope.onClickNext = function()
     {
@@ -176,8 +181,8 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       scope.customerData.issue = selectedIssue
     }
 
-    scope.getCateImage = function(cate){
-      console.log("cate: " + cate.category)
+    scope.getCateImage = function(cate)
+    {
       if(cate.category === "Desktop")
       {
         return "img/deviceCollection/001-computer-2.png"
