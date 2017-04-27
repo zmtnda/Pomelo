@@ -1,3 +1,9 @@
+app.filter("thumbnailFilter", function(){
+    var stateNames = ["thumbnail", "thumbnail activeThumbnail"];
+  return function(input) {
+    return stateNames[input];
+  };
+})
 app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates", 'notifyDlg', 'errorMessageFormatter',
   function(scope, state, http, cate, notifyDlg, emf)
   {
@@ -9,12 +15,15 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       zipCode: undefined
     }
 
+    scope.thumbnailStyles = {}
+
     scope.hasEnterZipCode = false
     scope.hasMapped = false
     scope.hasClickedCate = false
     scope.hasClickedManu = false
     scope.hasClickedModel = false
     scope.hasClickedIssue = false
+    scope.isValidZip = true
 
     scope.cates = cate
     scope.models = undefined
@@ -59,9 +68,36 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       return true;
     }
 
-    scope.checkIfValidZipCode = function(zipCode)
+    var cancelThumbnailStyle = function(type)
     {
-      emf.checkIfValidZipCode(zipCode);
+        for(var key2 in scope.thumbnailStyles[type])
+        {
+          if(scope.thumbnailStyles[type][key2] == 1)
+          {
+            console.log("key2: " + key2)
+            scope.thumbnailStyles[type][key2] = 0
+          }
+        }
+    }
+
+    var changeThumbnailStyle = function(type, name)
+    {
+      if(scope.thumbnailStyles[type] == undefined)
+      {
+        cancelThumbnailStyle(type)
+        scope.thumbnailStyles[type] = {[name]: 1}
+      }
+      else
+      {
+        if(scope.thumbnailStyles[type][name] == 1)
+          scope.thumbnailStyles[type][name] = 0;
+        else
+        {
+          cancelThumbnailStyle(type)
+          console.log("BYE "+JSON.stringify(scope.thumbnailStyles) + "\n type: " + type + "\n  name: " + name)
+          scope.thumbnailStyles[type][name] = 1;
+        }
+      }
     }
 
     scope.onClickNext = function()
@@ -130,24 +166,28 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       }
       if(scope.hasClickedModel)
       {
+        cancelThumbnailStyle("issue")
         changeState("model")
         scope.customerData.issue = undefined
         scope.hasClickedModel = false
       }
       else if(scope.hasClickedManu)
       {
+        cancelThumbnailStyle("model")
         changeState("manu")
         scope.customerData.model = undefined
         scope.hasClickedManu = false
       }
       else if(scope.hasClickedCate)
       {
+        cancelThumbnailStyle("manu")
         changeState("cate")
         scope.customerData.manufacturer = undefined
         scope.hasClickedCate = false
       }
       else if(scope.hasEnterZipCode)
       {
+        cancelThumbnailStyle("cate")
         changeState("default")
         scope.customerData.category = undefined
         scope.hasEnterZipCode = false
@@ -156,28 +196,32 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
 
     scope.onClickCategory = function(selectedCate, selectedId)
     {
+      changeThumbnailStyle("cate", selectedCate.category)
       scope.customerData.category = selectedCate
     }
 
     scope.onClickManu = function(selectedManu)
     {
+      changeThumbnailStyle("manu", selectedManu.manufacturer)
       scope.customerData.manufacturer = selectedManu
     }
 
     scope.onClickModel = function(selectedModel)
     {
+      changeThumbnailStyle("model", selectedModel.model)
       scope.customerData.model = selectedModel
     }
 
     scope.onClickIssue = function(selectedIssue)
     {
-      /*add animation for the text changes*/
+      changeThumbnailStyle("issue", selectedIssue.issue)
+      /*TODO add animation for the text changes*/
       scope.nextMessage = "Find technicians!!"
       scope.customerData.issue = selectedIssue
     }
 
-    scope.getCateImage = function(cate){
-      console.log("cate: " + cate.category)
+    scope.getCateImage = function(cate)
+    {
       if(cate.category === "Desktop")
       {
         return "img/deviceCollection/001-computer-2.png"
@@ -194,7 +238,14 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
       {
         return "img/deviceCollection/015-apple.png"
       }
-
     }
+
+    scope.$watch("customerData.zipCode", function(newVal)
+    {
+      if(scope.customerData.zipCode != undefined)
+      {
+        scope.isValidZip =  emf.checkIfValidZipCode(newVal);
+      }
+    })
 
   }]);

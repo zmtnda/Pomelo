@@ -41,9 +41,9 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
         return errorStr
       }
 
-      this.checkIsValidZipCode = function(zipCode)
+      this.checkIfValidZipCode = function(zipCode)
       {
-        /*TODO */
+        return /^\d{5}(?:[-\s]\d{4})?$/.test(zipCode);
       }
 
       this.hasMetLengths = function(email, password, firstName, lastName, city, zip)
