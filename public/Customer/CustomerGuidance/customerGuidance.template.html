@@ -3,11 +3,11 @@
   <div class="horizontal-align">
     <div class="row" id="row1">
       <h3 class="pull-left">You've selected </h3>
-      <h3 class="progressLabel" ng-if="customerData.zipCode"><span class="label label-success">{{customerData.zipCode}}</span></h3>  
-      <h3 class="progressLabel" ng-if="customerData.category"><span class="label label-success">{{customerData.category.category}}</span></h3>
-      <h3 class="progressLabel" ng-if="customerData.manufacturer"><span class="label label-success">{{customerData.manufacturer.manufacturer}}</span></h3>
-      <h3 class="progressLabel" ng-if="customerData.model"><span class="label label-success">{{customerData.model.model}}</span></h3>
-      <h3 class="progressLabel" ng-if="customerData.issue"><span class="label label-success">{{customerData.issue.issue}}</span></h3>
+      <h3 class="progressLabel pull-left" ng-if="customerData.zipCode"><span class="label label-success">{{customerData.zipCode}}</span></h3>  
+      <h3 class="progressLabel pull-left" ng-if="customerData.category"><span class="label label-success">{{customerData.category.category}}</span></h3>
+      <h3 class="progressLabel pull-left" ng-if="customerData.manufacturer"><span class="label label-success">{{customerData.manufacturer.manufacturer}}</span></h3>
+      <h3 class="progressLabel pull-left" ng-if="customerData.model"><span class="label label-success">{{customerData.model.model}}</span></h3>
+      <h3 class="progressLabel pull-left" ng-if="customerData.issue"><span class="label label-success">{{customerData.issue.issue}}</span></h3>
     </div>
     <div class="row cus-veritcal-align">
       <div class="horizontal-align">
@@ -20,25 +20,30 @@
           <div class="cus-veritcal-align">
             <div></br></br><input ng-if="!hasEnterZipCode" type="text" class="form-control" ng-model="customerData.zipCode" placeholder="Please enter your zip code..."></div>
             <div ng-if="hasEnterZipCode && !hasClickedCate" >
-              <span class="growHover thumbnail text-success" ng-repeat="cate in cates" ng-click="onClickCategory(cate)">
+              <span class="growHover thumbnail text-success" ng-repeat="cate in cates"
+                ng-click="onClickCategory(cate)">
                 <img ng-src="{{getCateImage(cate)}}"></img><p>{{cate.category}}</p></span>
             </div>
             <div ng-if="hasClickedCate && !hasClickedManu"> 
-              <span class="growHover thumbnail text-success" ng-repeat="manu in manus" ng-click="onClickManu(manu)" ng-attr-id="{{'manu' + $index}}">
+              <span class="growHover thumbnail text-success" ng-repeat="manu in manus" 
+                ng-click="onClickManu(manu)" ng-attr-id="{{'manu' + $index}}">
                 <p>{{manu.manufacturer}}</p></span>
             </div>
             <div ng-if="hasClickedManu && !hasClickedModel">
-              <span class="growHover thumbnail text-success" ng-repeat="model in models track by $index" ng-click="onClickModel(model, 'model' + $index)" ng-attr-id="{{'model' + $index}}" >
+              <span class="growHover thumbnail text-success" ng-repeat="model in models track by $index" 
+                ng-click="onClickModel(model, 'model' + $index)" ng-attr-id="{{'model' + $index}}" >
                 <p>{{model.model}}</p></span>
             </div>
             <div ng-if="hasClickedModel">
-              <span class="growHover thumbnail text-success" ng-repeat="issue in issues" ng-click="onClickIssue(issue)">
+              <span class="growHover thumbnail text-success" ng-repeat="issue in issues" 
+                ng-click="onClickIssue(issue)">
                 <p>{{issue.issue}}</p></span>
             </div>
           </div>
         </div>
         <div class="col-md-2">
-          <button class="text-success moveRightHover growHover btn btn-success" ng-click="onClickNext()" ng-bind="nextMessage">
+          <button class="text-success moveRightHover growHover btn btn-success" 
+          ng-click="onClickNext()" ng-bind="nextMessage">
           </button>
         </div>
         <div class="col-md-1"></div>
