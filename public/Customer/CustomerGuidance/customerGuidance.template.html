@@ -18,7 +18,11 @@
         <div ng-if="!hasEnterZipCode" class="col-md-2"></div>
         <div class="col-md-7" >
           <div class="cus-veritcal-align">
-            <div></br></br><input ng-if="!hasEnterZipCode" type="text" class="form-control" ng-model="customerData.zipCode" placeholder="Please enter your zip code..."></div>
+            <div>
+              </br></br>
+              <input ng-if="!hasEnterZipCode" type="text" class="form-control" ng-model="customerData.zipCode" placeholder="Please enter your zip code...">
+              <div ng-if="checkIsValidZipCode(customerData.zipCode)">Invalid Zip Code</div>
+            </div>
             <div ng-if="hasEnterZipCode && !hasClickedCate" >
               <span class="growHover thumbnail text-success" ng-repeat="cate in cates"
                 ng-click="onClickCategory(cate)">
