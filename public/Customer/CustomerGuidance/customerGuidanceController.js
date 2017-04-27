@@ -1,5 +1,5 @@
-app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates", 'notifyDlg',
-  function(scope, state, http, cate, notifyDlg)
+app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates", 'notifyDlg', 'errorMessageFormatter'
+  function(scope, state, http, cate, notifyDlg, emf)
   {
     scope.customerData = {
       issue: undefined,
@@ -57,6 +57,11 @@ app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cate
         return false;
       }
       return true;
+    }
+
+    scope.checkIfValidZipCode = function(zipCode)
+    {
+      emf.checkIfValidZipCode(zipCode);
     }
 
     scope.onClickNext = function()
