@@ -35,8 +35,11 @@ body{
 
 .thumbnail p{
   position: relative;
-  height: 20px;
-  bottom: 20%;
+  height: 10px;
+  line-height: 110%;
+  top: 40%;
+  width: 100%;
+
 }
 
 .thumbnail img{
@@ -76,7 +79,6 @@ body{
 }
 
 #row1{
-  padding-top: 30px;
   margin-bottom: 10px;
   overflow-x:scroll; 
   height:130px;
