@@ -2,6 +2,7 @@ app.controller('technicianListingController', ['$scope', '$location', '$state', 
   function(scope, location, state, http, rscope, noDlg, timeout) {
 
     /*
+     Url: Serv/<issId>/Issues
     Access selections:
 
     (function(){
