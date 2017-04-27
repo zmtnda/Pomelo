@@ -39,12 +39,12 @@ app.config(['$stateProvider', '$urlRouterProvider',
         //  controller: '',
       })
       .state('orders', {
-         url: '/technician/orders',
+         url: '/technician/Orders',
          templateUrl: 'Technician/Orders/Orders.template.html',
          controller: 'ordersController',
       })
       .state('processingSearch', {
-         url: '/Customer/processingSearch',
+         url: '/Customer/ProcessingSearch',
          templateUrl: 'Customer/ProcessingSearch/processingSearch.template.html',
          controller: 'processingSearchController',
          data: {
@@ -52,8 +52,8 @@ app.config(['$stateProvider', '$urlRouterProvider',
           }
        })
       .state('services', {
-         url: '/technician/services',
-         templateUrl: 'Technician/services/services.template.html',
+         url: '/Technician/Services',
+         templateUrl: 'Technician/Services/services.template.html',
          controller: 'servicesController',
        })
        .state('technicianListing', {
