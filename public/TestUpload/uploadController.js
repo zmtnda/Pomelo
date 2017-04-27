@@ -13,16 +13,25 @@ app.controller('uploadController', ['$scope', '$location', '$state', '$http', '$
     scope.addFile = function () {
       alert("yeah");
       var fd = new FormData();
-      angular.forEach(scope.files, function (file) {
-        fd.append('images', file);
-      });
+      var photoMetaData = [];
 
-      var metaData = {
+      var albumMetaData = {
         description: scope.description,
         albumName: scope.albumName,
         albumId: -1 // -1 if new, > 0 if exists
       };
-      fd.append("metaData", JSON.stringify(metaData));
+
+      var i=0;
+      angular.forEach(scope.files, function (file) {
+        i++;
+        fd.append('images', file);
+        photoMetaData.push({
+          description: 'photo description ' + i
+        });
+      });
+
+      fd.append("albumMetaData", JSON.stringify(albumMetaData));
+      fd.append("photoMetaData", JSON.stringify(photoMetaData));
 
       http.post('/Upload/uploadAlbum', fd, {
         transformRequest: angular.identity,

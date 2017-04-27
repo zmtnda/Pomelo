@@ -31,7 +31,7 @@ router.post('/uploadProfile', (req, res) => {
   var logId = req.session.id;
   var tecId = req.session.tec_id;
   var username = req.session.email;
-  var changeAvatarQuery = 'UPDATE Portfolio SET avatar=? WHERE tec_id = ?';
+  var changeAvatarQuery = 'UPDATE Technicians SET avatar=? WHERE id_tec = ?';
 
   if (!vld.checkPrsOK(logId))
     return res.status(400).json({response: 'Permission Denied'});
@@ -73,7 +73,13 @@ router.post('/uploadAlbum', (req, res) => {
   var vld = req.validator;
   var body = {};
   var logId = req.session.id;
+  var tec_id = req.session.tec_id;
   var username = req.session.email;
+
+  var createAlbumQuery = ' INSERT INTO Albums (tec_id, name, description,' +
+    ' createdDate, lastUpdate) VALUES (?,?,?,NOW(), NOW()) ';
+  var insertPhotoToAlbum = ' INSERT INTO Photos (alb_id, url, thumb,' +
+    ' description, position, createdDate) VALUES ';
 
   if (!vld.checkPrsOK(logId))
     return;
@@ -82,39 +88,67 @@ router.post('/uploadAlbum', (req, res) => {
     if (!files.images)
       return res.status(400).json({success: 0, response: 'No files found'});
 
-    var metaData = JSON.parse(fields.metaData[0]);
+    var albumMetaData = JSON.parse(fields.albumMetaData[0]);
+    var photoMetaDataArray = JSON.parse(fields.photoMetaData[0]);
+
+    console.log("album");
+    console.log(albumMetaData);
+    console.log("photo");
+    console.log(photoMetaDataArray);
 
     connections.getConnection(res, cnn => {
       async.waterfall([
-        function (callback) {
+        function (callback) { // create thumb files
           createThumbsBuffer(files, callback);
         },
-        function (thumbBuffers, callback) {
-          uploadThumbBuffer(username, thumbBuffers, metaData.albumName, callback);
+        function (thumbBuffers, callback) { // upload thumbs
+          uploadThumbBuffer(username, thumbBuffers, albumMetaData.albumName, callback);
         },
-        function(thumbUrls, callback) {
+        function(thumbUrls, callback) { // upload real images
           body.thumbUrls = thumbUrls;
-          console.log("come on");
-          console.log(thumbUrls);
-          uploadImages(username, files, metaData.albumName, callback);
+          // console.log(thumbUrls);
+          uploadImages(username, files, albumMetaData.albumName, callback);
         },
-        function (images, callback) {
+        function (images, callback) { // add thumb to images
           var i;
           for (i=0; i<images.length; i++) {
             images[i].thumb = body.thumbUrls[i].url;
+            images[i].description = photoMetaDataArray[i].description;
+            images[i].position = i;
           }
           callback(null, images);
+        },
+        function (images, callback) { // create new album
+          body.images = images;
+          cnn.query(createAlbumQuery,
+            [tec_id, albumMetaData.albumName, albumMetaData.description], callback);
+        },
+        function (result, fields, callback) {
+          albumMetaData.albumId = result.insertId;
+          var flattenMetaDataArray = [];
+          for (var i=0; i<photoMetaDataArray.length; i++) {
+            insertPhotoToAlbum += `(${result.insertId},?,?,?,${i},NOW())`;
+            flattenMetaDataArray.push(body.images[i].url);
+            flattenMetaDataArray.push(body.images[i].thumb);
+            flattenMetaDataArray.push(photoMetaDataArray[i].description);
+            if (i < photoMetaDataArray.length-1)
+              insertPhotoToAlbum += ', ';
+          }
+
+          cnn.query(insertPhotoToAlbum, flattenMetaDataArray, callback);
         }
       ], function (err, result) {
+        console.log("end insert photos");
+        console.log(result);
         if (err) {
           console.log(err);
           res.status(400).json(err);
         } else {
           res.status(200).json({
-            albumName: metaData.albumName,
-            description: metaData.description,
-            albumId: 'TODO',
-            images: result
+            albumName: albumMetaData.albumName,
+            description: albumMetaData.description,
+            albumId: albumMetaData.albumId,
+            images: body.images
           });
         }
       });
