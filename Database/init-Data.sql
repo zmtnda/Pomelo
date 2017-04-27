@@ -48,11 +48,11 @@
 		(1, 'Bachelor in Math', 'Cal Poly', '2017-01-25'),
 		(2, 'Master in CS', 'UCLA', '2015-02-23');
 
-	-- insert data into profolio --
-	insert into `Portfolio` (`tec_id`, `websites`, `aboutMe`, `companyName`,
-		`CompanyAddress`, `CompanyPhone`) values
-		(1, 'url', 'tech1 is me', 'Company_tec_1', 'SLO', 'xxx-xxx-xxxx'),
-		(2, 'url', 'tech2 is me', 'Company_tec_2', 'LA', 'xxx-xxx-xxxx');
+-- 	-- insert data into profolio --
+-- 	insert into `Portfolio` (`tec_id`, `websites`, `aboutMe`, `companyName`,
+-- 		`CompanyAddress`, `CompanyPhone`) values
+-- 		(1, 'url', 'tech1 is me', 'Company_tec_1', 'SLO', 'xxx-xxx-xxxx'),
+-- 		(2, 'url', 'tech2 is me', 'Company_tec_2', 'LA', 'xxx-xxx-xxxx');
 
 	-- insert data into customer --
 	insert into `Customers` (`email`) values
