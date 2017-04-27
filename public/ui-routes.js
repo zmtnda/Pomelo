@@ -58,7 +58,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
        })
        .state('technicianListing', {
           url: '/customer/technicianListing',
-          templateUrl: 'Customer/TechnicianListing/TechnicianListingTemplate.html',
+          templateUrl: 'Customer/TechnicianListing/technicianListingTemplate.html',
           controller: 'technicianListingController',
           data: {
             customerData: undefined
