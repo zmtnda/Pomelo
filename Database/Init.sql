@@ -42,10 +42,15 @@ CREATE  TABLE IF NOT EXISTS Technicians (
   hourlyRate NUMERIC (6,2) UNSIGNED NOT NULL ,
   city VARCHAR(30) NOT NULL,
   zip VARCHAR(20) NOT NULL,
-  avatar VARCHAR (200) NULL,
   ratings FLOAT(5,4) NOT NULL,
   bad_id INT(11) UNSIGNED NOT NULL,
   status INT(11) NOT NULL DEFAULT 0,
+  websites VARCHAR(256) NULL,
+  aboutMe VARCHAR(512) NULL,
+  avatar VARCHAR(256) NULL,
+  companyName VARCHAR(128) NULL,
+  companyAddress VARCHAR(128) NULL,
+  companyPhone VARCHAR(45) NULL,
   CONSTRAINT fkTechniciansLogins
     FOREIGN KEY (log_id )
     REFERENCES Logins (id_log)
@@ -75,7 +80,7 @@ CREATE  TABLE IF NOT EXISTS Certifications (
     FOREIGN KEY (tec_id )
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON UPDATE NO ACTION
 );
 
 -- -----------------------------------------------------
@@ -89,22 +94,42 @@ CREATE  TABLE IF NOT EXISTS Videos (
   CONSTRAINT fkVideosTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians(id_tec)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table album
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS Albums (
+  id_alb INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  tec_id INT(11) UNSIGNED NOT NULL,
+  name VARCHAR(128) NOT NULL,
+  description VARCHAR(512) NULL,
+  createdDate DATETIME NOT NULL,
+  lastUpdate DATETIME NOT NULL,
+  CONSTRAINT fkAlbumsTechnicians
+    FOREIGN KEY (tec_id)
+    REFERENCES Technicians (id_tec)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
 );
 
 -- -----------------------------------------------------
 -- Table Photos
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS Photos (
+CREATE TABLE IF NOT EXISTS Photos (
   id_pho INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) UNSIGNED NOT NULL ,
-  url VARCHAR (200) NOT NULL,
-  description VARCHAR(500) NULL ,
-  CONSTRAINT fkPhotosTechnicians
-    FOREIGN KEY (tec_id )
-    REFERENCES Technicians (id_tec)
-    ON DELETE NO ACTION
+  alb_id INT(11) UNSIGNED NOT NULL ,
+  url VARCHAR (256) NOT NULL,
+  thumb VARCHAR(256) NOT NULL,
+  description VARCHAR(512) NULL,
+  position INT(11) NOT NULL,
+  createdDate DATETIME NOT NULL,
+  CONSTRAINT fkPhotosAlbums
+    FOREIGN KEY (alb_id )
+    REFERENCES Albums (id_alb)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
 );
 
@@ -212,17 +237,17 @@ CREATE  TABLE IF NOT EXISTS ServicesOfferedByTech (
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    ON UPDATE NO ACTION ,
     CONSTRAINT fkServicesOfferedByTechCategoriesManufacture
       FOREIGN KEY (catMan_id)
       REFERENCES CategoriesManufacturers (id_catMan)
       ON DELETE CASCADE
-      ON UPDATE CASCADE,
+      ON UPDATE NO ACTION,
   CONSTRAINT fkServicesOfferedByTechModelsIssues
     FOREIGN KEY (modIss_id)
     REFERENCES ModelsIssues (id_modIss)
     ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON UPDATE NO ACTION
   )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -246,12 +271,12 @@ CREATE  TABLE IF NOT EXISTS ServicesHistory (
   CONSTRAINT fkServicesHistoryServicesOfferedByTech
     FOREIGN KEY (serTec_id)
     REFERENCES ServicesOfferedByTech (id_serTec)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT fkServicesHistoryCustomers
     FOREIGN KEY (cus_id)
     REFERENCES Customers (id_cus)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
   )
 ENGINE = InnoDB
@@ -272,18 +297,18 @@ CREATE  TABLE IF NOT EXISTS Reviews (
   CONSTRAINT fkReviewsServicesHistory
     FOREIGN KEY (serHis_id)
     REFERENCES ServicesHistory (id_serHis)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
   CONSTRAINT fkReviewsTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE,
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
   CONSTRAINT fkReviewsCustomers
     FOREIGN KEY (cus_id)
     REFERENCES Customers (id_cus)
-    ON DELETE NO ACTION
-    ON UPDATE CASCADE
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
   )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -293,6 +318,7 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 -- Table Portfolio
 -- -----------------------------------------------------
+/*
 CREATE  TABLE IF NOT EXISTS Portfolio (
   id_por INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   tec_id INT(11) UNSIGNED NOT NULL,
@@ -306,13 +332,17 @@ CREATE  TABLE IF NOT EXISTS Portfolio (
     FOREIGN KEY (tec_id)
     REFERENCES Technicians (id_tec)
     ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON UPDATE NO ACTION
   )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 SHOW WARNINGS;
+*/
 
+-- -----------------------------------------------------
+-- Table EmailVerification
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS EmailVerification (
   hash CHAR(100) NOT NULL PRIMARY KEY,
   email VARCHAR(128) NOT NULL,
@@ -413,6 +443,7 @@ CREATE VIEW ViewAllTechStars AS
 -- -----------------------------------------------------
 -- Create Procedure to update ratings for each technician
 -- -----------------------------------------------------
+/*
 DROP PROCEDURE IF EXISTS UpdateRatings;
 
 DELIMITER $$
@@ -437,3 +468,4 @@ BEGIN
    CLOSE tecId_cursor;
 END$$
 DELIMITER ;
+*/
