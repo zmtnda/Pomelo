@@ -3,6 +3,7 @@ app.factory("userPersistenceService", [
 		var email = "";
 		var password = "";
     var inSession = null;
+		var techId = "";
 		return {
 			setCookieData: function(email, password) {
 				email = email;
@@ -22,6 +23,7 @@ app.factory("userPersistenceService", [
 				$cookies.remove("email");
 				$cookies.remove("inSession");
 				$cookies.remove("password");
+				$cookies.remove("techId");
 			},
       setInSession: function(isInSession) {
 				inSession = isInSession;
@@ -36,7 +38,16 @@ app.factory("userPersistenceService", [
 					inSession = false;
 					return false;
 				}
+			},
+			setTechId: function(techId) {
+				techId = techId;
+				$cookies.put("techId", techId);
+			},
+			getTechId: function() {
+				techId = $cookies.get("techId");
+				return techId;
 			}
+
 		}
 	}
 ]);

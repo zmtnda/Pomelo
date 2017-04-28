@@ -16,6 +16,7 @@
              <th>Status</th>
              <th>Ordered Date</th>
              <th>Completed Date</th>
+             <th style="width: 13%">Note</th>
            </tr>
          </thead>
          <tbody>
@@ -33,6 +34,9 @@
               <td ng-if="ord.status === 3">Closed</td>
               <td>{{ord.orderedDate}}</td>
               <td>{{ord.completedDate}}</td>
+              <td style="width: 150%">
+                <button class="btn btn-sm btn-success">Show</button>
+              </td>
             </tr>
           </tbody>
      </table>

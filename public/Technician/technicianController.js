@@ -1,6 +1,7 @@
-app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop',
-  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop) {
+app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop','userPersistenceService',
+  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop, persisService) {
     scope.user = {};
+    scope.user.reviews = {};
     scope.viewEnum = {
       NONE: 0,
       PROVIDE: 1,
@@ -8,6 +9,20 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
       PERSONAL: 3,
       ORDERS: 4
     };
+
+    scope.user.tec_id = persisService.getTechId();
+
+    console.log("LOGGED IS: " + scope.user.tec_id);
+
+    http.get("Review/technician/" +  scope.user.tec_id)
+        .then(function(response){
+          console.log("response.data: " + JSON.stringify(response));
+          console.log("RESPONSE DATA: " + response.data.length);
+          scope.user.reviews.length = response.data.length;
+        }).
+        catch(function(err){noDlg.show(scope, err, "Error")});
+
+
 
     scope.isShowProvide = 0;
     scope.isShowListServices = 0;

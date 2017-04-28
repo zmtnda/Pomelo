@@ -1,7 +1,7 @@
 app.controller('updateAccountController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop', 'changePasswordPop', 'changeEmailPop',
   function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop, changePasswordPop, changeEmailPop) {
 
-    // console.log(rscope.loggedUser);
+    console.log(rscope.loggedUser);
     // scope.user = {};
     // scope.user.email = rscope.loggedUser.email;
     // console.log("scope user email is: " + scope.user.email);
