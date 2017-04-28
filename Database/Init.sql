@@ -378,11 +378,12 @@ CREATE VIEW ViewALLModelsIssues AS
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS ViewAllServicesOffer;
 CREATE VIEW ViewAllServicesOffer AS
-   SELECT T.id_tec, T.lastName, T.firstName, SO.id_serTec,M.id_mod, M.model, Iss.id_iss,
+   SELECT MI.id_modIss, CM.id_catMan, T.id_tec, T.lastName, T.firstName, SO.id_serTec,M.id_mod, M.model, Iss.id_iss,
    	Iss.issue, SO.servType, SO.estAmount, SO.status
-   FROM ServicesOfferedByTech SO, ModelsIssues MI, Models M, Issues Iss, Technicians T
+   FROM ServicesOfferedByTech SO, ModelsIssues MI, CategoriesManufacturers CM, Models M, Issues Iss, Technicians T
    WHERE SO.tec_id = T.id_tec AND SO.modIss_id = MI.id_modIss
    	AND MI.mod_id = M.id_mod AND MI.iss_id = Iss.id_iss
+    AND CM.id_catMan = SO.catMan_id
    ORDER BY T.id_tec ASC, M.model ASC, Iss.issue ASC;
 
 -- -----------------------------------------------------

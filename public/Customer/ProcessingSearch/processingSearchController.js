@@ -1,6 +1,5 @@
 app.controller('processingSearchController', ['$scope', '$location', '$state',  '$http', '$rootScope', 'notifyDlg', '$timeout',
   function(scope, location, state, http, rscope, noDlg, timeout) {
-
     /*
     Access selections:
 
@@ -11,11 +10,9 @@ app.controller('processingSearchController', ['$scope', '$location', '$state',  
     */
     /*Write a promise to do this
     */
-    var search = function(){
-
-    }
 
     timeout(function(){
-       state.go("technicianListing");
-    }, 4000)
+       state.get("technicianListing").data.customerData = state.current.data.customerData
+       state.go("technicianListing")
+    }, 1000)
 }]);
