@@ -16,38 +16,38 @@
         <button class="col-md-2 text-success moveLeftHover growHover btn btn-success" ng-if="hasEnterZipCode" ng-click="onClickPrevious()">
           Previous</button>
         <div ng-if="!hasEnterZipCode" class="col-md-2"></div>
-        <div class="col-md-7" >
+        <div class="col-md-7">
           <div class="cus-veritcal-align">
             <div>
               </br></br>
               <input ng-if="!hasEnterZipCode" type="text" class="form-control" ng-model="customerData.zipCode" placeholder="Please enter your zip code...">
-              <div ng-if="checkIsValidZipCode(customerData.zipCode)">Invalid Zip Code</div>
+              <div class="text-danger" ng-if="!isValidZip && customerData.zipCode"><h4>Invalid Zip Code</h4></div>
             </div>
             <div ng-if="hasEnterZipCode && !hasClickedCate" >
               <span class="growHover thumbnail text-success" ng-repeat="cate in cates"
-                ng-click="onClickCategory(cate)">
+                ng-click="onClickCategory(cate)" ng-class="thumbnailStyles['cate'][cate.category] | thumbnailFilter">
                 <img ng-src="{{getCateImage(cate)}}"></img><p>{{cate.category}}</p></span>
             </div>
             <div ng-if="hasClickedCate && !hasClickedManu"> 
               <span class="growHover thumbnail text-success" ng-repeat="manu in manus" 
-                ng-click="onClickManu(manu)" ng-attr-id="{{'manu' + $index}}">
+                ng-click="onClickManu(manu)" ng-class="thumbnailStyles['manu'][manu.manufacturer] | thumbnailFilter">
                 <p>{{manu.manufacturer}}</p></span>
             </div>
             <div ng-if="hasClickedManu && !hasClickedModel">
-              <span class="growHover thumbnail text-success" ng-repeat="model in models track by $index" 
-                ng-click="onClickModel(model, 'model' + $index)" ng-attr-id="{{'model' + $index}}" >
+              <span class="growHover thumbnail text-success" ng-repeat="model in models" 
+                ng-click="onClickModel(model)" ng-class="thumbnailStyles['model'][model.model] | thumbnailFilter">
                 <p>{{model.model}}</p></span>
             </div>
             <div ng-if="hasClickedModel">
               <span class="growHover thumbnail text-success" ng-repeat="issue in issues" 
-                ng-click="onClickIssue(issue)">
+                ng-click="onClickIssue(issue)" ng-class="thumbnailStyles['issue'][issue.issue] | thumbnailFilter">
                 <p>{{issue.issue}}</p></span>
             </div>
           </div>
         </div>
         <div class="col-md-2">
           <button class="text-success moveRightHover growHover btn btn-success" 
-          ng-click="onClickNext()" ng-bind="nextMessage">
+          ng-click="onClickNext()" ng-disabled="!isValidZip || !customerData.zipCode" ng-bind="nextMessage">
           </button>
         </div>
         <div class="col-md-1"></div>
@@ -55,7 +55,6 @@
     </div>
   </div>
 </body>
-
 
 <!-- <iframe ng-if=!hasEnterZipC width="100%" height="100%" style="padding-top:10px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3477.654539657165!2d-120.66486252917552!3d35.30519539043805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80ecf1b4054c3551%3A0x98b3b48a29d99103!2sCalifornia+Polytechnic+State+University!5e0!3m2!1sen!2sus!4v1481095087621"></iframe>
   <br />
