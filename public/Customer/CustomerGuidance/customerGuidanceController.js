@@ -1,9 +1,3 @@
-app.filter("thumbnailFilter", function(){
-    var stateNames = ["thumbnail", "thumbnail activeThumbnail"];
-  return function(input) {
-    return stateNames[input];
-  };
-})
 app.controller('customerGuidanceController', ['$scope', '$state', '$http', "cates", 'notifyDlg', 'errorMessageFormatter',
   function(scope, state, http, cate, notifyDlg, emf)
   {
