@@ -9,7 +9,7 @@ var bluebird = require('bluebird');
 var gm = require('gm');
 var aws = require("aws-sdk");
 var fs = require("fs");
-router.baseURL = '/Upload';
+router.baseURL = '/Photo';
 
 const S3_BUCKET = 'pomelotech';
 const THUMB_SIZE = 150;
@@ -23,7 +23,6 @@ var s3 = bluebird.promisifyAll(new aws.S3());
 
 // format for upload photo
 // https://${S3_BUCKET}.s3.amazonaws.com/${userEmail}/${album}/${date}-${hash}-${filename}
-
 
 router.post('/uploadProfile', (req, res) => {
   var vld = req.validator;
@@ -61,8 +60,55 @@ router.post('/uploadProfile', (req, res) => {
           });
         }
       });
+      cnn.release();
     });
   });
+});
+
+
+/*
+ * Get album for specific album
+ * Need albumId on api link
+ */
+router.get('/getAlbum/:albumId', (req, res) => {
+  var vld = req.validator;
+  var body = req.body;
+  var albumId = req.params.albumId;
+  var checkAlbumQuery = ' SELECT * FROM Albums WHERE id_alb=?';
+  var getPhotoQuery = ' SELECT * FROM Photos WHERE alb_id=? ';
+
+  connections.getConnection(res, cnn => {
+    async.waterfall([
+      function (callback) { // check album
+        cnn.query(checkAlbumQuery, albumId, callback);
+      },
+      function (result, fields, callback) { // get photos
+        if (result.length > 0) {
+          body.albumMetaData = result[0];
+          cnn.query(getPhotoQuery, albumId, callback);
+        } else {
+          callback({success: 0, response: `albumId ${albumId} doesn't exists`})
+        }
+      }
+    ], function (err, result) {
+      if (err) {
+        console.log(err);
+        res.status(400).json(err);
+      } else {
+        res.status(200).json({
+          success: 1,
+          albumName: body.albumMetaData.name,
+          description: body.albumMetaData.description,
+          albumId: body.albumMetaData.id_alb,
+          createdDate: body.albumMetaData.createdDate,
+          lastUpdate: body.albumMetaData.lastUpdate,
+          images: result
+        });
+      }
+    });
+    cnn.release();
+  });
+
 });
 
 /*
@@ -82,7 +128,7 @@ router.post('/uploadAlbum', (req, res) => {
     ' description, position, createdDate) VALUES ';
 
   if (!vld.checkPrsOK(logId))
-    return;
+    return res.status(400).json({response: 'Permission Denied'});
 
   new multiparty.Form().parse(req, (err, fields, files) => {
     if (!files.images)
@@ -91,10 +137,10 @@ router.post('/uploadAlbum', (req, res) => {
     var albumMetaData = JSON.parse(fields.albumMetaData[0]);
     var photoMetaDataArray = JSON.parse(fields.photoMetaData[0]);
 
-    console.log("album");
-    console.log(albumMetaData);
-    console.log("photo");
-    console.log(photoMetaDataArray);
+    // console.log("album");
+    // console.log(albumMetaData);
+    // console.log("photo");
+    // console.log(photoMetaDataArray);
 
     connections.getConnection(res, cnn => {
       async.waterfall([
@@ -138,8 +184,8 @@ router.post('/uploadAlbum', (req, res) => {
           cnn.query(insertPhotoToAlbum, flattenMetaDataArray, callback);
         }
       ], function (err, result) {
-        console.log("end insert photos");
-        console.log(result);
+        // console.log("end insert photos");
+        // console.log(result);
         if (err) {
           console.log(err);
           res.status(400).json(err);
@@ -159,8 +205,8 @@ router.post('/uploadAlbum', (req, res) => {
 
 function uploadThumbBuffer(username, thumbs, albumName, cb) {
   var operations = thumbs.map( thumb => {
-    console.log("Thumb")
-    console.log(thumb);
+    // console.log("Thumb")
+    // console.log(thumb);
     var filename = generateFileName(username, albumName, "thumb_"+ thumb[0].originalFilename);
     return bluebird.join(thumb,
       s3.uploadAsync({
@@ -190,7 +236,7 @@ function createThumbsBuffer(files, cb) {
   });
 
   bluebird.join(bluebird.all(operations), thumbBuffers => {
-    console.log(thumbBuffers);
+    // console.log(thumbBuffers);
     return thumbBuffers;
   })
     .then(result => cb(null, result))
@@ -209,8 +255,8 @@ function uploadImages(username, files, albumName, cb) {
         Body: fs.createReadStream(file.path)
       }));
   });
-  bluebird.join(bluebird.all(operations), images => {
 
+  bluebird.join(bluebird.all(operations), images => {
     var items = images.map(image => {
       fs.unlink(image[0].path); // delete file on local
       return {
@@ -223,14 +269,8 @@ function uploadImages(username, files, albumName, cb) {
 
     return items;
   })
-    .then(result => {
-      cb(null, result);
-    })
-    .catch(err => {
-      console.log("errrr??");
-      console.log(err);
-      cb(err);
-    });
+    .then(result => cb(null, result))
+    .catch(err => cb(err));
 }
 
 // Generate file name with username and album
