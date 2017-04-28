@@ -1,28 +1,34 @@
-<!-- <link href="css/Technician/shop-homepage.css" rel="stylesheet" type="text/css"> -->
 
-<!-- <div id="page-top" class="index"> -->
-  <!-- Header -->
 <body class="container">
-  <!-- <section class="success" id="about">
-
-          <div class="row">
-            <div class="col-md-offset-1">
-                  <button type="button" class="btn" style="width: 15%" ng-click="goToissueGudiance()">Provide A Service</button>
-                  <button type="button" class="btn" style="width: 15%" ng-click="goToTranscationHistory()">Transcation History</button>
-                  <button type="button" class="btn" style="width: 10%" ng-click="gotoOrders()">My Orders</button>
-                  <button type="button" class="btn" style="width: 10%" ng-click="goToServices()">My Services</button>
-                  <button type="button" class="btn" style="width: 20%" href="#userUpdate" ng-click="modifyTechnician()">Update Account</button>
-                  <button type="button" class="btn btn-warning" style="width: 20%" ng-click="deleteTechnician()">Delete this Account</button>
-            </div>
-
-           </div>
-  </section> -->
   <div class="container">
 
           <div class="row">
 
               <div class="col-md-3">
-                  <p class="lead">Shop Name</p>
+                  <p class="lead">{{loggedUser.firstName}} {{loggedUser.lastName}}</p>
+                  <img src="http://talentime.in/images/avatar1.jpg" alt="">
+                  <div class="ratings">
+                      <p class="pull-right">{{user.reviews.length}} reviews</p>
+                      <p>
+                          <span ng-if="loggedUser.ratings >= 0.5" class="glyphicon glyphicon-star"></span>
+                          <span ng-if="loggedUser.ratings < 0.5" class="glyphicon glyphicon-star-empty"></span>
+                          <span ng-if="loggedUser.ratings >= 1.5" class="glyphicon glyphicon-star"></span>
+                          <span ng-if="loggedUser.ratings < 1.5" class="glyphicon glyphicon-star-empty"></span>
+                          <span ng-if="loggedUser.ratings >= 2.5" class="glyphicon glyphicon-star"></span>
+                          <span ng-if="loggedUser.ratings < 2.5" class="glyphicon glyphicon-star-empty"></span>
+                          <span ng-if="loggedUser.ratings >= 3.5" class="glyphicon glyphicon-star"></span>
+                          <span ng-if="loggedUser.ratings < 3.5" class="glyphicon glyphicon-star-empty"></span>
+                          <span ng-if="loggedUser.ratings >= 4.5" class="glyphicon glyphicon-star"></span>
+                          <span ng-if="loggedUser.ratings < 4.5" class="glyphicon glyphicon-star-empty"></span>
+                      </p>
+                      <p class="text-success" ng-if="loggedUser.bad_id == 1">Bronze Badge</p>
+                      <p class="text-info" ng-if="loggedUser.bad_id == 2">Silver Badge</p>
+                      <p class="text-warning" ng-if="loggedUser.bad_id == 3">Gold Badge</p>
+                      <p class="text-muted" ng-if="loggedUser.bad_id == 4">Platinum Badge</p>
+                  </div>
+
+
+
                   <div class="list-group">
                       <a class="list-group-item" ng-click="goToissueGudiance()">Provide A Service</a>
                       <a class="list-group-item" ng-click="goToTranscationHistory()">Transcation History</a>
@@ -178,12 +184,12 @@
                           </div>
                       </div>
 
-                      <div class="col-sm-4 col-lg-4 col-md-4">
+                      <!-- <div class="col-sm-4 col-lg-4 col-md-4">
                           <h4><a href="#">Like this template?</a>
                           </h4>
                           <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
                           <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
-                      </div>
+                      </div> -->
 
                   </div>
 

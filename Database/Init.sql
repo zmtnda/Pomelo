@@ -88,9 +88,11 @@ CREATE  TABLE IF NOT EXISTS Certifications (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS Videos (
   id_vid INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  tec_id INT(11) UNSIGNED NOT NULL ,
+  tec_id INT(11) UNSIGNED NOT NULL,
   url VARCHAR (200) NOT NULL,
-  description VARCHAR(500) NULL ,
+  name VARCHAR(256) NOT NULL,
+  description VARCHAR(500) NULL,
+  createdDate DATETIME NOT NULL,
   CONSTRAINT fkVideosTechnicians
     FOREIGN KEY (tec_id)
     REFERENCES Technicians(id_tec)
