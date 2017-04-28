@@ -207,31 +207,28 @@ router.get('/:tecId/all', function(req, res) {
 
 // Customer Retrieve all the technicians for the issue
 // No AU required
-router.get('/:issId/Issues', function(req, res) {
+//issId is the json body with many fields
+router.get('/Issues', function(req, res) {
 	var vld = req.validator;
 	var user = req.session;
-	var issId = req.params.issId;
-    var selectQry = ' SELECT tech.firstName, tech.lastName, tech.hourlyRate, '
-                  + ' tech.city, tech.ratings, tech.bad_id, category, manufacturer, '
-                  + ' model, issue, servType, estAmount '
-                  + ' FROM ServicesOfferedByTech T1 '
-                  + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
-                  + ' FROM CategoriesManufacturers T1 '
-                  + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
-                  + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
-                  + ' ) T2 ON T1.catMan_id = T2.id_catMan '
-                  + ' INNER JOIN (SELECT id_modIss, model, issue '
-                  + ' FROM ModelsIssues T1 '
-                  + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
-                  + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
-                  + ' AND T3.id_iss = ? '
-                  + ' ) T3 ON T1.modIss_id = T3.id_modIss '
-                  + ' INNER JOIN Technicians tech ON T1.tec_id = tech.id_tec '
-                  + ' ORDER BY tech.ratings DESC';
-		connections.getConnection(res, function(cnn) {
-			cnn.query(selectQry, issId,
+	// var issId = req.params.issId;
+  var queryParam = JSON.parse(req.query.servicesOffer);
+  var queryZip = req.query.zipCode;
+  var selectQry = ' SELECT T2.* '
+                  + ' FROM ServicesOfferedByTech T1, Technicians T2 '
+                  + ' WHERE T1.tec_id = T2.id_tec '
+                  + ' AND modIss_id = ? AND catMan_id = ? '
+                  + ' ORDER BY T2.ratings DESC';
+       console.log("adding issues params: " + JSON.stringify(queryParam) + queryParam.modIss_id + queryParam.catMan_id);
+
+if (vld.check(queryParam != null, Tags.noPermission)){
+  connections.getConnection(res, function(cnn) {
+    console.log("slectQry" + selectQry);
+			cnn.query(selectQry, [queryParam.modIss_id, queryParam.catMan_id],
 			function(err, result){
 				if(!err){
+                 console.log("aresult: " + JSON.stringify(result));
+
 					res.json(result);
 					cnn.release();
 				}
@@ -241,6 +238,26 @@ router.get('/:issId/Issues', function(req, res) {
 				}
 			});
 		});
+}
+  
+    // var selectQry = ' SELECT tech.firstName, tech.lastName, tech.hourlyRate, '
+    //               + ' tech.city, tech.ratings, tech.bad_id, category, manufacturer, '
+    //               + ' model, issue, servType, estAmount '
+    //               + ' FROM ServicesOfferedByTech T1 '
+    //               + ' INNER JOIN (SELECT id_catMan, category, manufacturer '
+    //               + ' FROM CategoriesManufacturers T1 '
+    //               + ' INNER JOIN Categories T2 ON T1.cat_id = T2.id_cat '
+    //               + ' INNER JOIN Manufacturers T3 ON T1.man_id = T3.id_man '
+    //               + ' ) T2 ON T1.catMan_id = T2.id_catMan '
+    //               + ' INNER JOIN (SELECT id_modIss, model, issue '
+    //               + ' FROM ModelsIssues T1 '
+    //               + ' INNER JOIN Models T2 ON T1.mod_id = T2.id_mod '
+    //               + ' INNER JOIN Issues T3 ON T1.iss_id = T3.id_iss '
+    //               + ' AND T3.id_iss = ? '
+    //               + ' ) T3 ON T1.modIss_id = T3.id_modIss '
+    //               + ' INNER JOIN Technicians tech ON T1.tec_id = tech.id_tec '
+    //               + ' ORDER BY tech.ratings DESC';
+	
 
 });
 
