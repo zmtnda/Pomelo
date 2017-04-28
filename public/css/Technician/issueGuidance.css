@@ -1,6 +1,9 @@
-.btn {
-
-}
+/* .label p{
+  width: inherit;
+  height: inherit;
+  display: inline-block;
+  overflow-wrap: break-word;
+}*/
 
 .container {
   padding-top: 20px;
@@ -20,7 +23,7 @@ table {
 }
 
 .issue-label:active{
-  background-color: grey
+  background-color: #DCDCDC;
 }
 
 #serviceTypeSelection{
