@@ -1,6 +1,7 @@
- app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService', '$http', 'notifyDlg', "errorMessageFormatter",
+ app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService',
+  '$http', 'notifyDlg', "errorMessageFormatter", '$uibModalStack',
   "$uibModalInstance", '$timeout',
-  function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout) {
+  function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout, uibMStack) {
 
     scope.user = {confirmationEmail: "",
                   confirmationPassword: ""};
@@ -31,7 +32,7 @@
         scope.validZipLength = scope.user.zip.toString().length <= 20
         scope.validLength = emf.hasMetLengths(scope.user.email, scope.user.password, scope.user.firstName, scope.user.lastName, scope.user.city, scope.user.zip.toString())
         scope.validEmailFormat = emf.checkEmailByRegex(scope.user.email)
-
+       
         if (!scope.validEmailFormat)
         {
           scope.parsedError = "Invalid email format."
@@ -40,22 +41,14 @@
         {
           logSer.addUser(scope.user.email, scope.user.password, scope.user.role, scope.user.firstName,
                          scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
-          .then(function()
-          {
-            console.log("CLOSE REGISTER POP-UP")
-            uibIns.close("Cancel")
-          })
           .then (function()
           {
-    			  if(rscope.loggedUser.email !== 'Admin@11.com')
-            {
-              noDlg.show(scope, "A confirmation link has sent to your email account.", "Confirm")
-    				}
-    				else
-            {
-    					state.reload();
-    				}
+            console.log("Opening Confirm")
+            noDlg.show(scope, "A confirmation link has sent to your email account.", "Confirm")
     		  })
+          .then(function(){
+            $uibModalStack.dismissAll();
+          })
     		  .catch(function(err)
           {
             scope.parsedError = emf.formatErrorCodeAndErrorArray(err)

@@ -15,9 +15,10 @@ app.service("errorMessageFormatter", ["$uibModal", function(uibM) {
         }
         else
         {
-          if(errorStr != null && errorStr.code != null)
+          if(errorStr != null && dataField != null)
           {
             errorStr = dataField["code"]
+            console.log("In errorMessageFormatter " + errorStr);
             if(errorStr === "ER_DUP_ENTRY")
             {
               errorStr = "This email has been used."
