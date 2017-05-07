@@ -1,7 +1,7 @@
  app.controller('registerController', ['$rootScope','$scope', '$state', 'goToServices', 'logService',
   '$http', 'notifyDlg', "errorMessageFormatter", '$uibModalStack',
   "$uibModalInstance", '$timeout',
-  function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, timeout, uibMStack) {
+  function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, uibMStack, timeout) {
 
     scope.user = {confirmationEmail: "",
                   confirmationPassword: ""};
@@ -24,6 +24,7 @@
 
       if(scope.noMissingFields)
       {
+        /*First Half of the promise*/
         scope.waitingResponse = true
         scope.validEmailLength = scope.user.email.length <= 128
         scope.validPasswordLength = scope.user.password.toString().length <= 32
@@ -33,6 +34,7 @@
         scope.validLength = emf.hasMetLengths(scope.user.email, scope.user.password, scope.user.firstName, scope.user.lastName, scope.user.city, scope.user.zip.toString())
         scope.validEmailFormat = emf.checkEmailByRegex(scope.user.email)
        
+       /*Second Half of the promise*/
         if (!scope.validEmailFormat)
         {
           scope.parsedError = "Invalid email format."
@@ -43,18 +45,17 @@
                          scope.user.lastName, scope.user.hourlyRate, scope.user.city, scope.user.zip)
           .then (function()
           {
-            console.log("Opening Confirm")
-            noDlg.show(scope, "A confirmation link has sent to your email account.", "Confirm")
+            uibIns.close();
     		  })
-          .then(function(){
-            $uibModalStack.dismissAll();
+          .then(function()
+          {
+            scope.parsedError = "A confirmation link has sent to your email account."
           })
     		  .catch(function(err)
           {
             scope.parsedError = emf.formatErrorCodeAndErrorArray(err)
           });
         }
-        scope.waitingResponse = false
       }
 	 }
 }])
