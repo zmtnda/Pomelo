@@ -2,7 +2,7 @@
   '$http', 'notifyDlg', "errorMessageFormatter", '$uibModalStack',
   "$uibModalInstance", '$timeout',
   function(rscope, scope, state, goSer, logSer, http, noDlg, emf, uibIns, uibMStack, timeout) {
-
+    
     scope.user = {confirmationEmail: "",
                   confirmationPassword: ""};
     scope.noMissingFields = false
