@@ -54,7 +54,6 @@ router.post('/', function(req, res) {
          if(result[0].role == 2 || (result[0].role == 1 && result[0].status == 1)) {
            cookie = ssnUtil.makeSession(result[0], res);
            delete result[0].passwordHash;
-           delete result[0].passwordSalt;
            console.log("same pass");
            console.log(result[0]);
            res.location(router.baseURL + '/'  + cookie).send(result[0]);

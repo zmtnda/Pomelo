@@ -20,27 +20,24 @@
 		('admin@pomelo.com', '$2a$10$ewWJ0dmjgHYT6hdAzCSem.6THkdBnkh1gAa1QOpGxzjG3L8kuSVq6', 2, NOW()),
 		('tech1@pomelo.com', '$2a$10$U4DwDhzPEgQbWJ6OCO1tVumEcF7njvmQgERpPrLKPjrIqq2Y9Zxxa', 1, NOW()),
 		('tech2@pomelo.com', '$2a$10$3gXUMRKrLya6GD7OfaCeme63Vkg5oZApaPpEyeJJRDe6HzHE2e6qW', 1, NOW()),
-		('tech3@pomelo.com', '$2a$10$nVvbCL0BdtwBuVKvDAs2ye7JkA6mu3nPNIypti9OaHp1S6xvtK4SK', 1, NOW()),
-		('tech4@pomelo.com', '$2a$10$Ldk2dzZ73ZhAG/5RP13s6.0166A.3/FX3hUHTUaioeLko9SXDNVoS', 1, NOW()),
-		('tech5@pomelo.com', '$2a$10$JIarV7MpOLSSXPEG0c0al.77MYf.gCs32S2ChKAm2ow7f6oBF6K92', 1, NOW()),
-		('tech6@pomelo.com', '$2a$10$WIzIKiqfSr7KwQJmv1Ny8.w3f9Qj86zL/Dr5N5A8wX6PBtKSshagS', 1, NOW()),
-		('tech7@pomelo.com', '$2a$10$dtKt65ZAhNT2b.z0IJltPOwmIwu3pWHXCFpirF5iVejsVM8/LdO92', 1, NOW()),
-		('tech8@pomelo.com', '$2a$10$Kgipz/F.7FUUn2ZN.ZzNsO1FYZKLhSRsSIDbRcleS/EJsfs3rM34u', 1, NOW());
-
-
+		('tech3@pomelo.com', '$2a$10$nVvbCL0BdtwBuVKvDAs2ye7JkA6mu3nPNIypti9OaHp1S6xvtK4SK', 1, NOW());
 
 	-- insert data into technicians --
 	-- status 1: active, 0: not --
 	insert into `Technicians` (`log_id`, `firstName`, `lastName`, `hourlyRate`,
-		`City`, `Zip`, `ratings`, `bad_id`, `status`) values
-		(2, 'Tech_1', 'Byakugan', 46.5, 'SLO', 93405, 3.5, 2, 1),
-		(3, 'Tech_2', 'Uhara', 30.0, 'Santa Clara', 95050, 4.2, 3, 1),
-		(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 1),
-		(5, 'Tech_4', 'Zin', 50.0, 'San Luis Obispo', 93405, 4.5, 3, 1),
-		(6, 'Tech_5', 'Zee', 30.0, 'San Luis Obispo', 93405, 4.5, 3, 0),
-		(7, 'Tech_6', 'Zin2', 55.0, 'San Luis Obispo', 93403, 4.5, 3, 1),
-		(8, 'Tech_7', 'Zee2', 45.0, 'San Luis Obispo', 93406, 4.5, 3, 1),
-		(9, 'Tech_8', 'Tun', 25.5, 'Santa Maria', 93454, 2.5, 4, 1);
+		`City`, `Zip`, `ratings`, `bad_id`, `status`, `website`, `aboutMe`,
+		`avatar`, `companyName`, `companyAddress`, `companyPhone`)
+	values
+		(2, 'Khoa', 'Nguyen', 46.5, 'SLO', 93405, 3.5, 2, 1, 'https://www.linkedin.com/in/khoadanhnguyen/',
+		'about me', 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAgjAAAAJDg5NzFlZGUzLTI5ZTgtNDZlYS04MWEwLWFiMDMzNjg3MTEzYQ.jpg',
+		 'Pomelo', 'SLO', '953-321-1341'),
+		(3, 'Zin', 'Tun', 30.0, 'Santa Clara', 95050, 4.2, 3, 1, 'https://www.linkedin.com/in/zin-mar-tun-291649107/',
+			'aboutme', 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAQxAAAAJGM1ZjFhOWUyLTQ2ODYtNDIxNC1iMWJlLTQ5NzgyOGRiZmRiZg.jpg',
+		 	'Mother', 'Santa Clara', '322-159-1342'),
+		(4, 'Nghia', 'Nguyen', 35.5, 'Santa Clara', 95050, 2.5, 4, 1, 'https://www.linkedin.com/in/nnguy101/',
+			'aboutme', 'https://s3-us-west-2.amazonaws.com/pomelotech/nnguy101%40gmail.com/profile/profilepic.jpg',
+		 	'AwesomeTech', 'Santa Clara', '232-213-1231');
+
 
 	-- insert into certification --
 	insert into `Certifications` (`tec_id`, `certificationName`, `institution`, `yearObtained`) values
