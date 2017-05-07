@@ -102,9 +102,9 @@
              </thead>
              <tbody>
                <tr ng-repeat = "oneOffer in offerrings track by $index">
-                 <td><div class="label label-default issue-label"><p>{{ oneOffer.cate }}</p></div></td>
-                 <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus"><p>{{ manu.manuName }}</p></div></td>
-                 <td><div class="label label-default issue-label" ng-repeat="model in oneOffer.offer.models"><p>{{ model.modelName }}</p></div></td>
+                 <td><div class="label label-default issue-label">{{ oneOffer.cate }}</div></td>
+                 <td><div class="label label-default issue-label" ng-repeat="manu in oneOffer.offer.manus">{{ manu.manuName }}</div></td>
+                 <td><div class="label label-default issue-label" ng-repeat="model in oneOffer.offer.models">{{ model.modelName }}</div></td>
                  <td>
                    <div id="issueColumn" class="label label-default issue-label" ng-repeat="issue in oneOffer.offer.issues | orderBy : 'correspondingModelName'">
                      <div> {{issue.correspondingModelName}} > {{ issue.issueName }} </div>
