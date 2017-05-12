@@ -5,8 +5,9 @@
           <div class="row">
 
               <div class="col-md-3">
+                <!-- http://talentime.in/images/avatar1.jpg -->
                   <p class="lead">{{loggedUser.firstName}} {{loggedUser.lastName}}</p>
-                  <img src="http://talentime.in/images/avatar1.jpg" alt="">
+
                   <div class="ratings">
                       <p class="pull-right">{{user.reviews.length}} reviews</p>
                       <p>
@@ -21,13 +22,25 @@
                           <span ng-if="loggedUser.ratings >= 4.5" class="glyphicon glyphicon-star"></span>
                           <span ng-if="loggedUser.ratings < 4.5" class="glyphicon glyphicon-star-empty"></span>
                       </p>
+
                       <p class="text-success" ng-if="loggedUser.bad_id == 1">Bronze Badge</p>
                       <p class="text-info" ng-if="loggedUser.bad_id == 2">Silver Badge</p>
                       <p class="text-warning" ng-if="loggedUser.bad_id == 3">Gold Badge</p>
                       <p class="text-muted" ng-if="loggedUser.bad_id == 4">Platinum Badge</p>
+
+                      <div class='image-container'>
+                        <img src="{{loggedUser.avatar}}" alt="" height="255" width="255" >
+                        <!-- <input class="update" type="text" value="Edit Photo" /> -->
+                        <div class="after" ng-click="changeAvatar()">
+                          <br>
+                          <p class="text-center">
+                            Upload New Image
+                          </p>
+                        </div>
+                      </div>
+
+                      <p></p>
                   </div>
-
-
 
                   <div class="list-group">
                       <a class="list-group-item" ng-click="goToissueGudiance()">Provide A Service</a>
@@ -61,11 +74,11 @@
                                       <img class="slide-image" src="http://placehold.it/800x300" alt="">
                                   </div>
                               </div>
-                              <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                              <!-- <a class="left carousel-control" data-slide="prev">
                                   <span class="glyphicon glyphicon-chevron-left"></span>
                               </a>
-                              <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                                  <span class="glyphicon glyphicon-chevron-right"></span>
+                              <a class="right carousel-control" data-slide="next">
+                                  <span class="glyphicon glyphicon-chevron-right"></span> -->
                               </a>
                           </div>
                       </div>
