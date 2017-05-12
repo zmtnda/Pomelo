@@ -86,5 +86,12 @@ div.show-image input.update {
   vertical-align:middle;
   text-align:center;
 }
+
+.fixedSizeImage img {
+  width: 847.5px;
+  height: 416.8px;
+  max-height: 416.8px;
+  min-height: 416.8px;
+}
 vertical-align:middle;
     text-align:center;
