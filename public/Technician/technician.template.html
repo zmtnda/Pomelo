@@ -6,7 +6,6 @@
               <div class="col-md-3">
                 <!-- http://talentime.in/images/avatar1.jpg -->
                   <p class="lead">{{loggedUser.firstName}} {{loggedUser.lastName}}</p>
-
                   <div class="ratings">
                       <p class="pull-right">{{user.reviews.length}} reviews</p>
                       <p>
@@ -21,7 +20,6 @@
                           <span ng-if="loggedUser.ratings >= 4.5" class="glyphicon glyphicon-star"></span>
                           <span ng-if="loggedUser.ratings < 4.5" class="glyphicon glyphicon-star-empty"></span>
                       </p>
-
                       <p class="text-success" ng-if="loggedUser.bad_id == 1">Bronze Badge</p>
                       <p class="text-info" ng-if="loggedUser.bad_id == 2">Silver Badge</p>
                       <p class="text-warning" ng-if="loggedUser.bad_id == 3">Gold Badge</p>
@@ -40,7 +38,6 @@
 
                       <p></p>
                   </div>
-
                   <div class="list-group">
                       <a class="list-group-item" ng-click="goToissueGudiance()">Provide A Service</a>
                       <a class="list-group-item" ng-click="goToTranscationHistory()">Transcation History</a>

@@ -10,7 +10,6 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
       ORDERS: 4
     };
 
-
     scope.user.tec_id = persisService.getTechId();
     // scope.avatar = loggedUser.avatar;
 

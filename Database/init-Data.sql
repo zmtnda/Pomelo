@@ -29,7 +29,7 @@
 		`avatar`, `companyName`, `companyAddress`, `companyPhone`)
 	values
 		(2, 'Khoa', 'Nguyen', 46.5, 'SLO', 93405, 3.5, 2, 1, 'https://www.linkedin.com/in/khoadanhnguyen/',
-		'about me', 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAgjAAAAJDg5NzFlZGUzLTI5ZTgtNDZlYS04MWEwLWFiMDMzNjg3MTEzYQ.jpg',
+		'about me While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer', 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAgjAAAAJDg5NzFlZGUzLTI5ZTgtNDZlYS04MWEwLWFiMDMzNjg3MTEzYQ.jpg',
 		 'Pomelo', 'SLO', '953-321-1341'),
 		(3, 'Zin', 'Tun', 30.0, 'Santa Clara', 95050, 4.2, 3, 1, 'https://www.linkedin.com/in/zin-mar-tun-291649107/',
 			'aboutme', 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAQxAAAAJGM1ZjFhOWUyLTQ2ODYtNDIxNC1iMWJlLTQ5NzgyOGRiZmRiZg.jpg',
@@ -37,7 +37,6 @@
 		(4, 'Nghia', 'Nguyen', 35.5, 'Santa Clara', 95050, 2.5, 4, 1, 'https://www.linkedin.com/in/nnguy101/',
 			'aboutme', 'https://s3-us-west-2.amazonaws.com/pomelotech/nnguy101%40gmail.com/profile/profilepic.jpg',
 		 	'AwesomeTech', 'Santa Clara', '232-213-1231');
-
 
 	-- insert into certification --
 	insert into `Certifications` (`tec_id`, `certificationName`, `institution`, `yearObtained`) values
