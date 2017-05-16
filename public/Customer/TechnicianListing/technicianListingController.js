@@ -25,6 +25,7 @@ app.controller('technicianListingController', ['$cookies','$scope', '$location',
     }).
     catch(function(err){noDlg.show(scope, err, "Error")});
   } else {
+    //   $cookies.remove("techList");
       console.log("temp is not null on refresh"+ JSON.stringify(temp));
       scope.listServices = temp;
   }}
