@@ -1,32 +1,17 @@
-<!--<div class="section col-xs-10 col-md-10 col-lg-10 col-md-offset-1">
-    <div class="thumbnail" ng-repeat="user in listServices | orderBy:'id'">
-            <b>Email</b>: {{user.email}}<br/>
-            <b>Role:</b> <span ng-switch="{{user.role}}">
-                      <span ng-switch-when="1">Technician</span>
-                      <span ng-switch-when="2">Admin</span>
-                  </span><br/>
-            <b>First Name:</b> {{user.firstName}}<br/>
-            <b>Last Name:</b> {{user.lastName}}<br/>
-            <b>Hourly Rate:</b> {{user.hourlyRate}}<br/>
-            <b>City:</b> {{user.city}}<br/>
-            <b>Zip Code:</b> {{user.zip}}<br/>
-
-    </div>
-</div>-->
-<!--<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">-->
-<div class="container" style="margin-top: 20px; margin-bottom: 20px;">
-    <div class="thumbnail" ng-repeat="user in listServices track by $index">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container" ng-repeat="user in listServices track by $index" style="margin-top: 20px; margin-bottom: 20px;">
+    <!--<div class="thumbnail" ng-repeat="user in listServices track by $index">-->
         <div class="row panel">
             <div class="col-md-4 bg_blur ">
                 <a href="#" class="follow_btn hidden-xs">Follow</a>
             </div>
             <div class="col-md-8  col-xs-12">
-            <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture hidden-xs" />
+            <img src={{user.avatar}} class="img-thumbnail picture hidden-xs" />
             <!--<img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail visible-xs picture_mob" />-->
             <div class="header">
-                    <h1>{{user.firstName}}</h1>
-                    <h4>{{user.firstName}}</h4>
+                    <h1>{{user.firstName}} {{user.lastName}}</h1>
+                    <h4>{{user.website}}</h4>
                     <span>{{user.aboutMe}}..."</span>
             </div>
             </div>
@@ -40,5 +25,5 @@
                 <div class="col-md-4 col-xs-4 well"><i class="fa fa-thumbs-o-up fa-lg"></i> 26</div>
             </div>
         </div>
-    </div>
+    <!--</div>-->
 </div>
