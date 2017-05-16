@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "angular-cookies": "^1.5.7",
+    "angular-local-storage": "^0.5.2",
     "async": "^2.0.0-rc.6",
     "aws-sdk": "^2.41.0",
     "bcryptjs": "^2.3.0",

@@ -32,15 +32,15 @@
 	-- insert data into technicians --
 	-- status 1: active, 0: not --
 	insert into `Technicians` (`log_id`, `firstName`, `lastName`, `hourlyRate`,
-		`City`, `Zip`, `ratings`, `bad_id`, `status`) values
-		(2, 'Tech_1', 'Byakugan', 46.5, 'SLO', 93405, 3.5, 2, 1),
-		(3, 'Tech_2', 'Uhara', 30.0, 'Santa Clara', 95050, 4.2, 3, 1),
-		(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 1),
-		(5, 'Tech_4', 'Zin', 50.0, 'San Luis Obispo', 93405, 4.5, 3, 1),
-		(6, 'Tech_5', 'Zee', 30.0, 'San Luis Obispo', 93405, 4.5, 3, 0),
-		(7, 'Tech_6', 'Zin2', 55.0, 'San Luis Obispo', 93403, 4.5, 3, 1),
-		(8, 'Tech_7', 'Zee2', 45.0, 'San Luis Obispo', 93406, 4.5, 3, 1),
-		(9, 'Tech_8', 'Tun', 25.5, 'Santa Maria', 93454, 2.5, 4, 1);
+		`City`, `Zip`, `ratings`, `bad_id`, `status`, `aboutMe`) values
+		(2, 'Tech_1', 'Byakugan', 46.5, 'SLO', 93405, 3.5, 2, 1, 'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.'),
+		(3, 'Tech_2', 'Uhara', 30.0, 'Santa Clara', 95050, 4.2, 3, 1,'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.'),
+		(4, 'Tech_3', 'Hosei', 35.5, 'Santa Clara', 95050, 2.5, 4, 1, 'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.'),
+		(5, 'Tech_4', 'Zin', 50.0, 'San Luis Obispo', 93405, 4.5, 3, 1, 'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.'),
+		(6, 'Tech_5', 'Zee', 30.0, 'San Luis Obispo', 93405, 4.5, 3, 0, 'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.'),
+		(7, 'Tech_6', 'Zin2', 55.0, 'San Luis Obispo', 93403, 4.5, 3, 1,'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.'),
+		(8, 'Tech_7', 'Zee2', 45.0, 'San Luis Obispo', 93406, 4.5, 3, 1,'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.'),
+		(9, 'Tech_8', 'Tun', 25.5, 'Santa Maria', 93454, 2.5, 4, 1,'While most qualitative researchers base their theories on in-depth interviews with a small number of people, an autoethnographer only uses his or her own experiences and feelings to understand a wider subject.');
 
 	-- insert into certification --
 	insert into `Certifications` (`tec_id`, `certificationName`, `institution`, `yearObtained`) values
