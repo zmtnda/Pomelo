@@ -1,5 +1,7 @@
-app.service("registerPopService", ["$uibModal", function(uibM) {
-      this.show = function(scp, hdr) {
+app.service("registerPopService", ["$uibModal", function(uibM) 
+{
+      this.show = function(scp, hdr) 
+      {
          scp.hdr = hdr;
          return uibM.open({
             animation: false,

@@ -31,6 +31,12 @@ var Session = function Session(user) {
    this.loginTime = new Date().getTime();
    this.lastUsed = new Date().getTime();
    this.role = user.role;
+   this.website = user.website;
+   this.avatar = user.avatar;
+   this.aboutMe = user.aboutMe;
+   this.companyName = user.companyName;
+   this.companyAddress = user.companyAddress;
+   this.companyPhone = user.companyPhone;
 };
 
 Session.prototype.isAdmin = function() {

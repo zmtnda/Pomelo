@@ -56,12 +56,14 @@ function(rscope, http, state, nDlg, route, persisService) {
           rscope.loggedUser.zip = result.data.zip;
           rscope.loggedUser.ratings = result.data.ratings;
           rscope.loggedUser.bad_id = result.data.bad_id;
-
+          rscope.loggedUser.avatar = result.data.avatar;
           rscope.inSession = true;
           persisService.setInSession(true);
           persisService.setCookieData(emailParam, passwordParam);
           persisService.setTechId(rscope.loggedUser.tec_id);
-          
+
+          console.log(result.data);
+
           if(rscope.loggedUser.role === 0){
             state.go('customer');
            }

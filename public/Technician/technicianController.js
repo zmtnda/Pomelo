@@ -1,5 +1,5 @@
-app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop','userPersistenceService',
-  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop, persisService) {
+app.controller('technicianController', ['$scope', '$location','$state','logService', '$http', '$rootScope', 'notifyDlg', 'goToServices', '$timeout', 'passVerifyPop','userPersistenceService', '$uibModal',
+  function(scope, location, state, logSer, http, rscope, noDlg, goto, timeout, passVerifyPop, persisService, uib) {
     scope.user = {};
     scope.user.reviews = {};
     scope.viewEnum = {
@@ -11,13 +11,15 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
     };
 
     scope.user.tec_id = persisService.getTechId();
+    // scope.avatar = loggedUser.avatar;
 
     console.log("LOGGED IS: " + scope.user.tec_id);
+    console.log("LOGGED data: " + scope.user.tec_id);
 
     http.get("Review/technician/" +  scope.user.tec_id)
         .then(function(response){
-          console.log("response.data: " + JSON.stringify(response));
-          console.log("RESPONSE DATA: " + response.data.length);
+          // console.log("response.data: " + JSON.stringify(response));
+          // console.log("RESPONSE DATA: " + response.data.length);
           scope.user.reviews.length = response.data.length;
         }).
         catch(function(err){noDlg.show(scope, err, "Error")});
@@ -215,5 +217,16 @@ app.controller('technicianController', ['$scope', '$location','$state','logServi
           // call $anchorScroll()
           $anchorScroll();
     };
+
+    scope.changeAvatar = function(){
+      uib.open({
+         animation: false,
+         controller: "profileuploadController", /*controller injection has to be here; otherwise, uibModalInstance wouldn't be resolved.*/
+         templateUrl: 'Technician/ProfileUpload/profileUpload.html',
+         scope: scope,
+         size: 'lg'
+      }).result;
+    }
+
 
 }]);

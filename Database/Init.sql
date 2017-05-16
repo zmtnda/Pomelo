@@ -45,7 +45,7 @@ CREATE  TABLE IF NOT EXISTS Technicians (
   ratings FLOAT(5,4) NOT NULL,
   bad_id INT(11) UNSIGNED NOT NULL,
   status INT(11) NOT NULL DEFAULT 0,
-  websites VARCHAR(256) NULL,
+  website VARCHAR(256) NULL,
   aboutMe VARCHAR(512) NULL,
   avatar VARCHAR(256) NULL,
   companyName VARCHAR(128) NULL,

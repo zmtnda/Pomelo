@@ -52,3 +52,46 @@ body {
 footer {
     margin: 50px 0;
 }
+
+/*div.show-image:hover img{
+    opacity:0.5;
+}
+div.show-image input.update {
+    top:45%;
+    left:45%;
+}*/
+
+
+.image-container {
+    position: relative;
+    width: 255px;
+    height: 255px;
+}
+.image-container .after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    display: none;
+    color: #FFF;
+    cursor:pointer;
+}
+.image-container:hover .after {
+    display: block;
+    background: rgba(0, 0, 0, .6);
+}
+
+.image-container .centerText {
+  vertical-align:middle;
+  text-align:center;
+}
+
+.fixedSizeImage img {
+  width: 847.5px;
+  height: 416.8px;
+  max-height: 416.8px;
+  min-height: 416.8px;
+}
+vertical-align:middle;
+    text-align:center;
