@@ -17,8 +17,8 @@ app.controller('technicianListingController', ['$cookies','$scope', '$location',
               console.log("response: " + JSON.stringify(response));
               scope.listServices = response.data;
              var expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() + 1); 
-// expireDate.setTime(expireDate.getTime()+(30*1000));
+    // expireDate.setDate(expireDate.getDate() + 1); 
+    expireDate.setTime(expireDate.getTime()+(30*1000));
     $cookies.remove("techList");
     $cookies.putObject("techList", response.data, {'expires' : expireDate, 'path': '/'});
     console.log("finish stored cookie: ");
