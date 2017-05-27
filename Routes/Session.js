@@ -37,6 +37,8 @@ var Session = function Session(user) {
    this.companyName = user.companyName;
    this.companyAddress = user.companyAddress;
    this.companyPhone = user.companyPhone;
+	 this.panelAlbum_id = user.panelAlbum_id;
+	 this.panelAlbum = user.panelAlbum;
 };
 
 Session.prototype.isAdmin = function() {

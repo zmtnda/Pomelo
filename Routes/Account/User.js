@@ -117,6 +117,14 @@ router.post('/', function(req, res) {
               var attrTechTable = {log_id: result.insertId, firstName: body.firstName, lastName: body.lastName,
                 hourlyRate: body.hourlyRate, city: body.city, zip: body.zip, ratings: '5', bad_id: '1', status: '0'};
               cnn.query('INSERT INTO Technicians SET ?', attrTechTable, callback);
+            },
+            function(result, fields, callback) { // Make the panel album
+              body.tec_id = result.insertId;
+              cnn.query('INSERT INTO Albums (tec_id, name, description, createdDate, lastUpdate) ' +
+                'VALUES (?,?,?,NOW(),NOW())', [result.insertId, 'panelAlbum', 'panelAlbum'], callback);
+            },
+            function(result, fields, callback) { // Put panelPhoto_id to tec
+              cnn.query('UPDATE Technicians SET panelAlbum_id=?', result.insertId, callback);
             }
           ], function(err, result) {
             if (err) {
