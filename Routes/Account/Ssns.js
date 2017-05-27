@@ -78,40 +78,8 @@ router.post('/', function(req, res) {
         cookie = ssnUtil.makeSession(body.techInfo, res);
         res.location(router.baseURL + '/'  + cookie).send(body.techInfo);
       }
-      // else if (req.validator.check(result.length && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
-      //    if(result[0].role == 2 || (result[0].role == 1 && result[0].status == 1)) {
-      //      cookie = ssnUtil.makeSession(result[0], res);
-      //      delete result[0].passwordHash;
-      //      console.log("same pass");
-      //      console.log(result[0]);
-      //      res.location(router.baseURL + '/'  + cookie).send(result[0]);
-      //    } else if (result[0].role == 1 && result[0].status == 0) {
-      //      res.status(400).json({success: 0, response: 'Need to verify your email'});
-      //    } else {
-      //      res.status(400).json({success: 0, response: 'Account is disabled'});
-      //    }
-      // }
     });
     cnn.release();
-    // cnn.query(selectQry, req.body.email, function(err, result) {
-    //   if(err){
-    //      res.status(400).json(err);
-    //   }
-    //   else if (req.validator.check(result.length && bcrypt.compareSync(req.body.password, result[0].passwordHash), Tags.badLogin)) {
-    //      if(result[0].role == 2 || (result[0].role == 1 && result[0].status == 1)) {
-    //        cookie = ssnUtil.makeSession(result[0], res);
-    //        delete result[0].passwordHash;
-    //        console.log("same pass");
-    //        console.log(result[0]);
-    //        res.location(router.baseURL + '/'  + cookie).send(result[0]);
-    //      } else if (result[0].role == 1 && result[0].status == 0) {
-    //        res.status(400).json({success: 0, response: 'Need to verify your email'});
-    //      } else {
-    //        res.status(400).json({success: 0, response: 'Account is disabled'});
-    //      }
-    //   }
-    //   cnn.release();
-    // });
   });
 });
 

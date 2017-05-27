@@ -23,7 +23,8 @@ app.controller('uploadController', ['$scope', '$location', '$state', '$http', '$
         i++;
         fd.append('images', file);
         photoMetaData.push({
-          description: 'photo description ' + i
+          description: 'photo description ' + i,
+          position: i
         });
       });
 
