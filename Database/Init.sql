@@ -51,6 +51,7 @@ CREATE  TABLE IF NOT EXISTS Technicians (
   companyName VARCHAR(128) NULL,
   companyAddress VARCHAR(128) NULL,
   companyPhone VARCHAR(45) NULL,
+  panelAlbum_id INT(11) UNSIGNED NULL,
   CONSTRAINT fkTechniciansLogins
     FOREIGN KEY (log_id )
     REFERENCES Logins (id_log)

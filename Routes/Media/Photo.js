@@ -65,7 +65,6 @@ router.post('/uploadProfile', (req, res) => {
   });
 });
 
-
 /*
  * Get album for specific album
  * Need albumId on api link
@@ -137,11 +136,6 @@ router.post('/uploadAlbum', (req, res) => {
     var albumMetaData = JSON.parse(fields.albumMetaData[0]);
     var photoMetaDataArray = JSON.parse(fields.photoMetaData[0]);
 
-    // console.log("album");
-    // console.log(albumMetaData);
-    // console.log("photo");
-    // console.log(photoMetaDataArray);
-
     connections.getConnection(res, cnn => {
       async.waterfall([
         function (callback) { // create thumb files
@@ -201,6 +195,29 @@ router.post('/uploadAlbum', (req, res) => {
       cnn.release();
     });
   });
+});
+
+/*
+Need albumId, Metadata, deletePhotoIds, addNewPhotoFile
+*/
+router.put('/updateAlbum', (req, res) => {
+  var vld = req.validator;
+  var body = {};
+  var logId = req.session.id;
+  var tec_id = req.session.tec_id;
+  var username = req.session.email;
+
+  if (!vld.checkPrsOK(logId))
+    return res.status(400).json({response: 'Permission Denied'});
+
+    new multiparty.Form().parse(req, (err, fields, files) => {
+      if (!files.images)
+        return res.status(400).json({success: 0, response: 'No files found'});
+
+      var albumMetaData = JSON.parse(fields.albumMetaData[0]);
+      var photoMetaDataArray = JSON.parse(fields.photoMetaData[0]);
+    }
+
 });
 
 function uploadThumbBuffer(username, thumbs, albumName, cb) {
