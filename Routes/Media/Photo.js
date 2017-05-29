@@ -218,106 +218,105 @@ router.put('/updateAlbum', (req, res) => {
   if (!vld.checkPrsOK(logId))
     return res.status(400).json({response: 'Permission Denied'});
 
-    new multiparty.Form().parse(req, (err, fields, files) => {
-      if (!files.images)
-        return res.status(400).json({success: 0, response: 'No files found'});
+  new multiparty.Form().parse(req, (err, fields, files) => {
+    if (!files.images)
+      return res.status(400).json({success: 0, response: 'No files found'});
 
-      var albumMetaData = JSON.parse(fields.albumMetaData[0]);
-      var photoMetaDataArray = JSON.parse(fields.photoMetaData[0]);
-      var deletePhotoIds = JSON.parse(fields.deletePhotoIds[0]);
+    var albumMetaData = JSON.parse(fields.albumMetaData[0]);
+    var photoMetaDataArray = JSON.parse(fields.photoMetaData[0]);
+    var deletePhotoIds = JSON.parse(fields.deletePhotoIds[0]);
 
-      connections.getConnection(res, cnn => {
-        async.waterfall([
-          function (callback) {
-            cnn.query(checkAlbumWithTech, [albumMetaData.albumId, tec_id], callback);
-          },
-          function (result, fields, callback) {
-            if (result.length == 0) // check album belong to tec
-              callback({success: 0, response: 'Permisson denined, album doesn\'t belong to this technician'})
-            else { // check delete photo belong to album
-              albumMetaData.createdDate = result[0].createdDate;
-              checkPhotoIsInAlbum += 'alb_id = ? AND id_pho IN ('
-              var i;
-              var attr = [alb_id];
-              for (i=0; i<deletePhotoIds.length; i++) {
-                checkPhotoIsInAlbum += '?';
-                deletePhotos += '?';
-                attr.append(deletePhotoIds[i]);
-                if (i < deletePhotoIds.length - 1) {
-                  checkPhotoIsInAlbum += ',';
-                  deletePhotos += ',';
-                }
-              }
-              checkPhotoIsInAlbum += ')';
-              deletePhotos += ')';
-              cnn.query(checkPhotoIsInAlbum, attr, callback);
-            }
-          },
-          function (result, fields, callback) {
-            if (result.length != deletePhotoIds.length) {
-              callback({success: 0, response: 'Permisson denied, photos doesn\'t belong album'});
-            } else { // go ahead and delete photos
-              cnn.query(deletePhotos, deletePhotoIds, callback);
-            }
-          },
-          function (result, fields, callback) { // update album description
-            cnn.query(updateAlbum, [albumMetaData.albumName, albumMetaData.description, albumMetaData.albumId], callback);
-          },
-          function (result, fields, callback) { // create thumbs on local
-            createThumbsBuffer(files, callback);
-          },
-          function (thumbBuffers, callback) { // upload thumbs
-            uploadThumbBuffer(username, thumbBuffers, albumMetaData.albumName, callback);
-          },
-          function (thumbUrls, callback) { // upload real images
-            body.thumbUrls = thumbUrls;
-            // console.log(thumbUrls);
-            uploadImages(username, files, albumMetaData.albumName, callback);
-          },
-          function (images, callback) { // add thumb to images
+    connections.getConnection(res, cnn => {
+      async.waterfall([
+        function (callback) {
+          cnn.query(checkAlbumWithTech, [albumMetaData.albumId, tec_id], callback);
+        },
+        function (result, fields, callback) {
+          if (result.length == 0) // check album belong to tec
+            callback({success: 0, response: 'Permisson denined, album doesn\'t belong to this technician'})
+          else { // check delete photo belong to album
+            albumMetaData.createdDate = result[0].createdDate;
+            checkPhotoIsInAlbum += 'alb_id = ? AND id_pho IN ('
             var i;
-            for (i=0; i<images.length; i++) {
-              images[i].thumb = body.thumbUrls[i].url;
-              images[i].description = photoMetaDataArray[i].description;
-              images[i].position = i;
+            var attr = [alb_id];
+            for (i=0; i<deletePhotoIds.length; i++) {
+              checkPhotoIsInAlbum += '?';
+              deletePhotos += '?';
+              attr.append(deletePhotoIds[i]);
+              if (i < deletePhotoIds.length - 1) {
+                checkPhotoIsInAlbum += ',';
+                deletePhotos += ',';
+              }
             }
-            callback(null, images);
-          },
-          function (images, callback) { // insert images
-            var flattenMetaDataArray = [];
-            for (var i=0; i<photoMetaDataArray.length; i++) {
-              insertPhotoToAlbum += `(${albumMetaData.albumId},?,?,?,${i},NOW())`;
-              flattenMetaDataArray.push(images[i].url);
-              flattenMetaDataArray.push(images[i].thumb);
-              flattenMetaDataArray.push(photoMetaDataArray[i].description);
-              // flattenMetaDataArray.push(photoMetaDataArray[i].position);
-              if (i < photoMetaDataArray.length-1)
-                insertPhotoToAlbum += ', ';
-            }
-            cnn.query(insertPhotoToAlbum, flattenMetaDataArray, callback);
-          },
-          function (result, fields, callback) { // get photos for Albums
-            cnn.query('SELECT * FROM Photos WHERE alb_id=?', albumMetaData.albumId, callback);
+            checkPhotoIsInAlbum += ')';
+            deletePhotos += ')';
+            cnn.query(checkPhotoIsInAlbum, attr, callback);
           }
-        ], function(err, result) {
-          if (err) {
-            res.status(400).json(err);
-          } else {
-            res.status(200).json({
-              success: 1,
-              albumName: albumMetaData.albumName,
-              description: albumMetaData.description,
-              albumId: albumMetaData.albumId,
-              createdDate: albumMetaData.createdDate,
-              lastUpdate: new Date().toISOString().substr(0,10)},
-              images: result
-            });
+        },
+        function (result, fields, callback) {
+          if (result.length != deletePhotoIds.length) {
+            callback({success: 0, response: 'Permisson denied, photos doesn\'t belong album'});
+          } else { // go ahead and delete photos
+            cnn.query(deletePhotos, deletePhotoIds, callback);
           }
-        });
-        cnn.release();
+        },
+        function (result, fields, callback) { // update album description
+          cnn.query(updateAlbum, [albumMetaData.albumName, albumMetaData.description, albumMetaData.albumId], callback);
+        },
+        function (result, fields, callback) { // create thumbs on local
+          createThumbsBuffer(files, callback);
+        },
+        function (thumbBuffers, callback) { // upload thumbs
+          uploadThumbBuffer(username, thumbBuffers, albumMetaData.albumName, callback);
+        },
+        function (thumbUrls, callback) { // upload real images
+          body.thumbUrls = thumbUrls;
+          // console.log(thumbUrls);
+          uploadImages(username, files, albumMetaData.albumName, callback);
+        },
+        function (images, callback) { // add thumb to images
+          var i;
+          for (i=0; i<images.length; i++) {
+            images[i].thumb = body.thumbUrls[i].url;
+            images[i].description = photoMetaDataArray[i].description;
+            images[i].position = i;
+          }
+          callback(null, images);
+        },
+        function (images, callback) { // insert images
+          var flattenMetaDataArray = [];
+          for (var i=0; i<photoMetaDataArray.length; i++) {
+            insertPhotoToAlbum += `(${albumMetaData.albumId},?,?,?,${i},NOW())`;
+            flattenMetaDataArray.push(images[i].url);
+            flattenMetaDataArray.push(images[i].thumb);
+            flattenMetaDataArray.push(photoMetaDataArray[i].description);
+            // flattenMetaDataArray.push(photoMetaDataArray[i].position);
+            if (i < photoMetaDataArray.length-1)
+              insertPhotoToAlbum += ', ';
+          }
+          cnn.query(insertPhotoToAlbum, flattenMetaDataArray, callback);
+        },
+        function (result, fields, callback) { // get photos for Albums
+          cnn.query('SELECT * FROM Photos WHERE alb_id=?', albumMetaData.albumId, callback);
+        }
+      ], function(err, result) {
+        if (err) {
+          res.status(400).json(err);
+        } else {
+          res.status(200).json({
+            success: 1,
+            albumName: albumMetaData.albumName,
+            description: albumMetaData.description,
+            albumId: albumMetaData.albumId,
+            createdDate: albumMetaData.createdDate,
+            lastUpdate: new Date().toISOString().substr(0,10),
+            images: result
+          });
+        }
       });
-    }
-
+      cnn.release();
+    });
+  });
 });
 
 function uploadThumbBuffer(username, thumbs, albumName, cb) {
