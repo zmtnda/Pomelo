@@ -214,9 +214,10 @@ router.get('/Issues', function(req, res) {
 	// var issId = req.params.issId;
   var queryParam = JSON.parse(req.query.servicesOffer);
   var queryZip = req.query.zipCode;
-  var selectQry = ' SELECT T2.* '
-                  + ' FROM ServicesOfferedByTech T1, Technicians T2 '
+  var selectQry = ' SELECT T2.*, T3.* '
+                  + ' FROM ServicesOfferedByTech T1, Technicians T2, Logins T3'
                   + ' WHERE T1.tec_id = T2.id_tec '
+                  + ' AND T3.id_log = T2.log_id '
                   + ' AND modIss_id = ? AND catMan_id = ? '
                   + ' ORDER BY T2.ratings DESC';
        console.log("adding issues params: " + JSON.stringify(queryParam) + queryParam.modIss_id + queryParam.catMan_id);
