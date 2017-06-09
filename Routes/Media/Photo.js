@@ -309,15 +309,14 @@ router.put('/updateAlbum', (req, res) => {
               description: albumMetaData.description,
               albumId: albumMetaData.albumId,
               createdDate: albumMetaData.createdDate,
-              lastUpdate: new Date().toISOString().substr(0,10)},
+              lastUpdate: new Date().toISOString().substr(0,10),
               images: result
             });
           }
         });
         cnn.release();
       });
-    }
-
+});
 });
 
 function uploadThumbBuffer(username, thumbs, albumName, cb) {
