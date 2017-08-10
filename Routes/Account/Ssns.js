@@ -60,6 +60,8 @@ router.post('/', function(req, res) {
              console.log(result[0]);
              body.techInfo = result[0];
              callback(null, result[0].panelAlbum_id);
+            //  callback(null, result[0]);
+
            } else if (result[0].role == 1 && result[0].status == 0) {
              callback({success: 0, response: 'Need to verify your email'});
            } else {
@@ -68,10 +70,14 @@ router.post('/', function(req, res) {
         }
       },
       function (panelAlbum_id, callback) {
-        cnn.query("SELECT * FROM Photos WHERE alb_id = ?", panelAlbum_id, callback);
+        if(panelAlbum_id != null)
+          cnn.query(' SELECT * FROM Photos WHERE alb_id = ?', panelAlbum_id, callback);
+        else
+          callback(null, 'done');
       }
     ], function (err, result) {
       if(err){
+        console.log("error", err);
          res.status(400).json(err);
       } else {
         body.techInfo.panelAlbum = result;

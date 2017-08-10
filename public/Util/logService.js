@@ -37,6 +37,7 @@ function(rscope, http, state, nDlg, route, persisService) {
         var result;
         http.post("Ssns/", {email: emailParam, password: passwordParam})
         .then(function(response){
+          console.log("post ssns");
           result = response;
           var location;
           location = response.headers().location.split('/');
